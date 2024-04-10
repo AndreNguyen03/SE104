@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="816.0" type="HBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.LoginController">
+   <children>
+      <VBox fx:id="vBoxLeft" prefHeight="522.0" prefWidth="404.0">
+         <children>
+            <Pane prefHeight="522.0" prefWidth="403.0" style="-fx-background-color: E1FDB7;">
+               <children>
+                  <Text fx:id="textWelcome" layoutX="101.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME BACK!">
+                     <font>
+                        <Font name="Tahoma Bold" size="22.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="392.0" fitWidth="389.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Pane fx:id="rightPane" prefHeight="522.0" prefWidth="442.0">
+         <children>
+            <Text layoutX="148.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" textAlignment="CENTER">
+               <font>
+                  <Font name="Tahoma" size="45.0" />
+               </font>
+            </Text>
+            <TextField fx:id="textFieldUsername" layoutX="100.0" layoutY="217.0" prefHeight="31.0" prefWidth="227.0" promptText="Username" />
+            <TextField fx:id="textFieldPassword" layoutX="100.0" layoutY="267.0" prefHeight="31.0" prefWidth="227.0" promptText="Password" />
+            <Text fill="#0488da" layoutX="100.0" layoutY="343.0" onMouseClicked="#forgotPasswordOnclick" strokeType="OUTSIDE" strokeWidth="0.0" text="Forgot password?" textAlignment="CENTER">
+               <font>
+                  <Font name="VNI-Casca-Bold" size="16.0" />
+               </font>
+            </Text>
+            <JFXButton fx:id="btnSignin" layoutX="251.0" layoutY="324.0" onMouseClicked="#SigninOnClicked" prefHeight="31.0" prefWidth="76.0" style="-fx-background-color: #1B97D0;" text="Sign in">
+               <font>
+                  <Font name="Tahoma" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </Pane>
+   </children>
+</fx:root>
