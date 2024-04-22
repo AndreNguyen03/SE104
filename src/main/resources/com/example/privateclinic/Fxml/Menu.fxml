@@ -82,5 +82,6 @@
             </Text>
          </children>
       </Pane>
+      <Pane layoutX="245.0" layoutY="120.0" prefHeight="780.0" prefWidth="1356.0" />
    </children>
 </Pane>
