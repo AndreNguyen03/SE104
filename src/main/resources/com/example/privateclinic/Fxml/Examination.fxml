@@ -18,14 +18,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: linear-gradient(to top,#E1FDB7,#ffffff);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-            <VBox prefHeight="901.0" prefWidth="348.0" style="-fx-border-color: black;">
+            <VBox prefHeight="897.0" prefWidth="593.0" style="-fx-border-color: black;">
                <children>
-                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0">
+                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" style="-fx-background-color: linear-gradient(to top,#E1FDB7,#ffffff);">
                      <children>
                         <ImageView fitHeight="105.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -70,7 +71,7 @@
                               <Font name="Segoe UI Semibold" size="14.0" />
                            </font>
                         </JFXButton>
-                        <JFXRadioButton layoutX="193.0" layoutY="119.0" text="Giọng nữ">
+              z          <JFXRadioButton layoutX="193.0" layoutY="119.0" text="Giọng nữ">
                            <font>
                               <Font name="Segoe UI Semibold" size="16.0" />
                            </font>
@@ -79,18 +80,18 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="627.0" prefWidth="345.0">
                      <children>
-                        <TableView layoutX="6.0" layoutY="14.0" prefHeight="540.0" prefWidth="345.0">
+                        <TableView layoutX="4.0" layoutY="14.0" prefHeight="540.0" prefWidth="338.0" style="-fx-border-color: #4A7612;">
                            <columns>
-                              <TableColumn prefWidth="63.999969601631165" text="STT" />
-                              <TableColumn prefWidth="68.66668701171875" text="Mã BN" />
-                              <TableColumn prefWidth="212.00003051757812" text="Họ tên" />
+                              <TableColumn prefWidth="63.999969601631165" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="STT" />
+                              <TableColumn prefWidth="68.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Mã BN" />
+                              <TableColumn prefWidth="212.00003051757812" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Họ tên" />
                            </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="143.0" prefWidth="345.0">
+                  <AnchorPane prefHeight="102.0" prefWidth="351.0">
                      <children>
-                        <VBox layoutY="52.0" prefHeight="54.0" prefWidth="345.0">
+                        <VBox layoutY="52.0" prefHeight="38.0" prefWidth="345.0">
                            <children>
                               <HBox prefHeight="44.0" prefWidth="345.0">
                                  <children>
@@ -164,7 +165,7 @@
             </VBox>
          </children>
       </HBox>
-      <AnchorPane layoutX="348.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1252.0">
+      <AnchorPane layoutX="347.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1253.0" style="-fx-background-color: linear-gradient(to right,#D2FD94,#ffffff);">
          <children>
             <Text layoutX="91.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Ngày khám">
                <font>
@@ -173,20 +174,20 @@
             </Text>
          </children>
       </AnchorPane>
-      <DatePicker layoutX="532.0" layoutY="25.0" prefHeight="30.0" prefWidth="154.0" />
+      <DatePicker layoutX="532.0" layoutY="25.0" prefHeight="30.0" prefWidth="154.0" style="-fx-background-color: #EBFDCF; -fx-border-color: #4A7612;" />
       <Group layoutX="453.0" layoutY="150.0" />
-      <TitledPane animated="false" collapsible="false" layoutX="366.0" layoutY="75.0" prefHeight="177.0" prefWidth="523.0" text="Thông tin bệnh nhân">
+      <TitledPane animated="false" collapsible="false" layoutX="366.0" layoutY="81.0" prefHeight="177.0" prefWidth="523.0" style="-fx-background-color: #E1FDB7; -fx-border-color: #4A7612;" text="Thông tin bệnh nhân">
         <content>
-          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="193.0" prefWidth="521.0" style="-fx-background-color: ffffff;">
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="193.0" prefWidth="521.0" style="-fx-background-color: #F9FAF63;">
                <children>
                   <Text layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân">
                      <font>
                         <Font name="Segoe UI" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="126.0" layoutY="11.0" prefHeight="27.0" prefWidth="81.0">
+                  <TextField disable="true" layoutX="126.0" layoutY="9.0" prefHeight="27.0" prefWidth="81.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                   <Text layoutX="221.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh nhân">
@@ -194,9 +195,9 @@
                         <Font name="Segoe UI" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="339.0" layoutY="10.0" prefHeight="27.0" prefWidth="161.0">
+                  <TextField disable="true" layoutX="339.0" layoutY="10.0" prefHeight="27.0" prefWidth="161.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                   <Text layoutX="14.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
@@ -222,9 +223,9 @@
                         <Font name="Segoe UI" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="317.0" layoutY="47.0" prefHeight="27.0" prefWidth="182.0">
+                  <TextField disable="true" layoutX="317.0" layoutY="47.0" prefHeight="27.0" prefWidth="182.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                </children>
@@ -234,7 +235,7 @@
             <Font name="Segoe UI Semibold" size="16.0" />
          </font>
       </TitledPane>
-      <TitledPane animated="false" collapsible="false" layoutX="909.0" layoutY="75.0" prefHeight="177.0" prefWidth="679.0" text="Thông tin bệnh nhân">
+      <TitledPane animated="false" collapsible="false" layoutX="909.0" layoutY="81.0" prefHeight="177.0" prefWidth="679.0" style="-fx-background-color: #F9FAF6; -fx-border-color: #4A7612;" text="Chẩn đoán">
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="142.0" prefWidth="575.0" style="-fx-background-color: ffffff;">
                <children>
@@ -245,7 +246,7 @@
                   </Text>
                   <TextField layoutX="137.0" layoutY="9.0" prefHeight="27.0" prefWidth="427.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                   <Text layoutX="9.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chẩn đoán bệnh:">
@@ -255,12 +256,12 @@
                   </Text>
                   <TextField layoutX="138.0" layoutY="46.0" prefHeight="27.0" prefWidth="81.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                   <TextField layoutX="254.0" layoutY="46.0" prefHeight="27.0" prefWidth="311.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                   <Text layoutX="11.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lưu ý:">
@@ -270,7 +271,7 @@
                   </Text>
                   <TextField layoutX="58.0" layoutY="85.0" prefHeight="44.0" prefWidth="510.0">
                      <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </TextField>
                </children>
@@ -280,7 +281,7 @@
             <Font name="Segoe UI Semibold" size="16.0" />
          </font>
       </TitledPane>
-      <TitledPane animated="false" collapsible="false" layoutX="366.0" layoutY="272.0" prefHeight="611.0" prefWidth="1221.0" text="Kê thuốc">
+      <TitledPane animated="false" collapsible="false" layoutX="366.0" layoutY="272.0" prefHeight="621.0" prefWidth="1221.0" style="-fx-border-color: #4A7612; -fx-background-color: #F9FAF6;" text="Kê thuốc">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="586.0" prefWidth="1219.0">
                <children>
@@ -299,21 +300,41 @@
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="12.0" layoutY="33.0" prefHeight="25.0" prefWidth="179.0" />
-                  <TextField layoutX="207.0" layoutY="34.0" prefHeight="25.0" prefWidth="67.0" />
-                  <TextField layoutX="285.0" layoutY="34.0" prefHeight="25.0" prefWidth="99.0" />
+                  <TextField layoutX="12.0" layoutY="33.0" prefHeight="25.0" prefWidth="179.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
+                  <TextField layoutX="207.0" layoutY="34.0" prefHeight="25.0" prefWidth="67.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
+                  <TextField layoutX="285.0" layoutY="34.0" prefHeight="25.0" prefWidth="99.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
                   <Text fill="RED" layoutX="407.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cách dùng">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="389.0" layoutY="34.0" prefHeight="25.0" prefWidth="113.0" />
+                  <TextField layoutX="389.0" layoutY="34.0" prefHeight="25.0" prefWidth="113.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
                   <Text fill="RED" layoutX="514.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="513.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0" />
+                  <TextField layoutX="513.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
                   <Text fill="RED" layoutX="566.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sáng">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
@@ -324,51 +345,71 @@
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="564.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0" />
-                  <TextField layoutX="614.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0" />
+                  <TextField layoutX="564.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
+                  <TextField layoutX="614.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
                   <Text fill="RED" layoutX="662.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chiều">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="662.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0" />
+                  <TextField layoutX="662.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
                   <Text fill="RED" layoutX="717.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tối">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="709.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0" />
+                  <TextField layoutX="709.0" layoutY="34.0" prefHeight="25.0" prefWidth="40.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
                   <Text fill="RED" layoutX="755.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="755.0" layoutY="34.0" prefHeight="25.0" prefWidth="63.0" />
-                  <JFXButton layoutX="851.0" layoutY="31.0" prefHeight="29.0" prefWidth="81.0" style="-fx-background-color: #8cc835;" text="Lưu" textFill="WHITE">
+                  <TextField layoutX="755.0" layoutY="34.0" prefHeight="25.0" prefWidth="63.0">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="14.0" />
+                     </font>
+                  </TextField>
+                  <JFXButton layoutX="864.0" layoutY="31.0" prefHeight="29.0" prefWidth="81.0" style="-fx-background-color: #8cc835;" text="Lưu" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton layoutX="945.0" layoutY="31.0" prefHeight="29.0" prefWidth="81.0" style="-fx-background-color: #8cc835;" text="Xoá" textFill="WHITE">
+                  <JFXButton layoutX="970.0" layoutY="32.0" prefHeight="29.0" prefWidth="81.0" style="-fx-background-color: #8cc835;" text="Xoá" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Semibold" size="14.0" />
                      </font>
                   </JFXButton>
-                  <TableView layoutX="11.0" layoutY="68.0" prefHeight="505.0" prefWidth="1201.0">
+                  <TableView layoutX="16.0" layoutY="77.0" prefHeight="508.0" prefWidth="1201.0" style="-fx-border-color: #4A7612;">
                      <columns>
-                        <TableColumn prefWidth="38.66668891906738" text="STT" />
-                        <TableColumn prefWidth="113.33334732055664" text="Tên thuốc" />
-                        <TableColumn prefWidth="76.66668701171875" text="Đơn vị" />
-                        <TableColumn prefWidth="76.66668701171875" text="Dạng thuốc" />
-                        <TableColumn prefWidth="76.66668701171875" text="Cách dùng" />
-                        <TableColumn prefWidth="76.66668701171875" text="Ngày" />
-                        <TableColumn prefWidth="76.66668701171875" text="Sáng" />
-                        <TableColumn prefWidth="76.66668701171875" text="Trưa" />
-                        <TableColumn prefWidth="76.66668701171875" text="Chiều" />
-                        <TableColumn prefWidth="54.666748046875" text="Tối" />
-                        <TableColumn prefWidth="74.0" text="Số lượng" />
-                        <TableColumn prefWidth="74.0" text="Đơn giá" />
-                        <TableColumn prefWidth="74.0" text="Thành tiền" />
+                        <TableColumn prefWidth="38.66668891906738" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="STT" />
+                        <TableColumn prefWidth="113.33334732055664" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Tên thuốc" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Đơn vị" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Dạng thuốc" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Cách dùng" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Ngày" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Sáng" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Trưa" />
+                        <TableColumn prefWidth="76.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Chiều" />
+                        <TableColumn prefWidth="54.666748046875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Tối" />
+                        <TableColumn prefWidth="74.0" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Số lượng" />
+                        <TableColumn prefWidth="74.0" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Đơn giá" />
+                        <TableColumn prefWidth="74.0" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Thành tiền" />
                      </columns>
                   </TableView>
                </children>

@@ -18,12 +18,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/21" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: linear-gradient(to top,#E1FDB7,#ffffff);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <AnchorPane layoutX="348.0" prefHeight="73.0" prefWidth="1254.0" style="-fx-background-color: linear-gradient(to right,#E1FDB7,#ffffff);" />
       <VBox prefHeight="900.0" prefWidth="345.0" style="-fx-border-color: black;">
          <children>
-            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0">
+            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" style="-fx-background-color: linear-gradient(to bottom,#E1FDB7,#ffffff);">
                <children>
                   <ImageView fitHeight="105.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -37,12 +37,12 @@
               <tabs>
                 <Tab style="-fx-font-size: 14; -fx-font-weight: bold;" text="Thêm mới bệnh nhân">
                      <content>
-                        <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="340.0" style="-fx-font-size: 14;" text="Thông tin bệnh nhân">
+                        <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="340.0" style="-fx-font-size: 14; -fx-background-color: transparent;" text="Thông tin bệnh nhân">
                            <padding>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <content>
-                              <Pane prefHeight="200.0" prefWidth="200.0">
+                              <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
                                  <children>
                                     <Text layoutX="10.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Mã BN" />
                                     <Text layoutX="10.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Họ tên" />
@@ -88,7 +88,7 @@
       </VBox>
       <DatePicker layoutX="522.0" layoutY="15.0" prefHeight="30.0" prefWidth="154.0" />
       <Text layoutX="424.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Ngày khám" />
-      <TableView layoutX="470.0" layoutY="56.0" prefHeight="823.0" prefWidth="1111.0">
+      <TableView layoutX="470.0" layoutY="77.0" prefHeight="802.0" prefWidth="1111.0">
         <columns>
           <TableColumn prefWidth="75.0" text="STT" />
           <TableColumn prefWidth="75.0" text="Mã BN" />
