@@ -84,7 +84,7 @@
                            <columns>
                               <TableColumn prefWidth="63.999969601631165" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="STT" />
                               <TableColumn prefWidth="68.66668701171875" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Mã BN" />
-                              <TableColumn prefWidth="212.00003051757812" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Họ tên" />
+                              <TableColumn prefWidth="212.00003051757812" style="-fx-background-color: linear-gradient(to bottom,#8CC835,#EBFDCF);" text="Họ tên" >
                            </columns>
                         </TableView>
                      </children>

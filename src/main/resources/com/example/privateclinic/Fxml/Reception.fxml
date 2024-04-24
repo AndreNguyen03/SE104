@@ -37,7 +37,7 @@
               <tabs>
                 <Tab style="-fx-font-size: 14; -fx-font-weight: bold;" text="Thêm mới bệnh nhân">
                      <content>
-                        <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="340.0" style="-fx-font-size: 14; -fx-background-color: transparent;" text="Thông tin bệnh nhân">
+                        <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="340.0" style="-fx-font-size: 14; -fx-background-color: #;" text="Thông tin bệnh nhân">
                            <padding>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -55,7 +55,7 @@
                                     <TextField layoutX="85.0" layoutY="240.0" prefHeight="30.0" prefWidth="192.0" />
                                     <TextArea layoutX="79.0" layoutY="295.0" prefHeight="200.0" prefWidth="200.0" />
                                     <ComboBox layoutX="84.0" layoutY="141.0" prefHeight="30.0" prefWidth="105.0" />
-                                    <JFXButton layoutX="46.0" layoutY="528.0" prefHeight="111.0" prefWidth="235.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào danh sách khám bệnh" />
+                                    <JFXButton layoutX="46.0" layoutY="528.0" prefHeight="111.0" prefWidth="235.0" style="-fx-font-size: 14; -fx-border-radius: 10; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào danh sách khám bệnh" />
                                     <DatePicker layoutX="84.0" layoutY="188.0" prefHeight="30.0" prefWidth="154.0" />
                                  </children>
                               </Pane>
@@ -100,8 +100,8 @@
             <TableColumn prefWidth="169.666748046875" text="Bác sĩ khám" />
         </columns>
       </TableView>
-      <JFXButton layoutX="365.0" layoutY="156.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào DSKB" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true" />
-      <JFXButton layoutX="365.0" layoutY="314.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Xóa khỏi DSKB" textAlignment="CENTER" wrapText="true" />
-      <JFXButton layoutX="365.0" layoutY="478.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="In phiếu TN" textAlignment="CENTER" wrapText="true" />
+      <JFXButton layoutX="365.0" layoutY="156.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black; -fx-border-radius: 10;" text="Thêm vào DSKB" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true" />
+      <JFXButton layoutX="365.0" layoutY="314.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black; -fx-border-radius: 10;" text="Xóa khỏi DSKB" textAlignment="CENTER" wrapText="true" />
+      <JFXButton layoutX="365.0" layoutY="478.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black; -fx-border-radius: 10;" text="In phiếu TN" textAlignment="CENTER" wrapText="true" />
    </children>
 </AnchorPane>
