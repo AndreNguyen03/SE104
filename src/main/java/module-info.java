@@ -10,10 +10,11 @@ module com.example.privateclinic {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.jfoenix;
 
     opens com.example.privateclinic to javafx.fxml;
     exports com.example.privateclinic;
-    exports com.example.privateclinic.Controllers;
+    opens com.example.privateclinic.Controllers to javafx.fxml;
     exports com.example.privateclinic.Models;
     exports com.example.privateclinic.Views;
 }

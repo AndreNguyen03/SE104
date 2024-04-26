@@ -19,7 +19,7 @@
                   <Image url="@../Images/logoMenu.png" />
                </image>
             </ImageView>
-            <Button fx:id="btnAccountant" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" style="-fx-font-family: Arial; -fx-font-size: 17; -fx-background-color: E1FDB7; -fx-text-fill: Black;" text="Tiếp nhận">
+            <Button fx:id="btnAccountant" mnemonicParsing="false" onAction="#btnReceptionClicked" prefHeight="54.0" prefWidth="243.0" style="-fx-font-family: Arial; -fx-font-size: 17; -fx-background-color: E1FDB7; -fx-text-fill: Black;" text="Tiếp nhận">
                <font>
                   <Font size="19.0" />
                </font>
@@ -27,7 +27,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="btnCategory" layoutX="11.0" layoutY="251.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" style="-fx-font-family: Arial; -fx-font-size: 17; -fx-background-color: E1FDB7; -fx-text-fill: Black;" text="Danh mục">
+            <Button fx:id="btnCategory" layoutX="11.0" layoutY="251.0" mnemonicParsing="false" onAction="#btnDanhMucClicked" prefHeight="54.0" prefWidth="243.0" style="-fx-font-family: Arial; -fx-font-size: 17; -fx-background-color: E1FDB7; -fx-text-fill: Black;" text="Danh mục">
                <font>
                   <Font size="19.0" />
                </font>
@@ -61,7 +61,7 @@
             </Button>
             <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="243.0">
                <children>
-                  <Button fx:id="btnLogout" layoutY="346.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" style="-fx-font-family: Arial; -fx-font-size: 17; -fx-background-color: E1FDB7; -fx-text-fill: Black; -fx-position-shape: 3000;" text="Đăng xuất">
+                  <Button fx:id="btnLogout" layoutY="341.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="243.0" style="-fx-font-family: Arial; -fx-font-size: 17; -fx-background-color: E1FDB7; -fx-text-fill: Black; -fx-position-shape: 3000;" text="Đăng xuất">
                      <font>
                         <Font size="19.0" />
                      </font>
@@ -80,6 +80,16 @@
                   <Font name=".VnArial Bold" size="45.0" />
                </font>
             </Text>
+            <ImageView fitHeight="43.0" fitWidth="46.0" layoutX="1296.0" layoutY="14.0" onMouseClicked="#closeMenu" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/close.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="43.0" fitWidth="46.0" layoutX="1250.0" layoutY="12.0" onMouseClicked="#minimizeMenu" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/minimize.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Pane layoutX="245.0" layoutY="120.0" prefHeight="780.0" prefWidth="1356.0" />
