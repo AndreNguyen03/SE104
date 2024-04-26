@@ -60,7 +60,7 @@ public class MenuController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == okButton) {
-            s.close(); // Close the main window on OK click
+            s.close();
         }
     }
 
