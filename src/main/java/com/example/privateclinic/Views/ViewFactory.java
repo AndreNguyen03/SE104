@@ -22,6 +22,11 @@ public class ViewFactory {
         createStage(loader);
     }
 
+    public void showReceptionWindow() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
+        createStage(loader);
+    }
+
     private void createStage(FXMLLoader loader) {
         Scene scene = null;
         try {

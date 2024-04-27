@@ -19,7 +19,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="688.0" prefWidth="763.0">
                      <children>
-                        <TableView editable="true" layoutY="-2.0" prefHeight="688.0" prefWidth="770.0" stylesheets="@../Styles/tableheader.css">
+                        <TableView editable="true" layoutY="-2.0" prefHeight="688.0" prefWidth="770.0" >
                           <columns>
                             <TableColumn minWidth="30.0" prefWidth="89.0" text="STT" />
                             <TableColumn prefWidth="146.0" text="Ngày" />
