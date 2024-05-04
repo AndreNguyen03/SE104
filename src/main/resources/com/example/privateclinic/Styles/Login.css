@@ -85,12 +85,37 @@
     -fx-background-color:#FFFFFF;
 }
 
-
-
-
 /*Error*/
 .error_lbl
 {
     -fx-fill: #FF0000;
 }
+
+/*Close*/
+.image
+{
+    -fx-opacity: 100;
+}
+.image_hover
+{
+    -fx-opacity: 0;
+}
+.pane_close
+{
+    -fx-background-color: transparent;
+}
+.pane_close:hover
+{
+    -fx-background-color: #FF0000;
+}
+
+.pane_close:hover .image_hover
+{
+    -fx-opacity: 100;
+}
+.pane_close:hover .image
+{
+    -fx-opacity: 0;
+}
+
 

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -29,8 +30,6 @@ public class LoginController implements Initializable {
     @FXML
     private Button btnChange;
 
-    @FXML
-    private Text loginMessageLabel;
     @FXML
     private Button btnConfirm;
 
@@ -73,6 +72,9 @@ public class LoginController implements Initializable {
 
     @FXML
     private Text tfShownPassword,tfShownPassword1,tfShownPassword2;
+
+    @FXML
+    private ImageView close;
 
     @FXML
     void backToLogin(MouseEvent event) {
@@ -127,8 +129,9 @@ public class LoginController implements Initializable {
             ValidateLogin();
 
         } else {
-            loginMessageLabel.setVisible(true);
-            loginMessageLabel.setText("Please enter username and password");
+            showAlert("Please enter username and password");
+            tfUsername_Login.setText("");
+            pfPassword_Login.setText("");
         }
     }
     public void ValidateLogin()
@@ -149,9 +152,7 @@ public class LoginController implements Initializable {
                     pfPassword_Login.setText("");
                 }
                 else {
-                    loginMessageLabel.setVisible(true);
-                    loginMessageLabel.setText("Invalid login. PLease try login again.");
-                    tfUsername_Login.setText("");
+                    showAlert("Invalid login. PLease try login again.");
                     radioHideShow.setSelected(false);
                 }
             }
@@ -206,5 +207,12 @@ public class LoginController implements Initializable {
             tfShownPassword2.setVisible(false);
         }
     }
-
+    private void showAlert(String string)
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText(null);
+        alert.setContentText(string);
+        alert.showAndWait();
+    }
 }
