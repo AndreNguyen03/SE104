@@ -240,14 +240,6 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Text>
-                  <Text fx:id="tfShownPassword" fill="#979c9f" layoutX="81.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ShownPassword" textAlignment="CENTER">
-                     <font>
-                        <Font name="Segoe UI Semibold" size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Text>
                </children>
             </Pane>
             <Pane layoutX="400.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
@@ -260,7 +252,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                  <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
                      <image>
                         <Image url="@../Images/close-gray.png" />
                      </image>

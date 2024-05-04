@@ -1,6 +1,7 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.Models.Model;
+import com.example.privateclinic.Views.ViewFactory;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -70,8 +71,7 @@ public class LoginController implements Initializable {
     @FXML
     private JFXRadioButton radioHideShow,radioHideShowChange;
 
-    @FXML
-    private Text tfShownPassword,tfShownPassword1,tfShownPassword2;
+
 
     @FXML
     private ImageView close;
@@ -112,11 +112,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnLogin.setOnAction(event -> loginButtonOnAction());
-        radioHideShow.setOnAction(event -> togglePasswordVisibility());
-        radioHideShowChange.setOnAction(event -> togglePasswordVisibilityChangePW());
-        tfShownPassword.setVisible(false);
-        tfShownPassword1.setVisible(false);
-        tfShownPassword2.setVisible(false);
+
         forgetPane.toBack();
         changePane.toBack();
     }
@@ -148,7 +144,6 @@ public class LoginController implements Initializable {
                 if(queryResult.getInt(1)==1){
                     //loginMessageLabel.setText("Congratulations!");
                     Model.getInstance().getViewFactory().showMenuWindow();
-                    tfShownPassword.setText("");
                     pfPassword_Login.setText("");
                 }
                 else {
@@ -167,9 +162,6 @@ public class LoginController implements Initializable {
     void passwordFieldKeyTyped(KeyEvent event)
     {
         checkValidate20characters(event);
-        tfShownPassword.textProperty().bind(Bindings.concat(pfPassword_Login.getText()));
-        tfShownPassword1.textProperty().bind(Bindings.concat(pfPassword_Login_changepw.getText()));
-        tfShownPassword2.textProperty().bind(Bindings.concat(pfPassword_Login_changeconfirmpw.getText()));
     }
     private void checkValidate20characters(KeyEvent event)
     {
@@ -187,26 +179,7 @@ public class LoginController implements Initializable {
             pfPassword_Login.deleteText(caretPos - 1, caretPos);
         }
     }
-    private void togglePasswordVisibility() {
-        if (radioHideShow.isSelected()) {
-            tfShownPassword.textProperty().bind(Bindings.concat(pfPassword_Login.getText()));
-            tfShownPassword.setVisible(true);
-        } else {
-            tfShownPassword.setVisible(false);
-        }
-    }
-    private void togglePasswordVisibilityChangePW()
-    {
-        if (radioHideShowChange.isSelected()) {
-            tfShownPassword1.textProperty().bind(Bindings.concat(pfPassword_Login_changepw.getText()));
-            tfShownPassword2.textProperty().bind(Bindings.concat(pfPassword_Login_changeconfirmpw.getText()));
-            tfShownPassword1.setVisible(true);
-            tfShownPassword2.setVisible(true);
-        } else {
-            tfShownPassword1.setVisible(false);
-            tfShownPassword2.setVisible(false);
-        }
-    }
+
     private void showAlert(String string)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
