@@ -1,12 +1,15 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.Models.Model;
+import com.jfoenix.controls.JFXRadioButton;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -17,8 +20,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public class LoginController implements Initializable {
+    private boolean isPasswordVisible = false;
 
     @FXML
     private Button btnChange;
@@ -49,7 +55,7 @@ public class LoginController implements Initializable {
     @FXML
     private TextField tfUsername_Login;
     @FXML
-    private TextField tfPassword_Login;
+    private PasswordField pfPassword_Login,pfPassword_Login_changeconfirmpw,pfPassword_Login_changepw;
     @FXML
     private TextField textFieldUsernameCP;
 
@@ -61,6 +67,12 @@ public class LoginController implements Initializable {
 
     @FXML
     private TextField tfPassword2CP;
+
+    @FXML
+    private JFXRadioButton radioHideShow,radioHideShowChange;
+
+    @FXML
+    private Text tfShownPassword,tfShownPassword1,tfShownPassword2;
 
     @FXML
     void backToLogin(MouseEvent event) {
@@ -98,16 +110,23 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnLogin.setOnAction(event -> loginButtonOnAction());
+        radioHideShow.setOnAction(event -> togglePasswordVisibility());
+        radioHideShowChange.setOnAction(event -> togglePasswordVisibilityChangePW());
+        tfShownPassword.setVisible(false);
+        tfShownPassword1.setVisible(false);
+        tfShownPassword2.setVisible(false);
         forgetPane.toBack();
         changePane.toBack();
     }
 
+
     public void loginButtonOnAction()
     {
-        if((!tfUsername_Login.getText().isBlank()) && !tfPassword_Login.getText().isBlank())
+        if((!tfUsername_Login.getText().isBlank()) && !pfPassword_Login.getText().isBlank())
         {
             ValidateLogin();
-        }else {
+
+        } else {
             loginMessageLabel.setVisible(true);
             loginMessageLabel.setText("Please enter username and password");
         }
@@ -116,8 +135,8 @@ public class LoginController implements Initializable {
     {
         DatabaseConnection connectionNow = new DatabaseConnection();
         Connection connectionDB= connectionNow.getConnection();
-
-        String verifyLogin = "SELECT COUNT(1) FROM \"NHANVIEN\" WHERE \"TK\" ='"+tfUsername_Login.getText().toString()+"' AND \"MK\" ='"+tfPassword_Login.getText().toString()+"'";
+        //Nhập username: "ngocanh0058", password: "abc"
+        String verifyLogin = "SELECT COUNT(1) FROM \"NHANVIEN\" WHERE \"TK\" ='"+tfUsername_Login.getText().toString()+"' AND \"MK\" ='"+pfPassword_Login.getText().toString()+"'";
         try {
             Statement statement = connectionDB.createStatement();
             ResultSet queryResult = statement.executeQuery(verifyLogin);
@@ -126,12 +145,14 @@ public class LoginController implements Initializable {
                 if(queryResult.getInt(1)==1){
                     //loginMessageLabel.setText("Congratulations!");
                     Model.getInstance().getViewFactory().showMenuWindow();
+                    tfShownPassword.setText("");
+                    pfPassword_Login.setText("");
                 }
                 else {
                     loginMessageLabel.setVisible(true);
                     loginMessageLabel.setText("Invalid login. PLease try login again.");
                     tfUsername_Login.setText("");
-                    tfPassword_Login.setText("");
+                    radioHideShow.setSelected(false);
                 }
             }
         }
@@ -141,4 +162,49 @@ public class LoginController implements Initializable {
             e.getCause();
         }
     }
+    @FXML
+    void passwordFieldKeyTyped(KeyEvent event)
+    {
+        checkValidate20characters(event);
+        tfShownPassword.textProperty().bind(Bindings.concat(pfPassword_Login.getText()));
+        tfShownPassword1.textProperty().bind(Bindings.concat(pfPassword_Login_changepw.getText()));
+        tfShownPassword2.textProperty().bind(Bindings.concat(pfPassword_Login_changeconfirmpw.getText()));
+    }
+    private void checkValidate20characters(KeyEvent event)
+    {
+        if (pfPassword_Login.getText().length() >= 20) {
+            // Hiển thị thông báo khi độ dài vượt quá 20 ký tự
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText(null);
+            alert.setContentText("Password must be 20 characters or less.");
+            alert.showAndWait();
+            event.consume(); // Hủy sự kiện
+
+            // Xoá ký tự vừa nhập dư
+            int caretPos = pfPassword_Login.getCaretPosition();
+            pfPassword_Login.deleteText(caretPos - 1, caretPos);
+        }
+    }
+    private void togglePasswordVisibility() {
+        if (radioHideShow.isSelected()) {
+            tfShownPassword.textProperty().bind(Bindings.concat(pfPassword_Login.getText()));
+            tfShownPassword.setVisible(true);
+        } else {
+            tfShownPassword.setVisible(false);
+        }
+    }
+    private void togglePasswordVisibilityChangePW()
+    {
+        if (radioHideShowChange.isSelected()) {
+            tfShownPassword1.textProperty().bind(Bindings.concat(pfPassword_Login_changepw.getText()));
+            tfShownPassword2.textProperty().bind(Bindings.concat(pfPassword_Login_changeconfirmpw.getText()));
+            tfShownPassword1.setVisible(true);
+            tfShownPassword2.setVisible(true);
+        } else {
+            tfShownPassword1.setVisible(false);
+            tfShownPassword2.setVisible(false);
+        }
+    }
+
 }
