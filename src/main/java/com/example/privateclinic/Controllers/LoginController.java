@@ -55,7 +55,7 @@ public class LoginController implements Initializable {
     @FXML
     private TextField tfUsername_Login;
     @FXML
-    private PasswordField pfPassword_Login,pfPassword_Login_changeconfirmpw,pfPassword_Login_changepw;
+    private PasswordField pfPassword_Login,pfPassword_Login_changeconfirmpw ,pfPassword_Login_changepw;
     @FXML
     private TextField textFieldUsernameCP;
 
