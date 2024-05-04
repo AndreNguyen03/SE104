@@ -1,4 +1,4 @@
-package com.example.privateclinic.Controllers;
+package com.example.privateclinic.Models;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ public class DatabaseConnection {
     public Connection getConnection(){
         String databaseName ="ClinicDB";
         String databaseUser ="postgres";
-        String databasePassword="phuan03042004";
+        String databasePassword="123";
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;
         //String urlMysql="jdbc:mysql://localhost:5432/"+databaseName;
 
