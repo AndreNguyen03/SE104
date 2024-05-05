@@ -26,6 +26,11 @@ public class ViewFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
         createStage(loader);
     }
+    public void showExaminationWindow()
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Examination.fxml"));
+        createStage(loader);
+    }
 
     private void createStage(FXMLLoader loader) {
         Scene scene = null;
@@ -41,5 +46,18 @@ public class ViewFactory {
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
+    }
+
+    public void closeStage(Stage stage)
+    {
+        stage.close();
+    }
+    public void hideStage(Stage stage)
+    {
+        stage.hide();
+    }
+    public void showStage(Stage stage)
+    {
+        stage.show();
     }
 }

@@ -68,8 +68,8 @@ public class MenuController {
         mainPane.getChildren().add(reportSceneRoot);
     }
     @FXML
-    void btnExaminationClicked(ActionEvent event) {
-
+    void btnExaminationClicked(ActionEvent event) throws IOException {
+        Model.getInstance().getViewFactory().showExaminationWindow();
     }
 
     @FXML

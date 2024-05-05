@@ -143,7 +143,9 @@ public class LoginController implements Initializable {
             {
                 if(queryResult.getInt(1)==1){
                     //loginMessageLabel.setText("Congratulations!");
-                    Model.getInstance().getViewFactory().showMenuWindow();
+                    Stage stage = (Stage) btnLogin.getScene().getWindow(); //get login-screen
+                    Model.getInstance().getViewFactory().closeStage(stage); //close login-screen
+                    Model.getInstance().getViewFactory().showMenuWindow(); //open menu-screen
                     pfPassword_Login.setText("");
                 }
                 else {
