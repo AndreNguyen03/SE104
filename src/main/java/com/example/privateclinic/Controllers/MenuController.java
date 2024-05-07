@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.almasb.fxgl.scene.Scene;
 import com.example.privateclinic.Models.Model;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,6 +52,7 @@ public class MenuController {
 
     @FXML
     private Pane mainPane;
+
 
     @FXML
     void btnAspirineClicked(ActionEvent event) throws IOException {
