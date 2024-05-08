@@ -20,34 +20,35 @@
 {
     -fx-padding: 8 15 15 15 ;
     -fx-background-insets: 0, 0 0 5 0 , 0 0 6 0, 0 0 7 0;
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #99eaee 0%, #46d2d7 100%),
-    #46d2d7,
-    #99eaee,
-    radial-gradient(center 50% 50%, radius 100%, #c8fdff, #b3eefc);
-    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.75),4,0,0,1);
-    -fx-text-fill: #4B7813;
-    -fx-font-family: "Verdana";
-    -fx-font-size: 16;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #67a910 0%, #578a17 100%),
+    #72b40f,
+    #7ac00e,
+    radial-gradient(center 50% 50%, radius 100%, #6f9d2b, #7ccb02);
+    -fx-cursor: hand;
+    -fx-text-fill: #FFFFFF;
+
 }
 
 .left-container .button:focused,.menu-button:focused {
     -fx-padding: 10 15 13 15;
     -fx-background-insets: 4 0 0 0, 4 0 5 0, 4 0 6 0, 4 0 7 0;
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #99eaee 0%, #46d2d7 100%),
-    #46d2d7,
-    #99eaee,
-    radial-gradient(center 50% 50%, radius 100%, #c8fdff, #93f0ff);
-    -fx-effect: dropshadow(gaussian,rgba(9, 50, 70,0.75),4,0,0,1);
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #6f9d2b, #7ccb02);
+    -fx-text-fill: #ffffff;
 }
+.menu-button:focused .label {
+    -fx-text-fill: #ffffff;
+}
+
 .menu-button .label
 {
     -fx-text-fill: #4B7813;
     -fx-font-family: "Verdana";
     -fx-font-size: 16;
     -fx-font-weight: bold;
+}
+.menu-button:hover .label
+{
+    -fx-text-fill: #FFFFFF;
 }
 .menu-button
 {
@@ -61,13 +62,26 @@
     -fx-font-size: 1.5em;
     -fx-background-color: #4B7813;
 }
+.menu-button:hover .arrow
+{
+    -fx-background-color: #FFFFFF;
+}
+.menu-button .menu-item
+{
+    -fx-background-color: #afacac;
+
+}
 .menu-button .menu-item:hover
 {
-    -fx-background-color: #C1EF8A;
+    -fx-background-color: #72b61c;
+
 }
 .menu-button .menu-item:focused
 {
-    -fx-background-color: #C1EF8A;
+}
+.menu-button:focused .arrow
+{
+    -fx-background-color: #FFFFFF;
 }
 
 .top-container
@@ -78,7 +92,7 @@
     fx-text-fill: #AAAAAA;
     -fx-font-size: 2em;
     -fx-font-family: "Verdana";
-    -fx-font-weight: 1.5em;
+    -fx-font-weight: bold;
 }
 /*Close*/
 .image
@@ -125,7 +139,6 @@
     #c93131,
     #d23d3d,
     radial-gradient(center 50% 50%, radius 100%, #f87272, #fc4141);
-    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.75),4,0,0,1);
     -fx-text-fill: #FFFFFF;
     -fx-font-family: "Verdana";
     -fx-font-size: 16;
@@ -140,6 +153,5 @@
     #c93131,
     #d23d3d,
     radial-gradient(center 50% 50%, radius 100%, #f87272, #fc4141);
-    -fx-effect: dropshadow(gaussian,rgba(9, 50, 70,0.75),4,0,0,1);
     -fx-text-fill: #FFFFFF;
 }

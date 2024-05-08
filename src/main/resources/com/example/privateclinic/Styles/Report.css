@@ -1,0 +1,64 @@
+/*table view*/
+.table-view {
+    -fx-text-fill: #ffffff;
+}
+.table-view .table-column
+{
+    -fx-background-color: #5A8F15;
+}
+.table-view .column-header-background
+{
+    -fx-pref-height: 30;
+}
+.table-view .column-header-background .label
+{
+    -fx-text-fill: #ffffff;
+
+    -fx-alignment: center ;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+/*tabpane*/
+.tab-pane
+{
+    -fx-background-color: #cdefa6;
+}
+.tab-pane .tab .tab-label
+{
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.tab-pane .tab{
+    -fx-background-color: #f6ffec;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16;
+}
+.tab-pane .tab:selected
+{
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width:3 0 0 0;
+    -fx-border-color: #5A8F15;
+    -fx-background-color: linear-gradient(to top, #ecfade,#cfefac);
+}
+.tab:selected .focus-indicator
+{
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+}
+.tab:focused
+{
+    -fx-focus-color: transparent;
+}
+.tab-pane .tab-header-background
+{
+    -fx-background-color: transparent;
+}
+
+.Pane Text
+{
+    -fx-font-size: 15px;
+    -fx-font-family: "Segoe UI Semibold";
+}
+

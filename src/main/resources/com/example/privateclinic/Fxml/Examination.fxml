@@ -114,14 +114,14 @@
          </AnchorPane>
       </VBox>
    </HBox>
-   <AnchorPane layoutX="356.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1243.0" styleClass="header-top">
+   <AnchorPane layoutX="354.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1243.0" styleClass="header-top">
       <Text layoutX="91.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày khám">
          <font>
             <Font name="Segoe UI Semibold" size="14.0" />
          </font>
       </Text>
       <DatePicker layoutX="188.0" layoutY="21.0" prefHeight="30.0" prefWidth="154.0" />
-      <Pane fx:id="btnClose" layoutX="1201.0" layoutY="-4.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
+      <Pane fx:id="btnClose" layoutX="1201.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
          <children>
             <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image_hover">
                <image>
@@ -166,12 +166,12 @@
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="14.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
+            <Text layoutX="14.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <JFXRadioButton graphicTextGap="1.0" layoutX="74.0" layoutY="60.0" text="Nam">
+            <JFXRadioButton graphicTextGap="1.0" layoutX="74.0" layoutY="69.0" text="Nam">
                <font>
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
@@ -179,17 +179,17 @@
                   <ToggleGroup fx:id="sex" />
                </toggleGroup>
             </JFXRadioButton>
-            <JFXRadioButton layoutX="142.0" layoutY="60.0" text="Nữ" toggleGroup="$sex">
+            <JFXRadioButton layoutX="142.0" layoutY="69.0" text="Nữ" toggleGroup="$sex">
                <font>
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
             </JFXRadioButton>
-            <Text layoutX="221.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh">
+            <Text layoutX="221.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="339.0" layoutY="54.0" prefHeight="27.0" prefWidth="182.0" styleClass="input-field">
+            <TextField layoutX="339.0" layoutY="63.0" prefHeight="27.0" prefWidth="182.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -233,7 +233,7 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="86.0" layoutY="86.0" prefHeight="44.0" prefWidth="510.0" styleClass="input-field">
+            <TextField layoutX="95.0" layoutY="82.0" prefHeight="44.0" prefWidth="510.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -244,10 +244,10 @@
          <Font name="Segoe UI Semibold" size="16.0" />
       </font>
    </TitledPane>
-   <TitledPane animated="false" collapsible="false" layoutX="365.0" layoutY="268.0" prefHeight="611.0" prefWidth="1221.0" text="Kê thuốc">
+   <TitledPane animated="false" collapsible="false" layoutX="365.0" layoutY="258.0" prefHeight="622.0" prefWidth="1221.0" text="Kê thuốc">
       <content>
-         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="586.0" prefWidth="1219.0" stylesheets="@../Styles/Examination.css">
-            <Pane layoutX="6.0" layoutY="2.0" prefHeight="60.0" prefWidth="1085.0" styleClass="container-pick">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="1217.0" stylesheets="@../Styles/Examination.css">
+            <Pane layoutX="12.0" layoutY="4.0" prefHeight="60.0" prefWidth="1085.0" styleClass="container-pick">
                <children>
                   <Button layoutX="926.0" layoutY="11.0" mnemonicParsing="false" text="Lưu" />
                   <Button id="red" layoutX="994.0" layoutY="11.0" mnemonicParsing="false" text="Xoá" />
@@ -310,9 +310,9 @@
                   <TextField disable="true" layoutX="823.0" layoutY="22.0" prefHeight="21.0" prefWidth="68.0" styleClass="amount" />
                   <ComboBox layoutX="185.0" layoutY="21.0" prefHeight="33.0" prefWidth="97.0" />
                   <ComboBox layoutX="266.0" layoutY="21.0" prefHeight="33.0" prefWidth="121.0" />
-                  <ComboBox layoutX="380.0" layoutY="21.0" prefHeight="33.0" prefWidth="121.0" />
+                  <ComboBox fx:id="cb_medicine" layoutX="380.0" layoutY="21.0" prefHeight="33.0" prefWidth="121.0" />
                </children></Pane>
-            <TableView id="tableview-main" layoutX="9.0" layoutY="67.0" prefHeight="497.0" prefWidth="1201.0">
+            <TableView id="tableview-main" layoutX="13.0" layoutY="74.0" prefHeight="497.0" prefWidth="1201.0">
                <columns>
                   <TableColumn prefWidth="49.99999809265137" text="STT" />
                   <TableColumn prefWidth="212.66663360595703" text="Tên thuốc" />

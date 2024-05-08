@@ -1,6 +1,7 @@
 package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.MenuController;
+import com.example.privateclinic.Controllers.SettingController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -14,6 +15,8 @@ import javafx.stage.StageStyle;
 public class ViewFactory {
     Stage stageExamination = null;
     Stage stageReception =null;
+    Stage stageSetting = null;
+    Stage stageMenu = null;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -23,7 +26,7 @@ public class ViewFactory {
     public void showMenuWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Menu.fxml"));
-        createStage(loader);
+        stageMenu=createStage(loader);
     }
 
     public void showReceptionWindow() {
@@ -50,6 +53,18 @@ public class ViewFactory {
         }
 
     }
+    public void showSettingWindow()
+    {
+        if(stageSetting==null)
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Setting.fxml"));
+            stageSetting=createStage(loader);
+        }
+        else
+        {
+            stageSetting.setAlwaysOnTop(true);
+        }
+    }
 
     private Stage createStage(FXMLLoader loader ) {
         Scene scene = null;
@@ -70,9 +85,18 @@ public class ViewFactory {
 
     public void closeStage(Stage stage)
     {
-        stage.close();//khi 1 stage nào đó đóng thì cập nhật tình hình các stage khác
+        stage.close();
+        if(stageMenu!=null &&!stageMenu.isShowing()) // nếu menu đóng thì đóng hết những window đang mở
+        {
+            if(stageExamination!=null) stageExamination.close();
+            if(stageReception!=null) stageReception.close();
+            if(stageSetting!=null) stageSetting.close();
+        }
+        //khi 1 stage nào đó đóng thì cập nhật tình hình các stage khác
         if(stageExamination!=null && !stageExamination.isShowing()) stageExamination=null;  // nếu khác null nhưng ko còn show thì cập nhật về null
-        if(stageExamination!=null && !stageReception.isShowing()) stageReception=null;
+        if(stageReception!=null && !stageReception.isShowing()) stageReception=null;
+        if(stageSetting!=null && !stageSetting.isShowing()) stageSetting=null;
+
     }
     public void hideStage(Stage stage)
     {

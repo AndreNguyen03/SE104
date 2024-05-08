@@ -25,7 +25,8 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable
+{
     private boolean isPasswordVisible = false;
 
     @FXML

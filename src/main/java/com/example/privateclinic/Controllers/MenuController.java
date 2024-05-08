@@ -94,7 +94,7 @@ public class MenuController {
 
     @FXML
     void btnSettingClicked(ActionEvent event) {
-
+        Model.getInstance().getViewFactory().showSettingWindow();
     }
     @FXML
     void closeMenu(MouseEvent event) {
@@ -111,7 +111,7 @@ public class MenuController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == okButton) {
-            s.close();
+            Model.getInstance().getViewFactory().closeStage(s);
         }
     }
 
