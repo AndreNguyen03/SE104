@@ -121,4 +121,6 @@ public class MenuController {
         s.setIconified(true);
     }
 
+    public void btnEmployeeClicked(ActionEvent event) {
+    }
 }

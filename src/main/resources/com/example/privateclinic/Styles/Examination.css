@@ -1,4 +1,4 @@
-.container-overal
+.container-overall
 {
     -fx-background-color: #f3faea;
 }
@@ -354,10 +354,7 @@
 {
 }
 /*pane-infor*/
-.titled-pane
-{
-    -fx-border-color: #416c0d;
-}
+
 .anchor
 {
 
@@ -366,6 +363,10 @@
 {
     -fx-font-size: 15px;
     -fx-font-family: "Segoe UI Semibold";
+}
+.titled-pane
+{
+    -fx-border-color: #416c0d;
 }
 .titled-pane .title
 {

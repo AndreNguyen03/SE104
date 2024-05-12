@@ -12,10 +12,12 @@ module com.example.privateclinic {
     requires com.almasb.fxgl.all;
     requires com.jfoenix;
     requires java.sql;
+    requires java.desktop;
 
     opens com.example.privateclinic to javafx.fxml;
     exports com.example.privateclinic;
     opens com.example.privateclinic.Controllers to javafx.fxml;
     exports com.example.privateclinic.Models;
     exports com.example.privateclinic.Views;
+    opens com.example.privateclinic.Models to javafx.fxml;
 }

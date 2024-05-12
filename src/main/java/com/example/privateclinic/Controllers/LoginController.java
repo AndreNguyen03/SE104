@@ -1,16 +1,13 @@
 package com.example.privateclinic.Controllers;
 
+import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.Model;
-import com.example.privateclinic.Views.ViewFactory;
 import com.jfoenix.controls.JFXRadioButton;
-import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -22,8 +19,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 public class LoginController implements Initializable
 {
@@ -133,7 +128,7 @@ public class LoginController implements Initializable
     }
     public void ValidateLogin()
     {
-        DatabaseConnection connectionNow = new DatabaseConnection();
+        ConnectDB connectionNow = new ConnectDB();
         Connection connectionDB= connectionNow.getConnection();
         //Nhập username: "ngocanh0058", password: "abc"
         String verifyLogin = "SELECT COUNT(1) FROM \"NHANVIEN\" WHERE \"TK\" ='"+tfUsername_Login.getText().toString()+"' AND \"MK\" ='"+pfPassword_Login.getText().toString()+"'";
