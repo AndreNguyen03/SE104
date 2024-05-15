@@ -5,6 +5,7 @@ import com.example.privateclinic.Models.User;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,13 +32,12 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable
-{
+public class LoginController implements Initializable {
     User user;
     String sentEmail = null;
     private String storedOTP;
-    private int index ;
-    private int time_remaining =20;
+    private int index;
+    private int time_remaining = 20;
     private Timeline timeline;
     @FXML
     private Button btnChange;
@@ -68,19 +68,23 @@ public class LoginController implements Initializable
     private TextField textFieldOTP;
 
     @FXML
-    private TextField tfUsername_Login,tf_username_forgot;
+    private TextField tfUsername_Login, tf_username_forgot;
     @FXML
-    private PasswordField pfPassword_Login, tfPassword2_change,tfPassword1_change;
+    private PasswordField pfPassword_Login, tfPassword2_change, tfPassword1_change;
+    @FXML
+    private TextField tfShowPasswordCP2, tfShowPasswordCP1, tfShowPasswordLogin;
 
     @FXML
     private Text textWelcome;
 
     @FXML
-    private JFXRadioButton radioHideShow,radioHideShowChange;
+    private JFXRadioButton radioHideShow, radioHideShowChange;
+    @FXML
+    private Pane paneProgress;
 
     @FXML
     void backToLogin(MouseEvent event) {
-        index =0;
+        index = 0;
         ResetTextField();
         loginPane.toFront();
     }
@@ -102,20 +106,19 @@ public class LoginController implements Initializable
 
     @FXML
     void sendOTP(MouseEvent event) {
-        if(tf_username_forgot.getText().isBlank())
-        {
+        if (tf_username_forgot.getText().isBlank()) {
             showAlert("You must fill the username!");
-            return ;
-        }
-
-        String username_result =null;
-        username_result= user.getUsername(tf_username_forgot.getText().toString());
-        if(username_result==null)
-        {
-            showAlert("Invalid username: "+ tf_username_forgot.getText().toString());
             return;
         }
-
+        paneProgress.toFront();
+        paneProgress.setVisible(true);
+        new Thread(() -> {
+            String username_result = null;
+            username_result = user.getUsername(tf_username_forgot.getText().toString());
+            if (username_result == null) {
+                showAlert("Invalid username: " + tf_username_forgot.getText().toString());
+                return;
+            }
             storedOTP = generateOTP();
             String fromEmail = "kiseryouta2003@gmail.com";
             String password = "qcqa slmu vkbr edha";
@@ -142,18 +145,24 @@ public class LoginController implements Initializable
                 message.setText(body);
 
                 Transport.send(message);
-                showAlert("OTP is now sent to mail!");
                 sentEmail = storedOTP;
-                // Bắt đầu đếm ngược sau khi gửi OTP
-                // Đặt lại thời gian đếm ngược
-                countDown();
+                Platform.runLater(() -> {
+                    if (sentEmail != null) {
+                        paneProgress.setVisible(false);
+                        showAlert("OTP is now sent to mail!");
+                        countDown(); // Start countdown here
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
                 sentEmail = null;
                 showAlert("Failed to send OTP: " + e.getMessage());
             }
+        }).start();
+
 
     }
+
     private void countDown() {
         lbl_send_otp.setDisable(true);
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
@@ -165,75 +174,66 @@ public class LoginController implements Initializable
                     timeline.stop();
                     lbl_send_otp.setText("Gửi OTP");
                     lbl_send_otp.setDisable(false);
-                    sentEmail=null; // đặt sent email về null để huỷ otp
-                    time_remaining=50; // khởi động lại timer
+                    sentEmail = null; // đặt sent email về null để huỷ otp
+                    time_remaining = 50; // khởi động lại timer
                 }
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
-    public String generateOTP()
-    {
+
+    public String generateOTP() {
         Random random = new Random();
         int otp = random.nextInt(100000, 999999);
-        return  String.valueOf(otp);
+        return String.valueOf(otp);
     }
+
     @FXML
     void btnContinue_clicked(MouseEvent event) {
 
-        if(CheckForFill())
-        {
-            if(!textFieldOTP.getText().toString().equals(sentEmail))
-            {
+        if (CheckForFill()) {
+            if (!textFieldOTP.getText().toString().equals(sentEmail)) {
                 showAlert("OTP is wrong!");
                 return;
             }
-            index =2;
+            index = 2;
             changePane.toFront();
             pfPassword_Login.setText("");
             sentEmail = null;
         }
     }
+
     private boolean CheckForFill() {
-        if(index == 0) // đang ở màn login
+        if (index == 0) // đang ở màn login
         {
-            if((tfUsername_Login.getText().isBlank()) && pfPassword_Login.getText().isBlank())
-            {
+            if ((tfUsername_Login.getText().isBlank()) && pfPassword_Login.getText().isBlank()) {
                 showAlert("Please enter username and password");
                 tfUsername_Login.setText("");
                 pfPassword_Login.setText("");
                 return false;
             }
-        }else
-        if(index == 1) // đang ở màn forgotpassword
+        } else if (index == 1) // đang ở màn forgotpassword
         {
-            if(tf_username_forgot.getText().isBlank()){
+            if (tf_username_forgot.getText().isBlank()) {
                 showAlert("You must fill the username!");
                 return false;
-            }
-            else
-            if(textFieldOTP.getText().isBlank())
-            {
+            } else if (textFieldOTP.getText().isBlank()) {
                 showAlert("You must fill the OTP!");
                 return false;
             }
-        }
-        else // đang ở màn change
+        } else // đang ở màn change
         {
-            if(tfPassword1_change.getText().isBlank())
-            {
+            if (tfPassword1_change.getText().isBlank()) {
                 showAlert("You must fill new password");
                 return false;
             }
-            if(tfPassword2_change.getText().isBlank())
-            {
+            if (tfPassword2_change.getText().isBlank()) {
                 showAlert("You must fill confirm new password");
                 return false;
 
             }
-            if(!tfPassword2_change.getText().equals(tfPassword1_change.getText()))
-            {
+            if (!tfPassword2_change.getText().equals(tfPassword1_change.getText())) {
                 showAlert("Wrong password re-entered, please check again");
                 return false;
             }
@@ -245,65 +245,83 @@ public class LoginController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnLogin.setOnAction(event -> loginButtonOnAction());
-        loginPane.toFront();;
+        radioHideShow.setOnAction(event -> showPassword());
+        radioHideShowChange.setOnAction(event -> showPassword());
+        loginPane.toFront();
+        ;
         user = new User();
-        index=0;
+        index = 0;
+    }
+
+    private void showPassword() {
+        if (index == 0 && radioHideShow.isSelected()) {
+            tfShowPasswordLogin.setVisible(true);
+            pfPassword_Login.setVisible(false);
+            tfShowPasswordLogin.setText(pfPassword_Login.getText());
+        } else if (index == 0 && !radioHideShow.isSelected()) {
+            pfPassword_Login.setVisible(true);
+            tfShowPasswordLogin.setVisible(false);
+        } else if (index == 2 && radioHideShowChange.isSelected()) {
+            tfShowPasswordCP1.setVisible(true);
+            tfPassword1_change.setVisible(false);
+            tfShowPasswordCP1.setText(tfPassword1_change.getText());
+            tfShowPasswordCP2.setVisible(true);
+            tfPassword2_change.setVisible(false);
+            tfShowPasswordCP2.setText(tfPassword2_change.getText());
+        } else if (index == 2 && !radioHideShowChange.isSelected()) {
+            tfShowPasswordCP1.setVisible(false);
+            tfPassword1_change.setVisible(true);
+            tfShowPasswordCP2.setVisible(false);
+            tfPassword2_change.setVisible(true);
+        }
     }
 
 
-
-
-    public void loginButtonOnAction()
-    {
-        if(CheckForFill()) Login(tfUsername_Login.getText().toString(),pfPassword_Login.getText().toString());
+    public void loginButtonOnAction() {
+        if (CheckForFill()) Login(tfUsername_Login.getText().toString(), pfPassword_Login.getText().toString());
     }
-    private void Login(String username,String password) {
-        int valid = user.CheckValidate(username,password);
-        if(valid==1)
-        {
+
+    private void Login(String username, String password) {
+        int valid = user.CheckValidate(username, password);
+        if (valid == 1) {
             showAlert("Welcome! Please change your password");
             loginPane.toBack();
             forgetPane.toBack();
-        }
-        else if(valid == 2)
-        {
+        } else if (valid == 2) {
             showAlert("Login successfully!");
             pfPassword_Login.setText("");
             Stage stage = (Stage) btnLogin.getScene().getWindow(); //get login-screen
             Model.getInstance().getViewFactory().closeStage(stage);//close login-screen
             Model.getInstance().getViewFactory().showMenuWindow(user);//mở menu-screen
-        }
-        else
+        } else
             showAlert("Fail to login! Check your Username and Password again");
     }
+
     @FXML
     public void btnConfirm_clicked(MouseEvent mouseEvent) throws SQLException {
-        if(CheckForFill()&&UpdatePassword(index))
-        {
+        if (CheckForFill() && UpdatePassword(index)) {
             showAlert("Password is now changed!");
             index = 0;
             ResetTextField();
             changePane.toBack();
             forgetPane.toBack();
-        }
-        else showAlert("Error!");
+        } else showAlert("Error!");
     }
 
     private boolean UpdatePassword(int index) throws SQLException {
-        if(index==0)// yêu cầu đổi mật khẩu mặc định
+        if (index == 0)// yêu cầu đổi mật khẩu mặc định
         {
-            return user.UpdatePassword(tf_username_forgot.getText().toString(),tfPassword2_change.getText().toString(),index);
+            return user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
         }
-        return user.UpdatePassword(tf_username_forgot.getText().toString(),tfPassword2_change.getText().toString(),index);
+        return user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
     }
 
     @FXML
-    void passwordFieldKeyTyped(KeyEvent event)
-    {
+    void passwordFieldKeyTyped(KeyEvent event) {
         checkValidate20characters(event);
     }
-    private void checkValidate20characters(KeyEvent event)
-    {
+
+    private void checkValidate20characters(KeyEvent event) {
         if (pfPassword_Login.getText().length() >= 20) {
             // Hiển thị thông báo khi độ dài vượt quá 20 ký tự
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -319,28 +337,27 @@ public class LoginController implements Initializable
         }
     }
 
-    private void showAlert(String string)
-    {
+    private void showAlert(String string) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Warning");
         alert.setHeaderText(null);
         alert.setContentText(string);
         alert.showAndWait();
     }
+
     @FXML
     void close(MouseEvent event) {
-        Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Stage s = (Stage) ((Node) event.getSource()).getScene().getWindow();
         s.close();
     }
-    public  void showLogin()
-    {
+
+    public void showLogin() {
         Model.getInstance().getViewFactory().showLoginWindow();
     }
+
     @FXML
     void minimize(MouseEvent event) {
-        Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Stage s = (Stage) ((Node) event.getSource()).getScene().getWindow();
         s.setIconified(true);
     }
-
-
 }
