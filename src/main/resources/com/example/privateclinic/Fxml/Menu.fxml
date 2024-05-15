@@ -128,4 +128,5 @@
          </children>
       </Pane>
    </Pane>
+   <Pane fx:id="mainPane" layoutX="249.0" layoutY="118.0" prefHeight="784.0" prefWidth="1350.0" />
 </Pane>
