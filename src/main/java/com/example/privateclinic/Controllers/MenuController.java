@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.almasb.fxgl.scene.Scene;
 import com.example.privateclinic.Models.Model;
+import com.example.privateclinic.Models.User;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class MenuController {
+    private User user;
 
     @FXML
     private MenuItem btnAspirine;
@@ -53,6 +55,10 @@ public class MenuController {
     @FXML
     private Pane mainPane;
 
+    public MenuController()
+    {
+        this.user = new User();
+    }
 
     @FXML
     void btnAspirineClicked(ActionEvent event) throws IOException {
@@ -114,13 +120,27 @@ public class MenuController {
             Model.getInstance().getViewFactory().closeStage(s);
         }
     }
-
+    public void initData(User _user)
+    {
+        this.user=_user;
+    }
+    public void ProfileEmploy_Clicked(MouseEvent mouseEvent) {
+        String id = this.user.getEmployee_id();
+        String name = this.user.getEmployName();
+        String username = this.user.getUsername();
+        String pos = this.user.getPosition();
+        Model.getInstance().getViewFactory().showProfileWindow(id,name,username,pos);
+    }
     @FXML
     void minimizeMenu(MouseEvent event) {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
         s.setIconified(true);
     }
 
-    public void btnEmployeeClicked(ActionEvent event) {
+
+    public void minimizeStage(Stage stage)
+    {
+        stage.setIconified(true);
     }
+
 }

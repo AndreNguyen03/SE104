@@ -5,7 +5,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -55,7 +54,7 @@ public class SettingController implements Initializable {
 
         System.out.println("Settings saved: Max Patients - " + cbMax.getValue() + ", Consultation Fee - " + cbMoney.getValue());
 
-        Alert alert = new Alert(AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Lưu Thiết Lập");
         alert.setHeaderText(null);
         alert.setContentText("Thiết lập đã được lưu thành công!");
@@ -87,7 +86,7 @@ public class SettingController implements Initializable {
     }
 
     private void showErrorMessage(String message) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Lỗi");
         alert.setHeaderText(null);
         alert.setContentText(message);

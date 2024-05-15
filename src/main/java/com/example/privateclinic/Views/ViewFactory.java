@@ -1,7 +1,9 @@
 package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.MenuController;
+import com.example.privateclinic.Controllers.ProfileController;
 import com.example.privateclinic.Controllers.SettingController;
+import com.example.privateclinic.Models.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -17,18 +19,34 @@ public class ViewFactory {
     Stage stageReception =null;
     Stage stageSetting = null;
     Stage stageMenu = null;
+    Stage stageProfile= null;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
         createStage(loader);
     }
 
-    public void showMenuWindow() {
-        Scene scene = null;
+    public void showMenuWindow(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Menu.fxml"));
-        stageMenu=createStage(loader);
+        createStage(loader);
+        MenuController menuController = loader.getController();
+        menuController.initData(user);
     }
+    public void showProfileWindow(String id,String name,String username,String pos)
+    {
+        if(stageProfile==null)
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Profile.fxml"));
+            stageProfile=createStage(loader);
+            ProfileController profileController = loader.getController();
+            profileController.initData(id,name,username,pos);
+        }
+        else
+        {
+            stageProfile.setAlwaysOnTop(true);
+        }
 
+    }
     public void showReceptionWindow() {
         if(stageReception==null)  //xử lí mở 2 lần scene
         {
@@ -96,14 +114,12 @@ public class ViewFactory {
         if(stageExamination!=null && !stageExamination.isShowing()) stageExamination=null;  // nếu khác null nhưng ko còn show thì cập nhật về null
         if(stageReception!=null && !stageReception.isShowing()) stageReception=null;
         if(stageSetting!=null && !stageSetting.isShowing()) stageSetting=null;
+        if(stageProfile!=null &&!stageProfile.isShowing()) stageProfile=null;
 
     }
-    public void hideStage(Stage stage)
+    public void minimizeStage(Stage stage)
     {
-        stage.hide();
+        stage.setIconified(true);
     }
-    public void showStage(Stage stage)
-    {
-        stage.show();
-    }
+
 }

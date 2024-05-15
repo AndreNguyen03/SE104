@@ -13,6 +13,7 @@ module com.example.privateclinic {
     requires com.jfoenix;
     requires java.sql;
     requires java.desktop;
+    requires java.mail;
 
     opens com.example.privateclinic to javafx.fxml;
     exports com.example.privateclinic;
