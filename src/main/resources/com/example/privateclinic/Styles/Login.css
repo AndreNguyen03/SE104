@@ -1,6 +1,18 @@
 .login_container {
     -fx-background-color: #E9E9E9;
 }
+.lbl{
+    -fx-text-fill: #0488da;
+    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI Semibold";
+}
+.lbl:hover{
+    -fx-font-size: 17px;
+    -fx-text-fill: #4eb4f5;
+}
+.lbl:pressed{
+    -fx-font-size: 16px;
+}
 .pá:hover
 {
     -fx-border-color: transparent;
@@ -55,17 +67,17 @@
 .inputText
 {
     -fx-background-color:#FFFFFF;
-    -fx-text-fill: #C1C0C7 ;
+    -fx-text-fill: #000000;
     -fx-border-color: #9E9DA3;
     -fx-background-radius: 5;
     -fx-font-family: "Segoe UI Semibold";
     -fx-border-radius:5;
     -fx-padding: 5 5 5 5;
+    -fx-font-size: 16;
 }
 .inputText:hover
 {
     -fx-background-color:#FFFFFF;
-    -fx-text-fill: #C1C0C7 ;
     -fx-border-color: #8BC634;
     -fx-font-family: "Segoe UI Semibold";
     -fx-border-radius:5;
@@ -73,9 +85,7 @@
 .inputText .text-field
 {
     -fx-border-width: 0 0 0 0;
-    -fx-font-size: 16;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #000000;
 }
 .password-field
 {
