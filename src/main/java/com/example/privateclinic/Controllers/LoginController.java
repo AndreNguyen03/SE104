@@ -165,7 +165,7 @@ public class LoginController implements Initializable
                     lbl_send_otp.setText("Gửi OTP");
                     lbl_send_otp.setDisable(false);
                     sentEmail=null; // đặt sent email về null để huỷ otp
-                    time_remaining=20; // khởi động lại timer
+                    time_remaining=50; // khởi động lại timer
                 }
             }
         }));
@@ -189,7 +189,6 @@ public class LoginController implements Initializable
                 return;
             }
             index =2;
-            ResetTextField();
             changePane.toFront();
             pfPassword_Login.setText("");
             sentEmail = null;
