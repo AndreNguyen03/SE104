@@ -107,6 +107,7 @@ public class LoginController implements Initializable
             showAlert("You must fill the username!");
             return ;
         }
+
         String username_result =null;
         username_result= user.getUsername(tf_username_forgot.getText().toString());
         if(username_result==null)

@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXRadioButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="816.0" styleClass="login_container" stylesheets="@../Styles/Login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.LoginController">
    <children>
       <Pane prefHeight="522.0" prefWidth="403.0" style="-fx-background-color: linear-gradient(to bottom,#4B7813,#8BC634)" styleClass="login_logo_container">
@@ -149,6 +143,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Text>
+                  <ProgressIndicator layoutX="204.0" layoutY="-2.0" prefHeight="56.0" prefWidth="63.0" />
                </children>
             </Pane>
             <Pane fx:id="changePane" layoutX="37.0" layoutY="108.0" prefHeight="305.0" prefWidth="361.0" style="-fx-background-color: E9E9E9;">
