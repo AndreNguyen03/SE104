@@ -124,5 +124,7 @@
 {
     -fx-opacity: 0;
 }
-
+.pane_progress {
+    -fx-background-color: rgb(170, 170, 170,0.5);
+}
 
