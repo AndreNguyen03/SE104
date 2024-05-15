@@ -262,7 +262,7 @@
             </Pane>
             <Pane fx:id="paneProgress" layoutX="-4.0" prefHeight="522.0" prefWidth="449.0" styleClass="pane_progress" visible="false">
                <children>
-                  <ProgressIndicator layoutX="147.0" layoutY="177.0" />
+                  <ProgressIndicator layoutX="200.0" layoutY="230.0" prefHeight="54.0" prefWidth="63.0" />
                </children>
             </Pane>
          </children>
