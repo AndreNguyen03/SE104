@@ -26,18 +26,20 @@ import javax.swing.*;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+
 public class LoginController implements Initializable {
     User user;
     String sentEmail = null;
     private String storedOTP;
     private int index;
-    private int time_remaining = 20;
+    private int time_remaining = 50;
     private Timeline timeline;
     @FXML
     private Button btnChange;
@@ -107,7 +109,7 @@ public class LoginController implements Initializable {
     @FXML
     void sendOTP(MouseEvent event) {
         if (tf_username_forgot.getText().isBlank()) {
-            showAlert("You must fill the username!");
+            showAlert("Warning","You must fill the username!");
             return;
         }
         paneProgress.toFront();
@@ -116,7 +118,7 @@ public class LoginController implements Initializable {
             String username_result = null;
             username_result = user.getUsername(tf_username_forgot.getText().toString());
             if (username_result == null) {
-                showAlert("Invalid username: " + tf_username_forgot.getText().toString());
+                showAlert("Warning","Invalid username: " + tf_username_forgot.getText().toString());
                 return;
             }
             storedOTP = generateOTP();
@@ -149,14 +151,14 @@ public class LoginController implements Initializable {
                 Platform.runLater(() -> {
                     if (sentEmail != null) {
                         paneProgress.setVisible(false);
-                        showAlert("OTP is now sent to mail!");
+                        showAlert("Warning","OTP is now sent to mail!");
                         countDown(); // Start countdown here
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 sentEmail = null;
-                showAlert("Failed to send OTP: " + e.getMessage());
+                showAlert("Warning","Failed to send OTP: " + e.getMessage());
             }
         }).start();
 
@@ -169,7 +171,8 @@ public class LoginController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 time_remaining--;
-                lbl_send_otp.setText("Gửi lại " + time_remaining + "s");
+                lbl_send_otp.setText("Gửi lại sau" + time_remaining + "s");
+               // lbl_send_otp.setX();
                 if (time_remaining <= 0) {
                     timeline.stop();
                     lbl_send_otp.setText("Gửi OTP");
@@ -194,7 +197,7 @@ public class LoginController implements Initializable {
 
         if (CheckForFill()) {
             if (!textFieldOTP.getText().toString().equals(sentEmail)) {
-                showAlert("OTP is wrong!");
+                showAlert("Warning","OTP is wrong!");
                 return;
             }
             index = 2;
@@ -208,7 +211,7 @@ public class LoginController implements Initializable {
         if (index == 0) // đang ở màn login
         {
             if ((tfUsername_Login.getText().isBlank()) && pfPassword_Login.getText().isBlank()) {
-                showAlert("Please enter username and password");
+                showAlert("Warning","Please enter username and password");
                 tfUsername_Login.setText("");
                 pfPassword_Login.setText("");
                 return false;
@@ -216,25 +219,26 @@ public class LoginController implements Initializable {
         } else if (index == 1) // đang ở màn forgotpassword
         {
             if (tf_username_forgot.getText().isBlank()) {
-                showAlert("You must fill the username!");
+                showAlert("Warning","You must fill the username!");
                 return false;
             } else if (textFieldOTP.getText().isBlank()) {
-                showAlert("You must fill the OTP!");
+                showAlert("Warning","You must fill the OTP!");
                 return false;
             }
         } else // đang ở màn change
         {
             if (tfPassword1_change.getText().isBlank()) {
-                showAlert("You must fill new password");
+                showAlert("Warning","You must fill new password");
                 return false;
             }
             if (tfPassword2_change.getText().isBlank()) {
-                showAlert("You must fill confirm new password");
+                showAlert("Warning","You must fill confirm new password");
                 return false;
 
             }
             if (!tfPassword2_change.getText().equals(tfPassword1_change.getText())) {
-                showAlert("Wrong password re-entered, please check again");
+                showAlert("Warning",
+                        "Wrong password re-entered, please check again");
                 return false;
             }
 
@@ -248,7 +252,6 @@ public class LoginController implements Initializable {
         radioHideShow.setOnAction(event -> showPassword());
         radioHideShowChange.setOnAction(event -> showPassword());
         loginPane.toFront();
-        ;
         user = new User();
         index = 0;
     }
@@ -278,42 +281,79 @@ public class LoginController implements Initializable {
 
 
     public void loginButtonOnAction() {
-        if (CheckForFill()) Login(tfUsername_Login.getText().toString(), pfPassword_Login.getText().toString());
+        paneProgress.setVisible(true);
+        paneProgress.toFront();
+        new Thread(() -> {
+            try {
+                if (CheckForFill()) {
+                    Login(tfUsername_Login.getText().toString(), pfPassword_Login.getText().toString());
+                }
+            }
+            catch (SQLException|IOException e)
+            {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    paneProgress.setVisible(false);
+                    showAlert("Error Connection","Can't connect server!");
+                });
+            }
+        }).start();
     }
 
-    private void Login(String username, String password) {
-        int valid = user.CheckValidate(username, password);
-        if (valid == 1) {
-            showAlert("Welcome! Please change your password");
-            loginPane.toBack();
-            forgetPane.toBack();
-        } else if (valid == 2) {
-            showAlert("Login successfully!");
-            pfPassword_Login.setText("");
-            Stage stage = (Stage) btnLogin.getScene().getWindow(); //get login-screen
-            Model.getInstance().getViewFactory().closeStage(stage);//close login-screen
-            Model.getInstance().getViewFactory().showMenuWindow(user);//mở menu-screen
-        } else
-            showAlert("Fail to login! Check your Username and Password again");
+    private void Login(String username, String password) throws SQLException,IOException {
+
+            int valid = user.CheckValidate(username, password);
+            Platform.runLater(()-> {
+                paneProgress.setVisible(false);
+                if (valid == 1) {
+                    showAlert("Notification","Welcome! Please change your password");
+                    loginPane.toBack();
+                    forgetPane.toBack();
+                } else if (valid == 2) {
+                    showAlert("Notification","Login successfully!");
+                    pfPassword_Login.setText("");
+                    Stage stage = (Stage) btnLogin.getScene().getWindow(); //get login-screen
+                    Model.getInstance().getViewFactory().closeStage(stage);//close login-screen
+                    Model.getInstance().getViewFactory().showMenuWindow(user);//mở menu-screen
+                } else
+                    showAlert("Warning","Fail to login! Check your Username and Password again");
+            });
     }
 
     @FXML
-    public void btnConfirm_clicked(MouseEvent mouseEvent) throws SQLException {
-        if (CheckForFill() && UpdatePassword(index)) {
-            showAlert("Password is now changed!");
-            index = 0;
-            ResetTextField();
-            changePane.toBack();
-            forgetPane.toBack();
-        } else showAlert("Error!");
+    public void btnConfirm_clicked(MouseEvent mouseEvent) {
+        paneProgress.setVisible(true);
+        paneProgress.toFront();
+        new Thread (()->{
+            try
+            {
+                if (CheckForFill() && UpdatePassword(index)) {
+                    showAlert("Notification","Password is now changed!");
+                    index = 0;
+                    ResetTextField();
+                    changePane.toBack();
+                    forgetPane.toBack();
+                } else showAlert("Warning","Error!");
+            }catch (SQLException |IOException e)
+            {
+                e.printStackTrace();
+                Platform.runLater(()->{
+                    showAlert("Error Connection","Can't connect server!");
+                    paneProgress.setVisible(false);
+                });
+            }
+
+        });
+
     }
 
-    private boolean UpdatePassword(int index) throws SQLException {
-        if (index == 0)// yêu cầu đổi mật khẩu mặc định
-        {
-            return user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
-        }
-        return user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
+    private boolean UpdatePassword(int index) throws SQLException,IOException {
+        boolean bool = user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
+       Platform.runLater(()->
+       {
+           paneProgress.setVisible(false);
+       });
+        return bool;
     }
 
     @FXML
@@ -337,9 +377,9 @@ public class LoginController implements Initializable {
         }
     }
 
-    private void showAlert(String string) {
+    private void showAlert(String tilte,String string) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
+        alert.setTitle(tilte);
         alert.setHeaderText(null);
         alert.setContentText(string);
         alert.showAndWait();
