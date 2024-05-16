@@ -171,7 +171,7 @@ public class LoginController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 time_remaining--;
-                lbl_send_otp.setText("Gửi lại sau" + time_remaining + "s");
+                lbl_send_otp.setText("Gửi lại sau " + time_remaining + " s");
                // lbl_send_otp.setX();
                 if (time_remaining <= 0) {
                     timeline.stop();
@@ -324,36 +324,41 @@ public class LoginController implements Initializable {
     public void btnConfirm_clicked(MouseEvent mouseEvent) {
         paneProgress.setVisible(true);
         paneProgress.toFront();
-        new Thread (()->{
-            try
-            {
-                if (CheckForFill() && UpdatePassword(index)) {
-                    showAlert("Notification","Password is now changed!");
-                    index = 0;
-                    ResetTextField();
-                    changePane.toBack();
-                    forgetPane.toBack();
-                } else showAlert("Warning","Error!");
-            }catch (SQLException |IOException e)
-            {
+        new Thread(() -> {
+            try {
+                if (CheckForFill()) {
+                    boolean updateSuccess = UpdatePassword(index);
+                    Platform.runLater(() -> {
+                        if (updateSuccess) {
+                            showAlert("Notification", "Password is now changed!");
+                            index = 0;
+                            ResetTextField();
+                            changePane.toBack();
+                            forgetPane.toBack();
+                        } else {
+                            showAlert("Warning", "Failed to update password. Please try again.");
+                        }
+                        paneProgress.setVisible(false);
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        showAlert("Warning", "Error! Please check the input fields.");
+                        paneProgress.setVisible(false);
+                    });
+                }
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
-                Platform.runLater(()->{
-                    showAlert("Error Connection","Can't connect server!");
+                Platform.runLater(() -> {
+                    showAlert("Error Connection", "Can't connect to the server!");
                     paneProgress.setVisible(false);
                 });
             }
-
-        });
+        }).start();
 
     }
 
     private boolean UpdatePassword(int index) throws SQLException,IOException {
-        boolean bool = user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
-       Platform.runLater(()->
-       {
-           paneProgress.setVisible(false);
-       });
-        return bool;
+        return  user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
     }
 
     @FXML
