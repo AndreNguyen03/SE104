@@ -237,7 +237,7 @@ public class User {
     }
     // Forgot password
     */
-    public ResultSet LoadListEmployee () throws SQLException {
+    public ResultSet LoadListEmployee () {
         ConnectDB connect = new ConnectDB();
         String query = "SELECT manv as \"ID\", HoTen as \"Họ và tên\",cccd as \"CCCD\",diachi as \"Địa chỉ\",sdt as \"Số điện thoại\",email as \"Email\",vitri as \"Vị trí làm việc\",username as \"Username\"  FROM nhanvien ";
         return connect.getData(query);
@@ -324,7 +324,7 @@ public class User {
             }
             return false;
     }
-    public ResultSet SearchData(String search) throws SQLException //search id or search name
+    public ResultSet SearchData(String search) //search id or search name
     {
         ConnectDB connect = new ConnectDB();
         String query = STR."SELECT MaNV as \"ID\", HoTen as \"Họ và tên\",CCCD as \"CCCD\",DiaChi as \"Địa chỉ\",SDT as \"Số điện thoại\",Email as \"Email\",ViTri as \"Vị trí công việc\",TK as \"Tài khoản\"  FROM NHANVIEN WHERE (MaNV like '\{search}%' or HoTen like N'% \{search}%')";

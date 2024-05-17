@@ -22,20 +22,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="884.0" prefWidth="1600.0" styleClass="container-overal" stylesheets="@../Styles/Examination.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ExaminationController">
-   <HBox prefHeight="100.0" prefWidth="200.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="884.0" prefWidth="1600.0" styleClass="container-overall" stylesheets="@../Styles/Examination.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ExaminationController">
+   <HBox layoutX="-2.0" layoutY="-2.0" prefHeight="100.0" prefWidth="200.0" styleClass="container-left">
       <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-      <VBox prefHeight="888.0" prefWidth="354.0" style="-fx-border-color: black;">
+      <VBox prefHeight="870.0" prefWidth="347.0">
          <HBox.margin>
             <Insets left="2.0" top="2.0" />
          </HBox.margin>
-         <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" styleClass="header-logo">
+         <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="111.0" prefWidth="347.0" styleClass="header-logo">
             <VBox.margin>
                <Insets />
             </VBox.margin>
-            <ImageView fitHeight="105.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="111.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Images/logoMenu.png" />
+                  <Image url="@../Images/ClinicUIT.png" />
                </image>
             </ImageView>
             <Text layoutX="140.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 32;" text="Khám bệnh" />
@@ -44,77 +44,77 @@
             <padding>
                <Insets bottom="5.0" />
             </padding>
-            <TextField layoutX="5.333333333333333" layoutY="59.0" prefHeight="31.0" prefWidth="169.0" promptText="Tìm kiếm" styleClass="input-field" AnchorPane.leftAnchor="5.333333333333333">
+            <TextField layoutX="5.333333333333333" layoutY="59.0" prefHeight="31.0" prefWidth="169.0" promptText="Tìm kiếm" styleClass="input-field" AnchorPane.leftAnchor="8.0">
                <font>
                   <Font name="Segoe UI Semibold" size="12.0" />
                </font>
             </TextField>
-            <Button layoutX="182.0" layoutY="59.0" mnemonicParsing="false" text="Tìm kiếm" />
-            <Button layoutX="267.0" layoutY="59.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="81.0" text="Làm mới" />
-            <Button layoutX="6.0" layoutY="97.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="169.0" text="Gọi bệnh nhân" />
-            <RadioButton layoutX="3.0" layoutY="-1.0" mnemonicParsing="false" text="Danh sách bệnh nhân chờ">
+            <Button id="btn" layoutX="183.0" layoutY="59.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="77.0" text="Tìm kiếm" />
+            <Button id="btn" layoutX="267.0" layoutY="59.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Làm mới" />
+            <Button id="btn" layoutX="6.0" layoutY="97.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="169.0" text="Gọi bệnh nhân" AnchorPane.leftAnchor="8.0" />
+            <RadioButton layoutX="10.0" layoutY="2.0" mnemonicParsing="false" text="Danh sách bệnh nhân chờ" AnchorPane.leftAnchor="8.0">
                <toggleGroup>
-                  <ToggleGroup fx:id="selectedview" />
+                  <ToggleGroup fx:id="listCustomer" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton layoutX="2.0" layoutY="27.0" mnemonicParsing="false" text="Danh sách bệnh nhân đã khám" toggleGroup="$selectedview" />
-            <RadioButton layoutX="197.0" layoutY="99.0" mnemonicParsing="false" text="Giọng nữ" />
+            <RadioButton layoutX="8.0" layoutY="29.0" mnemonicParsing="false" text="Danh sách bệnh nhân đã khám" toggleGroup="$listCustomer" AnchorPane.leftAnchor="8.0" />
+            <RadioButton layoutX="197.0" layoutY="102.0" mnemonicParsing="false" text="Giọng nữ" />
          </AnchorPane>
          <AnchorPane prefHeight="497.0" prefWidth="351.0">
-            <TableView layoutX="2.0" layoutY="1.0" prefHeight="529.0" prefWidth="345.0">
+            <TableView fx:id="tbl_customer" layoutX="1.0" layoutY="1.0" prefHeight="522.0" prefWidth="345.0">
                <columns>
-                  <TableColumn prefWidth="63.999969601631165" text="STT" />
-                  <TableColumn prefWidth="158.66665649414062" text="Họ tên" />
-                  <TableColumn prefWidth="121.33331298828125" text="Số điện thoại" />
+                  <TableColumn fx:id="col_mabn" prefWidth="63.999969601631165" text="STT" />
+                  <TableColumn fx:id="col_tenbn" prefWidth="158.66665649414062" text="Họ tên" />
+                  <TableColumn fx:id="col_sdt" prefWidth="121.33331298828125" text="Số điện thoại" />
                </columns>
             </TableView>
          </AnchorPane>
          <AnchorPane prefHeight="69.0" prefWidth="351.0" styleClass="container-footer">
             <VBox layoutY="62.0" prefHeight="44.0" prefWidth="345.0">
-               <HBox prefHeight="44.0" prefWidth="345.0">
-                  <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="107.0" text="Lịch sử khám">
+               <HBox prefHeight="44.0" prefWidth="345.0" style="-fx-alignment: center;">
+                  <Button id="btn" mnemonicParsing="false" prefHeight="33.0" prefWidth="107.0" text="Lịch sử khám">
                      <HBox.margin>
                         <Insets left="8.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="In toa thuốc">
+                  <Button id="btn" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="In toa thuốc">
                      <HBox.margin>
                         <Insets left="16.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" text="In bảng kê">
+                  <Button id="btn" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" text="In bảng kê">
                      <HBox.margin>
-                        <Insets left="16.0" />
+                        <Insets left="16.0" right="8.0" />
                      </HBox.margin>
                   </Button>
                </HBox>
             </VBox>
-            <HBox layoutY="11.0" prefHeight="44.0" prefWidth="345.0">
-               <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="74.0" text="Khám">
+            <HBox layoutY="11.0" prefHeight="44.0" prefWidth="345.0" style="-fx-alignment: center;">
+               <Button id="btn" mnemonicParsing="false" prefHeight="33.0" prefWidth="74.0" text="Khám">
                   <HBox.margin>
                      <Insets left="8.0" />
                   </HBox.margin>
                </Button>
-               <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Lưu">
+               <Button id="add" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Lưu">
                   <HBox.margin>
                      <Insets left="19.0" />
                   </HBox.margin>
                </Button>
-               <Button id="orange" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Sửa">
+               <Button id="edit" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Sửa">
                   <HBox.margin>
                      <Insets left="19.0" />
                   </HBox.margin>
                </Button>
-               <Button id="red" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Huỷ">
+               <Button id="delete" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Huỷ">
                   <HBox.margin>
-                     <Insets left="19.0" />
+                     <Insets left="15.0" right="8.0" />
                   </HBox.margin>
                </Button>
             </HBox>
          </AnchorPane>
       </VBox>
    </HBox>
-   <AnchorPane layoutX="354.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1243.0" styleClass="header-top">
+   <AnchorPane layoutX="350.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1248.0" styleClass="header-top">
       <Text layoutX="91.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày khám">
          <font>
             <Font name="Segoe UI Semibold" size="14.0" />
@@ -143,25 +143,25 @@
       </Pane>
    </AnchorPane>
    <Group layoutX="453.0" layoutY="150.0" />
-   <TitledPane animated="false" collapsible="false" layoutX="366.0" layoutY="75.0" prefHeight="177.0" prefWidth="582.0" text="Thông tin bệnh nhân">
+   <TitledPane animated="false" collapsible="false" layoutX="368.0" layoutY="75.0" prefHeight="177.0" prefWidth="582.0" text="Thông tin bệnh nhân">
       <content>
          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="142.0" prefWidth="579.0" style="-fx-background-color: ffffff;" styleClass="anchor">
-            <Text layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân">
+            <Text layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="126.0" layoutY="11.0" prefHeight="27.0" prefWidth="81.0" styleClass="input-field">
+            <TextField fx:id="tf_mabn" disable="true" layoutX="126.0" layoutY="11.0" prefHeight="27.0" prefWidth="81.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="221.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh nhân">
+            <Text layoutX="221.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh nhân">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="339.0" layoutY="10.0" prefHeight="31.0" prefWidth="208.0" styleClass="input-field">
+            <TextField fx:id="tf_tenbn" disable="true" editable="false" layoutX="339.0" layoutY="10.0" prefHeight="31.0" prefWidth="208.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -171,7 +171,7 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <JFXRadioButton graphicTextGap="1.0" layoutX="74.0" layoutY="69.0" text="Nam">
+            <JFXRadioButton fx:id="rad_men" disable="true" graphicTextGap="1.0" layoutX="74.0" layoutY="69.0" text="Nam">
                <font>
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
@@ -179,17 +179,17 @@
                   <ToggleGroup fx:id="sex" />
                </toggleGroup>
             </JFXRadioButton>
-            <JFXRadioButton layoutX="142.0" layoutY="69.0" text="Nữ" toggleGroup="$sex">
+            <JFXRadioButton fx:id="rad_women" disable="true" layoutX="142.0" layoutY="69.0" text="Nữ" toggleGroup="$sex">
                <font>
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
             </JFXRadioButton>
-            <Text layoutX="221.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh">
+            <Text layoutX="222.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="339.0" layoutY="63.0" prefHeight="27.0" prefWidth="182.0" styleClass="input-field">
+            <TextField fx:id="tf_ngaysinh" disable="true" editable="false" layoutX="339.0" layoutY="60.0" prefHeight="27.0" prefWidth="182.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -200,40 +200,40 @@
          <Font name="Segoe UI Semibold" size="16.0" />
       </font>
    </TitledPane>
-   <TitledPane animated="false" collapsible="false" layoutX="963.0" layoutY="75.0" prefHeight="177.0" prefWidth="625.0" text="Thông tin khám bệnh">
+   <TitledPane animated="false" collapsible="false" layoutX="965.0" layoutY="75.0" prefHeight="177.0" prefWidth="625.0" text="Thông tin khám bệnh">
       <content>
          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="138.0" prefWidth="636.0" style="-fx-background-color: ffffff;" styleClass="anchor">
-            <Text layoutX="38.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Triệu chứng:">
+            <Text layoutX="38.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Triệu chứng:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="165.0" layoutY="9.0" prefHeight="27.0" prefWidth="427.0" styleClass="input-field">
+            <TextField layoutX="165.0" layoutY="6.0" prefHeight="27.0" prefWidth="427.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="37.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chẩn đoán bệnh:">
+            <Text layoutX="37.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chẩn đoán bệnh:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="166.0" layoutY="47.0" prefHeight="27.0" prefWidth="81.0" styleClass="input-field">
+            <TextField layoutX="166.0" layoutY="49.0" prefHeight="27.0" prefWidth="81.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <TextField layoutX="282.0" layoutY="47.0" prefHeight="27.0" prefWidth="311.0" styleClass="input-field">
+            <TextField layoutX="282.0" layoutY="49.0" prefHeight="27.0" prefWidth="311.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="38.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lưu ý:">
+            <Text layoutX="38.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lưu ý:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField layoutX="95.0" layoutY="82.0" prefHeight="44.0" prefWidth="510.0" styleClass="input-field">
+            <TextField layoutX="95.0" layoutY="91.0" prefHeight="44.0" prefWidth="499.0" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -244,13 +244,13 @@
          <Font name="Segoe UI Semibold" size="16.0" />
       </font>
    </TitledPane>
-   <TitledPane animated="false" collapsible="false" layoutX="365.0" layoutY="258.0" prefHeight="622.0" prefWidth="1221.0" text="Kê thuốc">
+   <TitledPane animated="false" collapsible="false" layoutX="367.0" layoutY="258.0" prefHeight="622.0" prefWidth="1221.0" text="Kê thuốc">
       <content>
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="1217.0" stylesheets="@../Styles/Examination.css">
             <Pane layoutX="12.0" layoutY="4.0" prefHeight="60.0" prefWidth="1085.0" styleClass="container-pick">
                <children>
-                  <Button layoutX="926.0" layoutY="11.0" mnemonicParsing="false" text="Lưu" />
-                  <Button id="red" layoutX="994.0" layoutY="11.0" mnemonicParsing="false" text="Xoá" />
+                  <Button id="add" layoutX="926.0" layoutY="8.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="74.0" text="Thêm" />
+                  <Button id="delete" layoutX="1004.0" layoutY="8.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="68.0" text="Xoá" />
                   <Text fill="RED" layoutX="55.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên thuốc">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
