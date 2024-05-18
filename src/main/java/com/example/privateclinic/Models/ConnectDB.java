@@ -40,7 +40,7 @@ public class ConnectDB {
 
     private boolean isInternetAvailable() {
         try {
-            InetAddress.getByName("www.google.com").isReachable(3000); // Kiểm tra kết nối tới Google trong 3 giây
+            InetAddress.getByName("www.google.com").isReachable(200); // Kiểm tra kết nối tới Google trong 3 giây
             return true;
         } catch (IOException e) {
             return false;

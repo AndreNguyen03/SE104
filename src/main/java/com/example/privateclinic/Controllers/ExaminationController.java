@@ -1,14 +1,10 @@
 package com.example.privateclinic.Controllers;
 
-import com.example.privateclinic.Models.Customer;
-import com.example.privateclinic.Models.Model;
-import com.example.privateclinic.Models.User;
-import javafx.beans.Observable;
+import com.example.privateclinic.Models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -18,13 +14,26 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ExaminationController implements Initializable {
     public Pane btnClose;
+    public ComboBox cb_ngay;
+    public ComboBox cb_sang;
+    public ComboBox cb_trua;
+    public ComboBox cb_chieu;
+    public ComboBox cb_toi;
+    public TextField tf_soLuong;
+    public ComboBox cb_dvt;
+    public ComboBox cb_dangThuoc;
+    public ComboBox cb_cachDung;
     Customer customer;
     @FXML
     RadioButton rad_men,rad_women;
+    @FXML
+    ProgressBar progressCustomerLoad,progressMedicineLoad;
     @FXML
     TextField tf_mabn,tf_tenbn,tf_ngaysinh;
     @FXML
@@ -40,14 +49,22 @@ public class ExaminationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Initialization
         customer = new Customer();
-        fillDataCustomers_waiting();
+        progressCustomerLoad.setVisible(false);
+        progressMedicineLoad.setVisible(false);
+        //set up
+        fillDataCustomers_waiting(); // tải danh sách customers
+        uploadDonViTinh();
+        uploadDangThuoc();
+        uploadCachDung();
+        uploadComboBox();
         tbl_customer.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getClickCount()==2)
             {
                 try
                 {
-                    FillDataCustomer_exam();
+                    fillDataCustomer_exam();
 
                 }
                 catch (SQLException e)
@@ -56,6 +73,66 @@ public class ExaminationController implements Initializable {
                 }
             }
         });
+    }
+
+    private void uploadComboBox() {
+        List<Integer> listOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+        cb_ngay.getItems().addAll(listOptions);
+        cb_trua.getItems().addAll(listOptions);
+        cb_chieu.getItems().addAll(listOptions);
+        cb_toi.getItems().addAll(listOptions);
+        cb_sang.getItems().addAll(listOptions);
+    }
+
+    private void uploadCachDung() {
+        UseWay useWay = new UseWay();
+        ResultSet resultSet = useWay.LoadList();
+        try
+        {
+            while (resultSet.next())
+            {
+                cb_cachDung.getItems().add(resultSet.getString("tencd"));
+            }
+        }
+        catch (SQLException e )
+        {
+            e.printStackTrace();
+            showAlert("Error","Error");
+        }
+    }
+
+    private void uploadDangThuoc() {
+        MedicineType medicineType = new MedicineType();
+        ResultSet resultSet = medicineType.LoadList();
+        try
+        {
+            while (resultSet.next())
+            {
+                cb_dangThuoc.getItems().add(resultSet.getString("tendt"));
+            }
+        }
+        catch (SQLException e )
+        {
+            e.printStackTrace();
+            showAlert("Error","Error");
+        }
+    }
+
+    private void uploadDonViTinh() {
+        Unit unit = new Unit();
+        ResultSet resultSet = unit.LoadList();
+        try
+        {
+            while (resultSet.next())
+            {
+                cb_dvt.getItems().add(resultSet.getString("tendvt"));
+            }
+        }
+        catch (SQLException e )
+        {
+            e.printStackTrace();
+            showAlert("Error","Error");
+        }
     }
 
     private void fillDataCustomers_waiting() {
@@ -82,28 +159,43 @@ public class ExaminationController implements Initializable {
 
     }
 
-    public void FillDataCustomer_exam() throws  SQLException
+    public void fillDataCustomer_exam() throws  SQLException
     {
-        ObservableList<Customer> selectedCustomer  = tbl_customer.getSelectionModel().getSelectedItems();
-        if(selectedCustomer.stream().count()!=1)
+        progressCustomerLoad.setVisible(true);
+        new Thread(() ->
         {
-            return;
-        }
-        String id = selectedCustomer.get(0).getMaBN();
-        ResultSet resultSet = customer.LoadCustomer(id);
-        if(resultSet.next()){
-                tf_mabn.setText(resultSet.getString("mabn"));
-                tf_tenbn.setText(resultSet.getString("hoten"));
-                tf_ngaysinh.setText(resultSet.getString("ngaysinh"));
-                if(resultSet.getString("gioitinh").equals("Nam"))
-                {
-                    rad_men.setSelected(true);
-                }
-                else rad_women.setSelected(true);
-            }
-        else {
-            showAlert("Error","Error");
-        }
+          try
+          {
+              ObservableList<Customer> selectedCustomer  = tbl_customer.getSelectionModel().getSelectedItems();
+              if(selectedCustomer.stream().count()!=1)
+              {
+                  progressCustomerLoad.setVisible(false);
+                  return;
+              }
+              String id = selectedCustomer.get(0).getMaBN();
+              ResultSet resultSet = customer.LoadCustomer(id);
+              if(resultSet.next()){
+                  tf_mabn.setText(resultSet.getString("mabn"));
+                  tf_tenbn.setText(resultSet.getString("hoten"));
+                  tf_ngaysinh.setText(resultSet.getString("ngaysinh"));
+                  if(resultSet.getString("gioitinh").equals("Nam"))
+                  {
+                      rad_men.setSelected(true);
+                  }
+                  else rad_women.setSelected(true);
+                  progressCustomerLoad.setVisible(false);
+              }
+              else {
+                  showAlert("Error","Error");
+                  progressCustomerLoad.setVisible(false);
+              }
+          }
+          catch (SQLException e){
+              progressCustomerLoad.setVisible(false);
+              e.printStackTrace();
+          }
+        }).start();
+
         //ResultSet resultSet  = customer.LoadCustomer(id); // nếu không xài nữa thì xoá
         /*if(resultSet!=null)
         {
