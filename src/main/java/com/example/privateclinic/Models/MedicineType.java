@@ -13,11 +13,5 @@ public class MedicineType {
         tenDangThuoc="";
     }
 
-    public ResultSet LoadList()
-    {
-        ConnectDB connect = new ConnectDB();
-        String query ="SELECT madt, tendt FROM dangthuoc";
-        return connect.getData(query);
 
-    }
 }

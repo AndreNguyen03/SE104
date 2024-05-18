@@ -12,11 +12,5 @@ public class UseWay {
         tencd ="";
     }
 
-    public ResultSet LoadList()
-    {
-        ConnectDB connect = new ConnectDB();
-        String query ="SELECT macd, tencd FROM cachdung";
-        return connect.getData(query);
 
-    }
 }

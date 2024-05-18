@@ -7,7 +7,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -121,7 +121,7 @@
             <Font name="Segoe UI Semibold" size="14.0" />
          </font>
       </Text>
-      <DatePicker layoutX="188.0" layoutY="21.0" prefHeight="30.0" prefWidth="154.0" />
+      <DatePicker fx:id="dp_date" layoutX="188.0" layoutY="21.0" prefHeight="30.0" prefWidth="154.0" />
       <Pane fx:id="btnClose" layoutX="1201.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
          <children>
             <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image_hover">
@@ -152,7 +152,7 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_mabn" disable="true" layoutX="130.0" layoutY="13.0" prefHeight="27.0" prefWidth="81.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_mabn" editable="false" layoutX="130.0" layoutY="13.0" prefHeight="27.0" prefWidth="81.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -162,7 +162,7 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_tenbn" disable="true" editable="false" layoutX="334.0" layoutY="12.0" prefHeight="37.0" prefWidth="217.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_tenbn" editable="false" layoutX="334.0" layoutY="12.0" prefHeight="37.0" prefWidth="217.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -190,12 +190,11 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_ngaysinh" disable="true" editable="false" layoutX="303.0" layoutY="61.0" prefHeight="37.0" prefWidth="248.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_ngaysinh" editable="false" layoutX="303.0" layoutY="61.0" prefHeight="37.0" prefWidth="248.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <ProgressBar fx:id="progressCustomerLoad" layoutY="126.0" prefHeight="15.0" prefWidth="578.0" />
          </AnchorPane>
       </content>
       <font>
@@ -225,7 +224,7 @@
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="tf_tenBenh" layoutX="266.0" layoutY="49.0" prefHeight="37.0" prefWidth="327.0" promptText="Tên bệnh" styleClass="input-field">
+            <TextField fx:id="tf_tenBenh" layoutX="284.0" layoutY="49.0" prefHeight="37.0" prefWidth="309.0" promptText="Tên bệnh" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -299,22 +298,25 @@
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <Text fill="RED" layoutX="948.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng">
+                  <Text fill="RED" layoutX="948.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <ComboBox fx:id="cb_ngay" layoutX="614.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
-                  <ComboBox fx:id="cb_sang" layoutX="679.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
-                  <ComboBox fx:id="cb_trua" layoutX="744.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
-                  <ComboBox fx:id="cb_chieu" layoutX="808.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
-                  <ComboBox fx:id="cb_toi" layoutX="872.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
-                  <TextField fx:id="tf_soLuong" disable="true" layoutX="948.0" layoutY="23.0" prefHeight="21.0" prefWidth="68.0" promptText="0" styleClass="amount" />
+                  <ComboBox id="cb_vien" fx:id="cb_ngay" editable="true" layoutX="614.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
+                  <ComboBox id="cb_vien" fx:id="cb_sang" editable="true" layoutX="679.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
+                  <ComboBox id="cb_vien" fx:id="cb_trua" editable="true" layoutX="744.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
+                  <ComboBox id="cb_vien" fx:id="cb_chieu" editable="true" layoutX="808.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
+                  <ComboBox id="cb_vien" fx:id="cb_toi" editable="true" layoutX="872.0" layoutY="22.0" prefHeight="33.0" prefWidth="68.0" />
                   <ComboBox fx:id="cb_dvt" layoutX="291.0" layoutY="22.0" prefHeight="33.0" prefWidth="105.0" />
                   <ComboBox fx:id="cb_dangThuoc" layoutX="380.0" layoutY="22.0" prefHeight="33.0" prefWidth="130.0" />
                   <ComboBox fx:id="cb_cachDung" layoutX="494.0" layoutY="22.0" prefHeight="33.0" prefWidth="130.0" />
+                  <Label fx:id="lbl_soLuong" layoutX="965.0" layoutY="31.0" styleClass="lbl" text="Label">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="12.0" />
+                     </font></Label>
                </children></Pane>
-            <TableView id="tableview-main" layoutX="10.0" layoutY="64.0" prefHeight="497.0" prefWidth="1201.0">
+            <TableView id="tableview-main" layoutX="10.0" layoutY="64.0" prefHeight="507.0" prefWidth="1201.0">
                <columns>
                   <TableColumn prefWidth="49.99999809265137" text="STT" />
                   <TableColumn prefWidth="212.66663360595703" text="Tên thuốc" />
@@ -331,7 +333,6 @@
                   <TableColumn prefWidth="117.33345540364576" text="Thành tiền" />
                </columns>
             </TableView>
-            <ProgressBar fx:id="progressMedicineLoad" layoutX="-1.0" layoutY="569.0" prefHeight="15.0" prefWidth="1215.0" />
          </AnchorPane>
       </content>
    </TitledPane>

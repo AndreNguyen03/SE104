@@ -50,7 +50,9 @@
     -fx-background-color: transparent;
     -fx-border-color: #74b60c;
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
 }
 #add:hover {
     -fx-border-width: 0;
@@ -130,7 +132,7 @@
 /*header*/
 .header-logo
 {
-    -fx-background-color: linear-gradient(to right,#FEFFFB,#D2FD94);
+    -fx-background-color: linear-gradient(to right,#FEFFFB, #d8eabe);
 }
 .header-logo Text
 {
@@ -196,6 +198,7 @@
     -fx-background-color: #ffffff;
     -fx-border-color: #9E9DA3;
     -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
 }
 .input-field:hover
 {
@@ -252,9 +255,11 @@
 }
 .container-pick .combo-box .arrow-button
 {
+    -fx-background-color: transparent;
 }
-.container-pick .combo-box .arrow-button .arrow {
+.container-pick .combo-box .arrow-button .arrow{
     -fx-background-color: green;
+
 }
 .container-pick .combo-box-base
 {
@@ -401,12 +406,12 @@
     -fx-text-fill: #ffffff;
     -fx-alignment: center ;
     -fx-font-weight: bold;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-background-color: #5A8F15;
 }
 #tableview-main .column-header-background .label
 {
-    -fx-font-size: 15px;
+    -fx-font-size: 13px;
 }
 #tableview-main
 {
@@ -436,18 +441,18 @@
 }
 .anchor Text
 {
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
     -fx-font-family: "Segoe UI Semibold";
 }
 .titled-pane
 {
     -fx-border-color: #416c0d;
+    -fx-font-size: 13px;
 }
 .titled-pane .title
 {
-    -fx-background-color: linear-gradient(to top,#C1E293,#ffffff);
+    -fx-background-color: linear-gradient(to top,#D8EABEFF,#ffffff);
     -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 16px;
 }
 
 /*close*/

@@ -1,9 +1,11 @@
 package com.example.privateclinic.Views;
 
+import com.example.privateclinic.Controllers.ExaminationHistoryController;
 import com.example.privateclinic.Controllers.MenuController;
 import com.example.privateclinic.Controllers.ProfileController;
 import com.example.privateclinic.Controllers.SettingController;
 import com.example.privateclinic.Models.User;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ public class ViewFactory {
     Stage stageSetting = null;
     Stage stageMenu = null;
     Stage stageProfile= null;
+    Stage stageExaminationHistory = null;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -69,7 +72,6 @@ public class ViewFactory {
         {
             stageExamination.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
         }
-
     }
     public void showSettingWindow()
     {
@@ -81,6 +83,20 @@ public class ViewFactory {
         else
         {
             stageSetting.setAlwaysOnTop(true);
+        }
+    }
+    public void showHistoryExamination(String id,String year)
+    {
+        if(stageExaminationHistory==null) //xử lí mở 2 lần scene
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/HistoryExamination"));
+            stageExaminationHistory=createStage(loader);
+            ExaminationHistoryController examHistoryController = loader.getController();
+            examHistoryController.initatata(id);
+        }
+        else
+        {
+            stageExaminationHistory.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
         }
     }
 
@@ -109,13 +125,15 @@ public class ViewFactory {
             if(stageExamination!=null) stageExamination.close();
             if(stageReception!=null) stageReception.close();
             if(stageSetting!=null) stageSetting.close();
+            if(stageProfile!=null) stageProfile.close();
+            if(stageExaminationHistory!=null) stageExaminationHistory.close();
         }
         //khi 1 stage nào đó đóng thì cập nhật tình hình các stage khác
         if(stageExamination!=null && !stageExamination.isShowing()) stageExamination=null;  // nếu khác null nhưng ko còn show thì cập nhật về null
         if(stageReception!=null && !stageReception.isShowing()) stageReception=null;
         if(stageSetting!=null && !stageSetting.isShowing()) stageSetting=null;
         if(stageProfile!=null &&!stageProfile.isShowing()) stageProfile=null;
-
+        if(stageExaminationHistory!=null &&!stageExaminationHistory.isShowing()) stageExaminationHistory=null;
     }
     public void minimizeStage(Stage stage)
     {

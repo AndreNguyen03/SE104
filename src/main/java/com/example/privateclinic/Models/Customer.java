@@ -1,5 +1,6 @@
 package com.example.privateclinic.Models;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ public class Customer {
     private String ngaySinh;
     private String SDT;
     private String diaChi;
-    private String ngayVao;
+    private Date ngayVao;
 
     public Customer() {
     }
@@ -29,7 +30,7 @@ public class Customer {
         this.ngaySinh = ngaySinh;
         this.SDT = SDT;
         this.diaChi = diaChi;
-        this.ngayVao = ngayVao;
+        this.ngayVao = Date.valueOf(ngayVao);
     }
 
     public String getMaBN() {
@@ -80,12 +81,12 @@ public class Customer {
         this.diaChi = diaChi;
     }
 
-    public String getNgayVao() {
+    public Date getNgayVao() {
         return ngayVao;
     }
 
     public void setNgayVao(String ngayVao) {
-        this.ngayVao = ngayVao;
+        this.ngayVao = Date.valueOf(ngayVao);
     }
 
     public ResultSet LoadListCustomers()
@@ -94,22 +95,7 @@ public class Customer {
         String query = "SELECT mabn, hoten, gioitinh, ngaysinh, sdt, diachi, ngayvao FROM benhnhan";
         return connect.getData(query);
     }
-    public ResultSet LoadCustomer(String id)
-    {
-        ConnectDB connectDB = new ConnectDB();
-        String querry = "SELECT mabn, hoten, gioitinh, ngaysinh, sdt, diachi, ngayvao  FROM benhnhan WHERE mabn = ?";
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = connectDB.getConnection().prepareStatement(querry);
-            preparedStatement.setInt(1,Integer.parseInt(id));
-            return preparedStatement.executeQuery();
-        }
-        catch (SQLException e )
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
     public ResultSet Search(String search) throws SQLException
     {
         ConnectDB connect = new ConnectDB();
