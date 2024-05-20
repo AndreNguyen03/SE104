@@ -226,7 +226,6 @@
 
 .container-pick .combo-box .list-view {  /* phần bên trong cái thả xuống*/
     -fx-border-width: 0.5px;
-    -fx-pref-width: 30;
     -fx-border-color: #ACACAC;
     -fx-background-color: #EBFFD1;
     -fx-padding: 0px;
@@ -320,9 +319,7 @@
 }
 .table-view .table-column
 {
-    -fx-alignment: center;
-    -fx-font-size: 16px;
-    -fx-font-family: "Verdana", sans-serif;
+
 }
 .table-view .column-header-background .label
 {
@@ -330,7 +327,7 @@
     -fx-alignment: center ;
     -fx-font-weight: bold;
     -fx-font-size: 16px;
-    -fx-background-color: #5a8f15;
+
 }
 #tableview-main .column-header-background .label
 {
