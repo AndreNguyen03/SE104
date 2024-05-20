@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="header-top" stylesheets="@../Styles/Reception.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="header-top" stylesheets="@../Styles/Reception.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReceptionController">
    <children>
       <VBox prefHeight="900.0" prefWidth="345.0" style="-fx-border-color: black;">
          <children>
@@ -38,13 +52,23 @@
                                     <Text layoutX="10.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Ngày sinh" wrappingWidth="70.826171875" />
                                     <Text layoutX="10.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="SĐT" />
                                     <Text layoutX="10.0" layoutY="310.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Địa chỉ" />
-                                    <TextField layoutX="85.0" layoutY="43.0" prefHeight="30.0" prefWidth="192.0" />
-                                    <TextField layoutX="85.0" layoutY="90.0" prefHeight="30.0" prefWidth="193.0" />
-                                    <TextField layoutX="85.0" layoutY="240.0" prefHeight="30.0" prefWidth="192.0" />
-                                    <TextArea layoutX="79.0" layoutY="295.0" prefHeight="200.0" prefWidth="200.0" />
-                                    <ComboBox layoutX="84.0" layoutY="141.0" prefHeight="30.0" prefWidth="105.0" />
-                                    <JFXButton layoutX="46.0" layoutY="528.0" prefHeight="111.0" prefWidth="235.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào danh sách khám bệnh" />
-                                    <DatePicker layoutX="84.0" layoutY="188.0" prefHeight="30.0" prefWidth="154.0" />
+                                    <TextField fx:id="tfPatientId" disable="true" layoutX="85.0" layoutY="43.0" prefHeight="30.0" prefWidth="192.0" />
+                                    <TextField fx:id="tfPatientName" layoutX="84.0" layoutY="90.0" prefHeight="30.0" prefWidth="193.0" style="-fx-font-size: 16;" />
+                                    <TextField fx:id="tfPatientPhoneNumber" layoutX="84.0" layoutY="240.0" prefHeight="30.0" prefWidth="192.0" style="-fx-font-size: 16;" />
+                                    <TextArea fx:id="taPatientAddress" layoutX="84.0" layoutY="295.0" prefHeight="200.0" prefWidth="193.0" style="-fx-font-size: 16;" />
+                                    <ComboBox fx:id="cbPatientGender" layoutX="84.0" layoutY="141.0" prefHeight="35.0" prefWidth="193.0" promptText="Chọn giới tính" style="-fx-font-size: 16;">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="Nam" />
+                                                <String fx:value="Nữ" />
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                    <JFXButton fx:id="btnAddNewPatient" layoutX="46.0" layoutY="528.0" onAction="#addPatientToDatabase" prefHeight="111.0" prefWidth="235.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào danh sách khám bệnh">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></JFXButton>
+                                    <TextField fx:id="tfPatientBirthDay" layoutX="84.0" layoutY="193.0" prefHeight="30.0" prefWidth="192.0" promptText="dd/MM/yyyy" style="-fx-font-size: 16;" />
                                  </children>
                               </Pane>
                            </content>
@@ -56,14 +80,14 @@
                         <Pane prefHeight="200.0" prefWidth="200.0" styleClass="container-footer">
                            <children>
                               <Text layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Tìm kiếm theo mã BN" wrappingWidth="226.443359375" />
-                              <TextField layoutX="181.0" layoutY="13.0" prefHeight="25.0" prefWidth="139.0" />
+                              <TextField fx:id="tfPatientById" layoutX="181.0" layoutY="13.0" prefHeight="25.0" prefWidth="139.0" />
                               <Text layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Tìm kiếm theo họ tên" wrappingWidth="176.443359375" />
-                              <TextField layoutX="181.0" layoutY="51.0" prefHeight="25.0" prefWidth="139.0" />
-                              <TableView layoutX="14.0" layoutY="92.0" prefHeight="649.0" prefWidth="321.0">
+                              <TextField fx:id="tfPatientByName" layoutX="181.0" layoutY="51.0" prefHeight="25.0" prefWidth="139.0" />
+                              <TableView fx:id="tvPatient" layoutX="14.0" layoutY="92.0" prefHeight="649.0" prefWidth="321.0">
                                 <columns>
-                                  <TableColumn prefWidth="50.0" text="STT" />
-                                  <TableColumn prefWidth="66.0" text="Mã BN" />
-                                    <TableColumn prefWidth="204.0" text="Họ tên" />
+                                  <TableColumn fx:id="tcNumber" prefWidth="50.0" text="STT" />
+                                  <TableColumn fx:id="tcPatientId" prefWidth="66.0" text="Mã BN" />
+                                    <TableColumn fx:id="tcPatientName" prefWidth="204.0" text="Họ tên" />
                                 </columns>
                               </TableView>
                            </children>
@@ -74,22 +98,51 @@
             </TabPane>
          </children>
       </VBox>
-      <DatePicker layoutX="522.0" layoutY="15.0" prefHeight="30.0" prefWidth="154.0" />
+      <DatePicker fx:id="dpDate" layoutX="522.0" layoutY="15.0" prefHeight="30.0" prefWidth="154.0" />
       <Text layoutX="424.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Ngày khám" />
-      <TableView layoutX="470.0" layoutY="56.0" prefHeight="823.0" prefWidth="1111.0">
+      <TableView fx:id="tvPatientDetails" layoutX="470.0" layoutY="56.0" prefHeight="823.0" prefWidth="1111.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="STT" />
-          <TableColumn prefWidth="75.0" text="Mã BN" />
-            <TableColumn prefWidth="208.33331298828125" text="Họ tên" />
-            <TableColumn prefWidth="105.66668701171875" text="Giới tính" />
-            <TableColumn prefWidth="132.33331298828125" text="Ngày sinh" />
-            <TableColumn prefWidth="116.3333740234375" text="SĐT" />
-            <TableColumn prefWidth="230.333251953125" text="Địa chỉ" />
-            <TableColumn prefWidth="169.666748046875" text="Bác sĩ khám" />
+          <TableColumn fx:id="tcNumberDetails" prefWidth="75.0" text="STT" />
+          <TableColumn fx:id="tcPatientIdDetail" prefWidth="75.0" text="Mã BN" />
+            <TableColumn fx:id="tcPatientNameDetail" prefWidth="208.33331298828125" text="Họ tên" />
+            <TableColumn fx:id="tcPatientGenderDetail" prefWidth="105.66668701171875" text="Giới tính" />
+            <TableColumn fx:id="tcPatientBirthDetail" prefWidth="132.33331298828125" text="Ngày sinh" />
+            <TableColumn fx:id="tcPatientPhoneNumberDetail" prefWidth="116.3333740234375" text="SĐT" />
+            <TableColumn fx:id="tcPatientAddressDetail" prefWidth="230.333251953125" text="Địa chỉ" />
+            <TableColumn fx:id="tcDoctor" prefWidth="169.666748046875" text="Bác sĩ khám" />
         </columns>
       </TableView>
-      <JFXButton layoutX="365.0" layoutY="156.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào DSKB" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true" />
-      <JFXButton layoutX="365.0" layoutY="314.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Xóa khỏi DSKB" textAlignment="CENTER" wrapText="true" />
-      <JFXButton layoutX="365.0" layoutY="478.0" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="In phiếu TN" textAlignment="CENTER" wrapText="true" />
+      <JFXButton fx:id="btnAddFromList" disable="true" layoutX="365.0" layoutY="156.0" onMouseClicked="#addPatientToDetails" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào DSKB" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <JFXButton fx:id="btnDeleteFromList" disable="true" layoutX="365.0" layoutY="314.0" onMouseClicked="#detelePatientFromDetails" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Xóa khỏi DSKB" textAlignment="CENTER" wrapText="true">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <JFXButton fx:id="btnPrintWaitingSlip" layoutX="365.0" layoutY="478.0" onMouseClicked="#printWaitingSlip" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="In phiếu TN" textAlignment="CENTER" wrapText="true">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <Pane fx:id="btnClose" layoutX="1555.0" layoutY="3.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
+         <children>
+            <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image_hover">
+               <image>
+                  <Image url="@../Images/close-white.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image">
+               <image>
+                  <Image url="@../Images/close-gray.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
