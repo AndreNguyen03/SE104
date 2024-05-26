@@ -96,26 +96,26 @@ public  class ExaminationController implements Initializable {
     @FXML
     TextField tf_donViTinh,tf_dangThuoc,tf_cachDung;
     @FXML
-    public TableView<Customer> tbl_customer;
+    public TableView<Patient> tbl_customer;
     @FXML
-    public TableColumn <Customer,String> col_mabn;
+    public TableColumn <Patient,String> col_mabn;
     @FXML
-    public TableColumn <Customer,String> col_tenbn;
+    public TableColumn <Patient,String> col_tenbn;
     @FXML
-    public TableColumn <Customer,String> col_sdt;
+    public TableColumn <Patient,String> col_sdt;
 
-    ObservableList<Customer>  listWaitingCustomers ;
-    ObservableList<Customer> listDoneCustomers;
+    ObservableList<Patient>  listWaitingPatients ;
+    ObservableList<Patient> listDonePatients;
     ObservableList<Medicine>  listMedicines ;
     ObservableList<Disease> listDisiseases;
     MedicineDAO medicineDAO;
 
-    CustomerDAO customerDAO;
+    PatientDAO patientDAO;
     DiseaseDAO diseaseDAO;
     ExaminationDAO examinationDAO;
     PrescribeDAO prescribeDAO;
     HistoryDAO historyDAO;
-    Customer customerChosenBefore;
+    Patient patientChosenBefore;
     Medicine medicineChosenBefore;
     Prescribe prescribeChosenBefore;
     ExaminationHistory examinationHistorySent;
@@ -146,7 +146,7 @@ public  class ExaminationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Initialization
-        customerDAO = new CustomerDAO();
+        patientDAO = new PatientDAO();
         medicineDAO= new MedicineDAO();
         diseaseDAO = new DiseaseDAO();
         examinationDAO= new ExaminationDAO();
@@ -173,13 +173,13 @@ public  class ExaminationController implements Initializable {
                 RadioButton rad_selected = (RadioButton)newValue;
                 if(rad_selected.getId().equals("rad_patientWaiting"))
                 {
-                    showDataCustomers_waiting();// tải danh sách benh nhan cho
+                    showDataPatients_waiting();// tải danh sách benh nhan cho
                 }
                 else
                 {
-                    showDataDoneCustomers_waiting();// tải danh sách benh nhan da kham
+                    showDataDonePatients();// tải danh sách benh nhan da kham
                 }
-                customerChosenBefore=null;
+                patientChosenBefore=null;
             }
         });
         btnLamMoi.setOnAction(new EventHandler<ActionEvent>() {
@@ -187,7 +187,7 @@ public  class ExaminationController implements Initializable {
             public void handle(ActionEvent event) {
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
                 rad_patientWaiting.setSelected(true);
-                showDataCustomers_waiting();
+                showDataPatients_waiting();
             }
         });
         tbl_customer.setOnMouseClicked(mouseEvent -> {
@@ -200,8 +200,8 @@ public  class ExaminationController implements Initializable {
                     SetDisable();
                     ResetAllTextField();
                     ResetTF(tf_maBenhChinh,tf_tenBenhChinh,tf_tenBenhPhu,tf_tenBenhPhu);
-                    customerChosenBefore = tbl_customer.getSelectionModel().getSelectedItem();
-                    fillDataCustomer_exam();
+                    patientChosenBefore = tbl_customer.getSelectionModel().getSelectedItem();
+                    fillDataPatient_exam();
                     lbl_noPatientResult.setVisible(false);
             }
         });
@@ -240,12 +240,12 @@ public  class ExaminationController implements Initializable {
         {
             if(!newValue.trim().equals(""))
             {
-                if(rad_patientWaiting.isSelected()) tbl_customer.setItems(listWaitingCustomers);
-                else tbl_customer.setItems(listDoneCustomers); // cap nhat lai danh sach goc vao tbl
+                if(rad_patientWaiting.isSelected()) tbl_customer.setItems(listWaitingPatients);
+                else tbl_customer.setItems(listDonePatients); // cap nhat lai danh sach goc vao tbl
                 SearchPatientResultList(tf_searchIDName.getText().toString());
             } else {
-                tbl_customer.setItems(listWaitingCustomers);
-                if(!listWaitingCustomers.isEmpty()) lbl_noPatientResult.setVisible(false);
+                tbl_customer.setItems(listWaitingPatients);
+                if(!listWaitingPatients.isEmpty()) lbl_noPatientResult.setVisible(false);
                 rad_patientWaiting.setSelected(true);
             }
         });
@@ -255,9 +255,9 @@ public  class ExaminationController implements Initializable {
                 SetDisable();
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
                 rad_patientWaiting.setSelected(true);
-                showDataCustomers_waiting();
+                showDataPatients_waiting();
                 ResetAllTextField();
-                customerChosenBefore=null;
+                patientChosenBefore=null;
                 pane_optionPatient.setDisable(true);
             }
         });
@@ -330,7 +330,7 @@ public  class ExaminationController implements Initializable {
                     if(!tbl_customer.getSelectionModel().isEmpty())
                     {
                         SetUnDisable();
-                        fillDataCustomer_exam();
+                        fillDataPatient_exam();
                         tbl_customer.getSelectionModel().clearSelection();
                     }
                 }
@@ -380,7 +380,7 @@ public  class ExaminationController implements Initializable {
         btnLichSuKham.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(customerChosenBefore!=null) Model.getInstance().getViewFactory().showHistoryExamination(customerChosenBefore,ExaminationController.this);
+                if(patientChosenBefore!=null) Model.getInstance().getViewFactory().showHistoryExamination(patientChosenBefore,ExaminationController.this);
             }
         });
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
@@ -404,15 +404,17 @@ public  class ExaminationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 {
-                    if(IsBlank()) {
+                    if(!IsBlank()) {
                         int request = ShowYesNoAlert("Cancel");
                         if(request == JOptionPane.YES_OPTION){
                             ResetAllTextField();
                             SetDisable();
                             lbl_noPatientResult.setVisible(false);
-                        } else {
-
                         }
+                    } else {
+                        ResetAllTextField();
+                        SetDisable();
+                        lbl_noPatientResult.setVisible(false);
                     }
 
                 }
@@ -441,6 +443,7 @@ public  class ExaminationController implements Initializable {
             showAlert("Notification","Lưu dữ liệu khám bệnh và thuốc thành công!");
             ResetAllTextField();
             SetDisable();
+            LoadListPatients(Date.valueOf(LocalDate.now()));
         }
         else {
             showAlert("Warning","Error");
@@ -494,12 +497,12 @@ public  class ExaminationController implements Initializable {
 
     private void SearchPatientResultList(String searchString) {
         String lowerCase = normalizeString(searchString.toLowerCase());
-        ObservableList<Customer> customers = tbl_customer.getItems();
-        ObservableList<Customer> listResult = FXCollections.observableArrayList(
-                customers.stream()
+        ObservableList<Patient> patients = tbl_customer.getItems();
+        ObservableList<Patient> listResult = FXCollections.observableArrayList(
+                patients.stream()
                         .filter(customer ->
-                                normalizeString(String.valueOf(customer.getMaBN()).toLowerCase()).startsWith(lowerCase) ||
-                                        normalizeString(customer.getHoTen().toLowerCase()).contains(lowerCase))
+                                normalizeString(String.valueOf(customer.getPatientId()).toLowerCase()).startsWith(lowerCase) ||
+                                        normalizeString(customer.getPatientName().toLowerCase()).contains(lowerCase))
                         .collect(Collectors.toList())
         );
         tbl_customer.setItems(listResult);
@@ -651,9 +654,9 @@ public  class ExaminationController implements Initializable {
         col_giaBanResult.setCellValueFactory(new PropertyValueFactory<>("giaBan"));
 
         //bang benh nhan
-        col_mabn.setCellValueFactory(new PropertyValueFactory<>("maBN"));
-        col_tenbn.setCellValueFactory(new PropertyValueFactory<>("hoTen"));
-        col_sdt.setCellValueFactory(new PropertyValueFactory<>("SDT"));
+        col_mabn.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        col_tenbn.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+        col_sdt.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
 
         //bang ten benh
         col_maBenh.setCellValueFactory(new PropertyValueFactory<>("maBenh"));
@@ -753,8 +756,8 @@ public  class ExaminationController implements Initializable {
 
     private void LoadListPatients(Date date) {
 
-        listWaitingCustomers=customerDAO.getPatientsByDate(date);
-        listDoneCustomers=customerDAO.getPatientsDoneByDate(date);
+        listWaitingPatients=patientDAO.getPatientsByDate(date);
+        listDonePatients=patientDAO.getPatientsDoneByDate(date);
     }
 
     private void showResultMedicineList(String search) {
@@ -803,35 +806,35 @@ public  class ExaminationController implements Initializable {
        lbl_soLuong.setText(String.valueOf(total));
     }
 
-    private void showDataCustomers_waiting() {
+    private void showDataPatients_waiting() {
         //tbl_customer.getItems().clear();
-        tbl_customer.setItems(listWaitingCustomers);
+        tbl_customer.setItems(listWaitingPatients);
         tbl_customer.getSelectionModel().clearSelection();
         //Kiem tra danh sách cho co null khong
-        if(listWaitingCustomers.isEmpty()) {
+        if(listWaitingPatients.isEmpty()) {
             showAlert("Warning","List is empty");
             lbl_noPatientResult.setVisible(true);
         }
         else lbl_noPatientResult.setVisible(false);
     }
-    private void showDataDoneCustomers_waiting() {
+    private void showDataDonePatients() {
         //tbl_customer.getItems().clear();
-        tbl_customer.setItems(listDoneCustomers);
+        tbl_customer.setItems(listDonePatients);
         tbl_customer.getSelectionModel().clearSelection();
         //Kiem tra danh sách cho co null khong
-        if(listDoneCustomers.isEmpty()) {
+        if(listDonePatients.isEmpty()) {
             showAlert("Warning","List is empty");
             lbl_noPatientResult.setVisible(true);
         }
         else lbl_noPatientResult.setVisible(false);
     }
-    public void fillDataCustomer_exam()
+    public void fillDataPatient_exam()
     {
-        Customer customer = tbl_customer.getSelectionModel().getSelectedItem();
-        tf_mabn.setText(String.valueOf(customer.getMaBN()));
-        tf_ngaysinh.setText(String.valueOf(customer.getNgaySinh()));
-        tf_tenbn.setText(customer.getHoTen());
-        if(customer.getGioiTinh().equals("Nam"))
+        Patient patient = tbl_customer.getSelectionModel().getSelectedItem();
+        tf_mabn.setText(String.valueOf(patient.getPatientId()));
+        tf_ngaysinh.setText(String.valueOf(patient.getPatientBirth()));
+        tf_tenbn.setText(patient.getPatientName());
+        if(patient.getPatientGender().equals("Nam"))
             rad_men.setSelected(true);
         else rad_women.setSelected(true);
     }

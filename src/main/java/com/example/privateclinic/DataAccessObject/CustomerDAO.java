@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 public class CustomerDAO {
 
-    public ObservableList<Customer> getPatientsByDate(Date date) {
+    /*public ObservableList<Customer> getPatientsByDate(Date date) {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, bn.ngayvao FROM benhnhan bn WHERE ngayvao = ? " +
                 "AND bn.mabn NOT IN (SELECT mabn FROM khambenh)";
@@ -65,7 +65,7 @@ public class CustomerDAO {
             throw new RuntimeException(e);
         }
         return customers;
-    }
+    }*/
     /*public  ObservableList<Examination> getPatientsByDate(String id, String year)
     {
         ObservableList<Examination> examinations = FXCollections.observableArrayList();

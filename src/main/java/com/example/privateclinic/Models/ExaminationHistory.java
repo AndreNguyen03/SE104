@@ -3,27 +3,27 @@ package com.example.privateclinic.Models;
 import javafx.collections.ObservableList;
 
 public class ExaminationHistory {
-    Customer customer;
+    Patient patient;
     ObservableList<Prescribe> prescribes;
     Examination examination;
 
     public ExaminationHistory() {
-        customer= new Customer();
+        patient= new Patient();
         examination = new Examination();
     }
 
-    public ExaminationHistory(Customer customer, Examination examination,ObservableList<Prescribe>  prescribes) {
-        this.customer = customer;
+    public ExaminationHistory(Patient patient, Examination examination,ObservableList<Prescribe>  prescribes) {
+        this.patient = patient;
         this.prescribes = prescribes;
         this.examination = examination;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Patient getCustomer() {
+        return patient;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(Patient patient) {
+        this.patient = patient;
     }
 
     public ObservableList<Prescribe> getPrescribe() {

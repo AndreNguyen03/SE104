@@ -1,9 +1,6 @@
 package com.example.privateclinic.Controllers;
 
-import com.example.privateclinic.DataAccessObject.CustomerDAO;
-import com.example.privateclinic.DataAccessObject.ExaminationDAO;
-import com.example.privateclinic.DataAccessObject.ExaminationHistoryDAO;
-import com.example.privateclinic.DataAccessObject.PrescribeDAO;
+import com.example.privateclinic.DataAccessObject.*;
 import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.value.ChangeListener;
@@ -60,22 +57,22 @@ public class ExaminationHistoryController implements Initializable {
     public TextField tf_luuYHistory;
     public TextField tf_maBenhPhuHistory;
     public TextField tf_tenBenhPhuHistory;
-    private Customer customer;
+    private Patient patient;
     int currentYear;
-     CustomerDAO customerDAO;
+     PatientDAO patientDAO;
      ExaminationHistoryDAO examinationHistoryDAO;
      ObservableList<ExaminationHistory> listExaminationsHistory_detail;
      ObservableList<Examination> listExaminationsHistory;
      ExaminationHistory examHistoryBeforeClicked;
     ExaminationController examinationController ;
     boolean firstAccess =true;
-    public void initData(Customer _customer, ExaminationController _examinationController)
+    public void initData(Patient _patient, ExaminationController _examinationController)
     {
-        this.customer = _customer;
-        tf_maBenhNhanHistory.setText(String.valueOf(customer.getMaBN()));
-        tf_tenBenhNhanHistory.setText(customer.getHoTen());
-        tf_ngaysinhHistory.setText(String.valueOf(customer.getNgaySinh()));
-        if(customer.getGioiTinh().equals("Nam"))
+        this.patient = _patient;
+        tf_maBenhNhanHistory.setText(String.valueOf(patient.getPatientId()));
+        tf_tenBenhNhanHistory.setText(patient.getPatientName());
+        tf_ngaysinhHistory.setText(String.valueOf(patient.getPatientBirth()));
+        if(patient.getPatientGender().equals("Nam"))
             rad_menHistory.setSelected(true);
         else rad_womenHistory.setSelected(true);
         examinationController = _examinationController;
@@ -90,7 +87,7 @@ public class ExaminationHistoryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //inititalation
-        customerDAO = new CustomerDAO();
+        patientDAO = new PatientDAO();
         examinationHistoryDAO = new ExaminationHistoryDAO();
         listExaminationsHistory = FXCollections.observableArrayList();
         currentYear= java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
@@ -141,9 +138,9 @@ public class ExaminationHistoryController implements Initializable {
         ObservableList<Prescribe> prescribes = examHistoryBeforeClicked.getPrescribe();
         tf_trieuChungHistory.setText(examination.getTrieuChung());
         tf_maBenhChinhHistory.setText(String.valueOf(examination.getMaBenhChinh()));
-        tf_tenBenhChinhHistory.setText(examination.getTrieuChung());
-        tf_maBenhPhuHistory.setText(examination.getTrieuChung());
-        tf_tenBenhPhuHistory.setText(examination.getTrieuChung());
+        tf_tenBenhChinhHistory.setText(examination.getTenBenhChinh());
+        tf_maBenhPhuHistory.setText(String.valueOf(examination.getMaBenhPhu()));
+        tf_tenBenhPhuHistory.setText(examination.getTenBenhPhu());
         tf_luuYHistory.setText(examination.getLuuy());
         tbl_kethuocHistory.setItems(prescribes);
     }
@@ -168,7 +165,7 @@ public class ExaminationHistoryController implements Initializable {
 
     private void LoadHistory_Date(int year) {
         listExaminationsHistory.clear();
-        listExaminationsHistory_detail=examinationHistoryDAO.getPatientsByDate(customer.getMaBN(), year);
+        listExaminationsHistory_detail=examinationHistoryDAO.getPatientsByDate(patient.getPatientId(), year);
         for(ExaminationHistory examinationHistory : listExaminationsHistory_detail) {
             listExaminationsHistory.add(examinationHistory.getExamination());
         }
@@ -176,10 +173,10 @@ public class ExaminationHistoryController implements Initializable {
         if(!tbl_examHistory.getItems().isEmpty()) {
         } else {
             if (firstAccess) {
-                showAlert("Warning",customer.getHoTen() +" không có trong dữ liệu đã khám!");
+                showAlert("Warning",patient.getPatientName() +" không có trong dữ liệu đã khám!");
                 Model.getInstance().getViewFactory().closeStage((Stage) btnReuse.getScene().getWindow());
             } else {
-                showAlert("Warning", String.format("Từ năm %d về trước không ghi nhận bệnh nhân %s đến khám", cbYear.getValue(), customer.getHoTen()));            }
+                showAlert("Warning", String.format("Từ năm %d về trước không ghi nhận bệnh nhân %s đến khám", cbYear.getValue(), patient.getPatientName()));            }
 
         }
         firstAccess=false;

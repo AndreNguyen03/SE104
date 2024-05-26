@@ -14,6 +14,10 @@ module com.example.privateclinic {
     requires java.sql;
     requires java.desktop;
     requires java.mail;
+    requires itextpdf;
+    requires kernel;
+    requires layout;
+    requires io;
 
     opens com.example.privateclinic to javafx.fxml;
     exports com.example.privateclinic;

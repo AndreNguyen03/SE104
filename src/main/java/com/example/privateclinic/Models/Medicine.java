@@ -43,14 +43,13 @@ public class Medicine {
     public Medicine() {
     }
 
-    public Medicine(int maThuoc, String tenThuoc, int maDonViTinh, int maCachDung, int maDangThuoc, int soLuong, double giaBan) {
-        this.maThuoc = maThuoc;
-        this.tenThuoc = tenThuoc;
-        this.maDonViTinh = maDonViTinh;
-        this.maCachDung = maCachDung;
-        this.maDangThuoc = maDangThuoc;
-        this.soLuong = soLuong;
-        this.giaBan = giaBan;
+    public Medicine(int medicineId, String medicineName, int medicineUnit, double medicinePrice, int medicineForm, int medicineUse) {
+        this.maThuoc = medicineId;
+        this.tenThuoc = medicineName;
+        this.maDonViTinh = medicineUnit;
+        this.giaBan = medicinePrice;
+        this.maDangThuoc = medicineForm;
+        this.maCachDung = medicineUse;
     }
 
     public int getMaThuoc() {
@@ -107,5 +106,17 @@ public class Medicine {
 
     public void setGiaBan(double giaBan) {
         this.giaBan = giaBan;
+    }
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "medicineId=" + maThuoc + '\'' +
+                ", medicineName='" + tenThuoc + '\'' +
+                ", medicineUnit='" + tenDonViTinh + '\'' +
+                ", medicinePrice='" + giaBan + '\'' +
+                ", medicineForm=" + tenDangThuoc +
+                ", medicineUse='" + tenCachDung + '\'' +
+                ", medicineQuantity=" + soLuong +
+                '}';
     }
 }

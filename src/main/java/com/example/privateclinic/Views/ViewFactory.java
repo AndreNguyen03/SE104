@@ -2,6 +2,7 @@ package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.*;
 import com.example.privateclinic.Models.Customer;
+import com.example.privateclinic.Models.Patient;
 import com.example.privateclinic.Models.User;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
@@ -85,14 +86,14 @@ public class ViewFactory {
             stageSetting.setAlwaysOnTop(true);
         }
     }
-    public void showHistoryExamination(Customer customer,ExaminationController _examinationController)
+    public void showHistoryExamination(Patient patient, ExaminationController _examinationController)
     {
         if(stageExaminationHistory==null) //xử lí mở 2 lần scene
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/ExaminationHistory.fxml"));
             stageExaminationHistory=createStage(loader);
             ExaminationHistoryController examHistoryController = loader.getController();
-            examHistoryController.initData(customer,_examinationController);
+            examHistoryController.initData(patient,_examinationController);
         }
         else
         {

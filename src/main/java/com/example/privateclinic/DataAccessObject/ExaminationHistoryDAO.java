@@ -36,14 +36,14 @@ public class ExaminationHistoryDAO {
             statement.setInt(2, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Customer customer = new Customer();
-                    customer.setMaBN(resultSet.getInt("mabn"));
-                    customer.setHoTen(resultSet.getString("hoten"));
-                    customer.setGioiTinh(resultSet.getString("gioitinh"));
-                    customer.setSDT(resultSet.getString("sdt"));
-                    customer.setDiaChi(resultSet.getString("diachi"));
-                    customer.setNgayVao(resultSet.getDate("ngayvao"));
-                    customer.setNgaySinh(resultSet.getDate("ngaysinh"));
+                    Patient patient = new Patient();
+                    patient.setPatientId(resultSet.getInt("mabn"));
+                    patient.setPatientName(resultSet.getString("hoten"));
+                    patient.setPatientGender(resultSet.getString("gioitinh"));
+                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
+                    patient.setPatientAddress(resultSet.getString("diachi"));
+                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
+                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
 
                     Examination examination = new Examination();
                     examination.setMabn(resultSet.getInt("mabn"));
@@ -59,7 +59,7 @@ public class ExaminationHistoryDAO {
 
                     ObservableList<Prescribe> prescribes = GetPrescribes(examination.getMakb());
 
-                    ExaminationHistory examinationHistory = new ExaminationHistory(customer,examination,prescribes);
+                    ExaminationHistory examinationHistory = new ExaminationHistory(patient,examination,prescribes);
                     examinations.add(examinationHistory);
                 }
             }
