@@ -12,7 +12,7 @@ public class ConnectDB {
         databaseLink = getConnection();
     }
     public Connection getConnection(){
-        String databaseName ="ClinicDB";
+        String databaseName ="ClinicNeon";
         String databaseUser ="postgres";
         String databasePassword="phuan03042004";
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;

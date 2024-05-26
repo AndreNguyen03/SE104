@@ -49,7 +49,7 @@
                         <Font name="Segoe UI Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Button id="delete" fx:id="btnDeleteEmployee"  layoutX="270.0" layoutY="16.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="82.0" text="Xoá" textFill="WHITE">
+                  <Button id="delete" fx:id="btnDeleteEmployee" layoutX="270.0" layoutY="16.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="82.0" text="Xoá" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Semibold" size="18.0" />
                      </font>
@@ -79,7 +79,7 @@
                   <Image url="@../Images/search_icon.png" />
                </image>
             </ImageView>
-            <TextField fx:id="tfEmployee" onKeyPressed="#handleSearchKeyPressed" prefHeight="36.0" prefWidth="263.0" promptText="Tìm kiếm nhân viên: id/tên,...." styleClass="search-input">
+            <TextField fx:id="tfEmployee" prefHeight="36.0" prefWidth="263.0" promptText="Tìm kiếm nhân viên: id/tên,...." styleClass="search-input">
                <font>
                   <Font name="Segoe UI Semibold Italic" size="16.0" />
                </font>

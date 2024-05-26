@@ -2,22 +2,26 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.UserDAO;
 import com.example.privateclinic.Models.Employee;
+import com.example.privateclinic.Models.Patient;
 import com.example.privateclinic.Models.User;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+
 
 public class EmployeeController implements Initializable {
     public Button btnDeleteEmployee;
@@ -67,10 +71,31 @@ public class EmployeeController implements Initializable {
         btnDeleteEmployee.setOnAction(event -> handleDeleteAction());
         btnAddEmployee.setOnAction(event -> handleAddAction());
         btnEditEmployee.setOnAction(event -> handleEditAction()); // Add this line to handle edit action
-        tfEmployee.setOnKeyPressed(event -> handleSearchKeyPressed(event));
+        SetAction();
         addSelectionListener(); // Add this line to handle selection changes
     }
 
+    private void SetAction() {
+        tfEmployee.textProperty().addListener((observable,oldeValue,newValue) -> {
+            if(!newValue.isEmpty()) {
+                handleSearchAction();
+            } else {
+                employeeTableView.setItems(users);
+            }
+        });
+        addPhoneNum.textProperty().addListener((observable,oldValue,newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                addPhoneNum.setText(newValue.replaceAll("[^\\d]", ""));
+                showAlert("Warning","Chỉ nhập số bạn ơi!");
+            }
+        });
+        addcitizenId.textProperty().addListener((observable,oldValue,newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                addPhoneNum.setText(newValue.replaceAll("[^\\d]", ""));
+                showAlert("Warning","Chỉ nhập số bạn ơi!");
+            }
+        });
+    }
     private void setOnOffAddDeleteBtn() {
         btnDeleteEmployee.setDisable(true); // Bắt đầu bằng việc vô hiệu hóa nút Delete
         employeeTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -94,22 +119,23 @@ public class EmployeeController implements Initializable {
         employeeTableView.setItems(users);
     }
 
-    @FXML
-    private void handleSearchAction() {
-        String searchText = tfEmployee.getText().trim().toLowerCase();
-        if (!searchText.isEmpty()) {
-            ObservableList<User> filteredEmployees = FXCollections.observableArrayList(
-                    users.stream()
-                            .filter(emp -> String.valueOf(emp.getCitizen_id()).toLowerCase().contains(searchText)
-                                    || emp.getEmployName().toLowerCase().contains(searchText))
-                            .collect(Collectors.toList())
-            );
-            employeeTableView.setItems(filteredEmployees);
-        } else {
-            employeeTableView.setItems(users);
-        }
-    }
 
+    private void handleSearchAction() {
+        String searchText = tfEmployee.getText().trim();
+        String lowerCase = normalizeString(searchText.toLowerCase());
+        ObservableList<User> users = employeeTableView.getItems();
+        ObservableList<User> listResult = FXCollections.observableArrayList(
+                users.stream()
+                        .filter(user ->
+                                normalizeString(String.valueOf(user.getEmployee_id()).toLowerCase()).startsWith(lowerCase) ||
+                                        normalizeString(user.getUsername().toLowerCase()).contains(lowerCase))
+                        .collect(Collectors.toList())
+        );
+    }
+    private static String normalizeString(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
     @FXML
     private void handleDeleteAction() {
         User selectedUser = employeeTableView.getSelectionModel().getSelectedItem();
@@ -119,12 +145,6 @@ public class EmployeeController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleSearchKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            handleSearchAction();
-        }
-    }
 
     @FXML
     private void handleAddAction() {
@@ -134,10 +154,9 @@ public class EmployeeController implements Initializable {
         String phoneNum = addPhoneNum.getText();
         String email = addEmail.getText();
         String position = addPosition.getText();
-        String username = addEmail.getText();
 
         if (!name.isEmpty() && !citizenId.isEmpty() && !address.isEmpty() && !phoneNum.isEmpty() && !email.isEmpty() && !position.isEmpty()) {
-            User user = new User(username,name,citizenId,email,phoneNum,address,position);
+            User user = new User(name,citizenId,email,phoneNum,address,position);
             employeeDAO.addEmployee(user);
             users.add(user);
             clearAddEmployeeFields();
@@ -198,5 +217,12 @@ public class EmployeeController implements Initializable {
         addPhoneNum.clear();
         addEmail.clear();
         addPosition.clear();
+    }
+    private void showAlert(String tilte,String string) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(tilte);
+        alert.setHeaderText(null);
+        alert.setContentText(string);
+        alert.showAndWait();
     }
 }

@@ -56,7 +56,7 @@ public class UserDAO {
         try
         {
             //thực thi truy vấn và lấy kết qua
-            ResultSet resultSet = connectDB.getData(query);
+            ResultSet resultSet = connect.getData(query);
             //kiểm tra kq trả về
             if (resultSet.next()) {
                 //tìm thấy người dùng có user và password khớp
@@ -165,8 +165,7 @@ public class UserDAO {
     }
     public void addEmployee(User user) {
         String query = "INSERT INTO nhanvien (hoten, sdt, cccd, username, password, vitri, defaultpassword, diachi, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = connectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connect.getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getEmployName());
             statement.setString(2, user.getPhoneNumber());
             statement.setString(3, user.getCitizen_id());

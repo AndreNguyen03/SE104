@@ -55,6 +55,17 @@ public class User {
     public String getUsername() {
         return Username;
     }
+
+    public User(String employName, String citizen_id, String email, String phoneNumber, String address, String position) {
+        Username = email;
+        EmployName = employName;
+        Citizen_id = citizen_id;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Address = address;
+        Position = position;
+    }
+
     public String getUsername(String _username)
     {
         String username =null;
@@ -204,39 +215,7 @@ public class User {
         setEmail(resultSet.getString("email").toString());
         setPhoneNumber(resultSet.getString("sdt").toString());
     }
-
-    /*public String UserID(String username,String password) throws SQLException
-    {
-            ConnectDB connect = new ConnectDB();
-            String query = "SELECT employee_id FROM employee WHERE username = '" + username + "' AND password = '" + password + "'";
-            return connect.getData(query).getString("employee_id");
-    }
-    public String UserName(String username,String password) throws SQLException
-    {
-            ConnectDB connect = new ConnectDB();
-            String query = "SELECT employname FROM employee WHERE username = '" + username + "' AND password = '" + password + "'";
-            return connect.getData(query).getString("employname");
-    }
-    public String getUsername(String _username) throws SQLException
-    {
-        String username =null;
-        ConnectDB connect = new ConnectDB();
-        String query = "SELECT username FROM employee WHERE username = '" + _username +"'";
-        ResultSet resultSet = connect.getData(query);
-        if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
-        {
-            username = resultSet.getString("username");
-        }
-        return username;
-    }*/
-   /* public String getPosition(String username,String password) throws SQLException
-    {
-            ConnectDB connect = new ConnectDB();
-            String query = "SELECT position FROM employee WHERE username = '" + username + "' AND password = '" + password + "'";
-            return connect.getData(query).getString("position");
-    }
     // Forgot password
-    */
     public ResultSet LoadListEmployee () throws SQLException {
         ConnectDB connect = new ConnectDB();
         String query = "SELECT manv as \"ID\", HoTen as \"Họ và tên\",cccd as \"CCCD\",diachi as \"Địa chỉ\",sdt as \"Số điện thoại\",email as \"Email\",vitri as \"Vị trí làm việc\",username as \"Username\"  FROM nhanvien ";

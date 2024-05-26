@@ -20,6 +20,7 @@ public class ViewFactory {
     Stage stageMenu = null;
     Stage stageProfile= null;
     Stage stageExaminationHistory = null;
+    Stage stageAddEmployee = null;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -98,6 +99,19 @@ public class ViewFactory {
         {
             stageExaminationHistory.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
         }
+    }
+    public void showAddEmployee(){
+        /*if(stageAddEmployee==null) //xử lí mở 2 lần scene
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Add_Employee.fxml"));
+            stageAddEmployee=createStage(loader);
+            AddEmployeeController addEmployeeController = loader.getController();
+            addEmployeeController.initData();
+        }
+        else
+        {
+            stageExaminationHistory.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
+        }*/
     }
 
     private Stage createStage(FXMLLoader loader ) {
