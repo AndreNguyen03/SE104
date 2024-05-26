@@ -291,9 +291,9 @@ public class ReceptionController implements Initializable {
             String patientGender = cbPatientGender.getValue().toString();
             String patientPhoneNumber = tfPatientPhoneNumber.getText();
             String patientAddress = taPatientAddress.getText();
-
+            Date patientArrival = Date.valueOf(LocalDate.now());
             patientDAO.addPatient(new Patient(patientDAO.getNextPatientId(), patientName, patientGender
-                    , patientPhoneNumber, patientBirthDay, patientAddress));
+                    , patientPhoneNumber, patientBirthDay, patientAddress,patientArrival));
 
             clearDataField();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm thành công!");

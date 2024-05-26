@@ -77,7 +77,7 @@ public class MenuController {
     }
     @FXML
     void btnExaminationClicked(ActionEvent event) throws IOException {
-        Model.getInstance().getViewFactory().showExaminationWindow();
+        Model.getInstance().getViewFactory().showExaminationWindow(user);
     }
 
     @FXML
@@ -125,7 +125,7 @@ public class MenuController {
         this.user=_user;
     }
     public void ProfileEmploy_Clicked(MouseEvent mouseEvent) {
-        String id = this.user.getEmployee_id();
+        String id = String.valueOf(this.user.getEmployee_id());
         String name = this.user.getEmployName();
         String username = this.user.getUsername();
         String pos = this.user.getPosition();
