@@ -43,10 +43,11 @@ public class Medicine {
     public Medicine() {
     }
 
-    public Medicine(int medicineId, String medicineName, int medicineUnit, double medicinePrice, int medicineForm, int medicineUse) {
+    public Medicine(int medicineId, String medicineName, int medicineUnit, int medicineQuantity, double medicinePrice, int medicineForm, int medicineUse) {
         this.maThuoc = medicineId;
         this.tenThuoc = medicineName;
         this.maDonViTinh = medicineUnit;
+        this.soLuong = medicineQuantity;
         this.giaBan = medicinePrice;
         this.maDangThuoc = medicineForm;
         this.maCachDung = medicineUse;
