@@ -167,6 +167,7 @@ public class User {
     public int CheckValidate(String username, String password) throws  SQLException{
         ConnectDB connectDB = new ConnectDB();
         password = GetHash(password);
+
         String query = "SELECT * FROM nhanvien WHERE username = '"+username+"' AND (defaultpassword = '"+password+"' OR password ='"+password+"')";
         try
         {

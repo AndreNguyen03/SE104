@@ -83,7 +83,6 @@ public class ViewFactory {
             stageSetting.setAlwaysOnTop(true);
         }
     }
-
     private Stage createStage(FXMLLoader loader ) {
         Scene scene = null;
         try {
