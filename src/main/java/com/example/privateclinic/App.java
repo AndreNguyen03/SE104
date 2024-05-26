@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        /*User user = new User();
-        Model.getInstance().getViewFactory().showMenuWindow(user);*/
-        Model.getInstance().getViewFactory().showLoginWindow();
+        User user = new User();
+        Model.getInstance().getViewFactory().showMenuWindow(user);
+        //Model.getInstance().getViewFactory().showLoginWindow();
     }
 }
