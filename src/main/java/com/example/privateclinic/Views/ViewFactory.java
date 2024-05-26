@@ -1,9 +1,7 @@
 package com.example.privateclinic.Views;
 
-import com.example.privateclinic.Controllers.ExaminationHistoryController;
-import com.example.privateclinic.Controllers.MenuController;
-import com.example.privateclinic.Controllers.ProfileController;
-import com.example.privateclinic.Controllers.SettingController;
+import com.example.privateclinic.Controllers.*;
+import com.example.privateclinic.Models.Customer;
 import com.example.privateclinic.Models.User;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
@@ -61,12 +59,14 @@ public class ViewFactory {
             stageReception.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
         }
     }
-    public void showExaminationWindow()
+    public void showExaminationWindow(User user)
     {
         if(stageExamination==null) //xử lí mở 2 lần scene
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Examination.fxml"));
             stageExamination=createStage(loader);
+            ExaminationController examinationController = loader.getController();
+            examinationController.initData(user);
         }
         else
         {
@@ -85,14 +85,14 @@ public class ViewFactory {
             stageSetting.setAlwaysOnTop(true);
         }
     }
-    public void showHistoryExamination(String id,String year)
+    public void showHistoryExamination(Customer customer,ExaminationController _examinationController)
     {
         if(stageExaminationHistory==null) //xử lí mở 2 lần scene
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/HistoryExamination"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/ExaminationHistory.fxml"));
             stageExaminationHistory=createStage(loader);
             ExaminationHistoryController examHistoryController = loader.getController();
-            examHistoryController.initatata(id);
+            examHistoryController.initData(customer,_examinationController);
         }
         else
         {
@@ -116,7 +116,6 @@ public class ViewFactory {
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
         return stage;
     }
-
     public void closeStage(Stage stage)
     {
         stage.close();

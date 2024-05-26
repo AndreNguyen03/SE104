@@ -2,6 +2,7 @@ package com.example.privateclinic.DataAccessObject;
 
 import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.Customer;
+import com.example.privateclinic.Models.Prescribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,29 +11,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PrescribeDAO {
-    public ObservableList<Customer> getPatientsById_Date(String id, String year)
+    public PrescribeDAO() {
+    }
+
+    public boolean addPrescribe(int examinationID, Prescribe prescribe)
     {
-        ObservableList<Customer> customers = FXCollections.observableArrayList();
-        String query = "SELECT * FROM benhnhan bn, WHERE Year(ngayvao)=?";
+        String query = "INSERT INTO kethuoc (makhambenh,sothutu,mathuoc,ngay,sang,trua,chieu,toi,soluong,thanhtien)" +
+                " VALUES(?,?,?,?,?,?,?,?,?,?)";
         ConnectDB connectDB = new ConnectDB();
-        try (PreparedStatement statement = connectDB.getConnection().prepareStatement(query)) {
-            statement.setString(1, year);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Customer customer = new Customer();
-                    customer.setMaBN(resultSet.getString("mabn"));
-                    customer.setHoTen(resultSet.getString("hoten"));
-                    customer.setGioiTinh(resultSet.getString("gioitinh"));
-                    customer.setNgaySinh(resultSet.getString("ngaysinh"));
-                    customer.setSDT(resultSet.getString("sdt"));
-                    customer.setDiaChi(resultSet.getString("diachi"));
-                    customer.setNgayVao(resultSet.getString("ngayvao"));
-                    customers.add(customer);
-                }
-            }
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setInt(1, examinationID);
+            statement.setInt(2, prescribe.getSothuTu());
+            statement.setInt(3, prescribe.getMaThuoc());
+            statement.setInt(4, prescribe.getNgay());
+            statement.setInt(5, prescribe.getSang());
+            statement.setInt(6, prescribe.getTrua());
+            statement.setInt(7, prescribe.getChieu());
+            statement.setInt(8, prescribe.getToi());
+            statement.setInt(9, prescribe.getSoLuong());
+            statement.setDouble(10, prescribe.getSoLuong());
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return customers;
+        return true;
     }
 }

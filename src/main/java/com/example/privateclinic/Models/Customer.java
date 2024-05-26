@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Customer {
-    private String maBN;
+    private int maBN;
     private String hoTen;
     private String gioiTinh;
-    private String ngaySinh;
+    private Date ngaySinh;
     private String SDT;
     private String diaChi;
     private Date ngayVao;
@@ -17,13 +17,13 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String maBN, String hoTen, String SDT) {
+    public Customer(int maBN, String hoTen, String SDT) {
         this.maBN = maBN;
         this.hoTen = hoTen;
         this.SDT = SDT;
     }
 
-    public Customer(String maBN, String hoTen, String gioiTinh, String ngaySinh, String SDT, String diaChi, String ngayVao) {
+    public Customer(int maBN, String hoTen, String gioiTinh, Date ngaySinh, String SDT, String diaChi, String ngayVao) {
         this.maBN = maBN;
         this.hoTen = hoTen;
         this.gioiTinh = gioiTinh;
@@ -33,11 +33,11 @@ public class Customer {
         this.ngayVao = Date.valueOf(ngayVao);
     }
 
-    public String getMaBN() {
+    public int getMaBN() {
         return maBN;
     }
 
-    public void setMaBN(String maBN) {
+    public void setMaBN(int maBN) {
         this.maBN = maBN;
     }
 
@@ -57,11 +57,11 @@ public class Customer {
         this.gioiTinh = gioiTinh;
     }
 
-    public String getNgaySinh() {
+    public Date getNgaySinh() {
         return ngaySinh;
     }
 
-    public void setNgaySinh(String ngaySinh) {
+    public void setNgaySinh(Date ngaySinh) {
         this.ngaySinh = ngaySinh;
     }
 
@@ -85,27 +85,8 @@ public class Customer {
         return ngayVao;
     }
 
-    public void setNgayVao(String ngayVao) {
-        this.ngayVao = Date.valueOf(ngayVao);
-    }
-
-    public ResultSet LoadListCustomers()
-    {
-        ConnectDB connect = new ConnectDB();
-        String query = "SELECT mabn, hoten, gioitinh, ngaysinh, sdt, diachi, ngayvao FROM benhnhan";
-        return connect.getData(query);
-    }
-
-    public ResultSet Search(String search) throws SQLException
-    {
-        ConnectDB connect = new ConnectDB();
-        PreparedStatement preparedStatement = null;
-        String query = "SELECT mabn, hoten, gioitinh, ngaysinh, sdt, diachi, ngayvao " +
-                "FROM NHANVIEN WHERE (MaNV like '?%' or HoTen like N'% ?%'";
-        preparedStatement = connect.getConnection().prepareStatement(query);
-        preparedStatement.setString(1,search);
-        preparedStatement.setString(2,search);
-        return connect.getData(preparedStatement.toString());
+    public void setNgayVao(Date ngayVao) {
+        this.ngayVao = ngayVao;
     }
 
 }

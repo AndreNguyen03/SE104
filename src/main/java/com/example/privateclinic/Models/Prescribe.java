@@ -1,29 +1,90 @@
 package com.example.privateclinic.Models;
 
 public class Prescribe {
+    int makhambenh;
+    int sothuTu;
     int maThuoc;
-    int maKhamBenh;
+    int maKeThuoc;
     int ngay;
     int sang;
     int trua;
     int chieu;
     int toi;
     int soLuong;
+
+    double donGia;
+    double thanhTien;
+
+    String tenThuoc;
+
+    String tenDonViTinh;
+
+    String tenCachDung;
+    String tenDangThuoc;
+
     public Prescribe()
     {
 
     }
-    public Prescribe(int maThuoc, int maKhamBenh, int ngay, int sang, int trua, int chieu, int toi, int soLuong) {
+
+    public Prescribe(int maThuoc,String tenThuoc,String tenDonViTinh,String tenDangThuoc,String tenCachDung,double donGia,
+                     int ngay, int sang, int trua, int chieu, int toi, int soLuong) {
         this.maThuoc = maThuoc;
-        this.maKhamBenh = maKhamBenh;
+        //this.maKeThuoc = maKeThuoc;
         this.ngay = ngay;
         this.sang = sang;
         this.trua = trua;
         this.chieu = chieu;
         this.toi = toi;
         this.soLuong = soLuong;
+        this.donGia = donGia;
+        this.thanhTien = soLuong*donGia;
+
+        this.tenThuoc = tenThuoc;
+        this.tenCachDung = tenCachDung;
+        this.tenDangThuoc= tenDangThuoc;
+        this.tenDonViTinh= tenDonViTinh;
     }
 
+    public int getMakhambenh() {
+        return makhambenh;
+    }
+
+    public void setMakhambenh(int makhambenh) {
+        this.makhambenh = makhambenh;
+    }
+
+    public String getTenThuoc() {
+        return tenThuoc;
+    }
+
+    public void setTenThuoc(String tenThuoc) {
+        this.tenThuoc = tenThuoc;
+    }
+
+    public String getTenDonViTinh() {
+        return tenDonViTinh;
+    }
+
+    public void setTenDonViTinh(String tenDonViTinh) {
+        this.tenDonViTinh = tenDonViTinh;
+    }
+
+    public String getTenCachDung() {
+        return tenCachDung;
+    }
+
+    public void setTenCachDung(String tenCachDung) {
+        this.tenCachDung = tenCachDung;
+    }
+
+    public String getTenDangThuoc() {
+        return tenDangThuoc;
+    }
+
+    public void setTenDangThuoc(String tenDangThuoc) {
+        this.tenDangThuoc = tenDangThuoc;
+    }
     public int getMaThuoc() {
         return maThuoc;
     }
@@ -32,12 +93,12 @@ public class Prescribe {
         this.maThuoc = maThuoc;
     }
 
-    public int getMaKhamBenh() {
-        return maKhamBenh;
+    public int getMaKeThuoc() {
+        return maKeThuoc;
     }
 
-    public void setMaKhamBenh(int maKhamBenh) {
-        this.maKhamBenh = maKhamBenh;
+    public void setMaKeThuoc(int maKeThuoc) {
+        this.maKeThuoc = maKeThuoc;
     }
 
     public int getNgay() {
@@ -86,5 +147,26 @@ public class Prescribe {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+    public double getDonGia() {
+        return donGia;
+    }
+
+    public void setDonGia(double donGia) {
+        this.donGia = donGia;
+    }
+    public double getThanhTien() {
+        return thanhTien;
+    }
+
+    public void setThanhTien(double thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+    public int getSothuTu() {
+        return sothuTu;
+    }
+
+    public void setSothuTu(int sothuTu) {
+        this.sothuTu = sothuTu;
     }
 }

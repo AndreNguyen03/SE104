@@ -26,9 +26,6 @@
         <!-- https://mvnrepository.com/artifact/com.gluonhq/charm-glisten -->
         <!-- https://mvnrepository.com/artifact/com.gluonhq/charm -->
 
-
-
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

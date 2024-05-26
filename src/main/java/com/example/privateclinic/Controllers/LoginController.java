@@ -1,5 +1,6 @@
 package com.example.privateclinic.Controllers;
 
+import com.example.privateclinic.DataAccessObject.UserDAO;
 import com.example.privateclinic.Models.Model;
 import com.example.privateclinic.Models.User;
 import com.jfoenix.controls.JFXRadioButton;
@@ -35,7 +36,9 @@ import java.util.ResourceBundle;
 
 
 public class LoginController implements Initializable {
-    User user;
+    public PasswordField pfPassword1_change;
+    public PasswordField pfPassword2_change;
+    UserDAO userDAO ;
     String sentEmail = null;
     private String storedOTP;
     private int index;
@@ -72,7 +75,7 @@ public class LoginController implements Initializable {
     @FXML
     private TextField tfUsername_Login, tf_username_forgot;
     @FXML
-    private PasswordField pfPassword_Login, tfPassword2_change, tfPassword1_change;
+    private PasswordField pfPassword_Login;
     @FXML
     private TextField tfShowPasswordCP2, tfShowPasswordCP1, tfShowPasswordLogin;
 
@@ -94,10 +97,12 @@ public class LoginController implements Initializable {
     private void ResetTextField() {
         tfUsername_Login.setText("");
         pfPassword_Login.setText("");
-        tfPassword1_change.setText("");
-        tfPassword2_change.setText("");
+        pfPassword1_change.setText("");
+        pfPassword2_change.setText("");
         tf_username_forgot.setText("");
         textFieldOTP.setText("");
+        tfShowPasswordCP1.setText("");
+        tfShowPasswordCP2.setText("");
     }
 
     @FXML
@@ -116,7 +121,7 @@ public class LoginController implements Initializable {
         paneProgress.setVisible(true);
         new Thread(() -> {
             String username_result = null;
-            username_result = user.getUsername(tf_username_forgot.getText().toString());
+            username_result = userDAO.getUsername(tf_username_forgot.getText().toString());
             if (username_result == null) {
                 showAlert("Warning","Invalid username: " + tf_username_forgot.getText().toString());
                 return;
@@ -142,7 +147,7 @@ public class LoginController implements Initializable {
             try {
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(fromEmail, "Green Clinic"));
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail(tf_username_forgot.getText())));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(userDAO.getEmail(tf_username_forgot.getText())));
                 message.setSubject(subject);
                 message.setText(body);
 
@@ -227,16 +232,16 @@ public class LoginController implements Initializable {
             }
         } else // đang ở màn change
         {
-            if (tfPassword1_change.getText().isBlank()) {
+            if (pfPassword1_change.getText().isBlank()) {
                 showAlert("Warning","You must fill new password");
                 return false;
             }
-            if (tfPassword2_change.getText().isBlank()) {
+            if (pfPassword2_change.getText().isBlank()) {
                 showAlert("Warning","You must fill confirm new password");
                 return false;
 
             }
-            if (!tfPassword2_change.getText().equals(tfPassword1_change.getText())) {
+            if (!pfPassword2_change.getText().equals(pfPassword1_change.getText())) {
                 showAlert("Warning",
                         "Wrong password re-entered, please check again");
                 return false;
@@ -252,30 +257,48 @@ public class LoginController implements Initializable {
         radioHideShow.setOnAction(event -> showPassword());
         radioHideShowChange.setOnAction(event -> showPassword());
         loginPane.toFront();
-        user = new User();
+        userDAO =  new UserDAO();
         index = 0;
     }
 
     private void showPassword() {
         if (index == 0 && radioHideShow.isSelected()) {
+
+            //show password va an password field
             tfShowPasswordLogin.setVisible(true);
             pfPassword_Login.setVisible(false);
             tfShowPasswordLogin.setText(pfPassword_Login.getText());
+
         } else if (index == 0 && !radioHideShow.isSelected()) {
+
+            // set lai matkhau da hien vao passwordfield
+            pfPassword_Login.setText(tfShowPasswordLogin.getText());
+
+            //an textfield va show lai passwordfield
             pfPassword_Login.setVisible(true);
             tfShowPasswordLogin.setVisible(false);
+
         } else if (index == 2 && radioHideShowChange.isSelected()) {
+
+            // show password va an passwordfield
             tfShowPasswordCP1.setVisible(true);
-            tfPassword1_change.setVisible(false);
-            tfShowPasswordCP1.setText(tfPassword1_change.getText());
+            pfPassword1_change.setVisible(false);
+            tfShowPasswordCP1.setText(pfPassword1_change.getText());
             tfShowPasswordCP2.setVisible(true);
-            tfPassword2_change.setVisible(false);
-            tfShowPasswordCP2.setText(tfPassword2_change.getText());
+            pfPassword2_change.setVisible(false);
+            tfShowPasswordCP2.setText(pfPassword2_change.getText());
+
         } else if (index == 2 && !radioHideShowChange.isSelected()) {
+
+            //set lai mat khau da hien vao passwordfield
+            pfPassword1_change.setText(tfShowPasswordCP1.getText());
+            pfPassword2_change.setText(tfShowPasswordCP2.getText());
+
+            //an textfield va show lai passwordfield
             tfShowPasswordCP1.setVisible(false);
-            tfPassword1_change.setVisible(true);
+            pfPassword1_change.setVisible(true);
             tfShowPasswordCP2.setVisible(false);
-            tfPassword2_change.setVisible(true);
+            pfPassword2_change.setVisible(true);
         }
     }
 
@@ -286,7 +309,7 @@ public class LoginController implements Initializable {
         new Thread(() -> {
             try {
                 if (CheckForFill()) {
-                    Login(tfUsername_Login.getText().toString(), pfPassword_Login.getText().toString());
+                    Login(tfUsername_Login.getText().trim(), pfPassword_Login.getText().trim());
                 }
             }
             catch (SQLException|IOException e)
@@ -302,7 +325,7 @@ public class LoginController implements Initializable {
 
     private void Login(String username, String password) throws SQLException,IOException {
 
-            int valid = user.CheckValidate(username, password);
+            int valid = userDAO.CheckValidate(username, password);
             Platform.runLater(()-> {
                 paneProgress.setVisible(false);
                 if (valid == 1) {
@@ -314,7 +337,7 @@ public class LoginController implements Initializable {
                     pfPassword_Login.setText("");
                     Stage stage = (Stage) btnLogin.getScene().getWindow(); //get login-screen
                     Model.getInstance().getViewFactory().closeStage(stage);//close login-screen
-                    Model.getInstance().getViewFactory().showMenuWindow(user);//mở menu-screen
+                    Model.getInstance().getViewFactory().showMenuWindow(userDAO.getEmployee());//mở menu-screen
                 } else
                     showAlert("Warning","Fail to login! Check your Username and Password again");
             });
@@ -322,6 +345,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void btnConfirm_clicked(MouseEvent mouseEvent) {
+        if(isLess6characters(pfPassword1_change)) return;
         paneProgress.setVisible(true);
         paneProgress.toFront();
         new Thread(() -> {
@@ -358,7 +382,9 @@ public class LoginController implements Initializable {
     }
 
     private boolean UpdatePassword(int index) throws SQLException,IOException {
-        return  user.UpdatePassword(tf_username_forgot.getText().toString(), tfPassword2_change.getText().toString(), index);
+        if(index ==0 )
+            return userDAO.UpdatePassword(tfUsername_Login.getText().toString(), pfPassword2_change.getText().toString(), index);
+        return  userDAO.UpdatePassword(tf_username_forgot.getText().toString(), pfPassword2_change.getText().toString(), index);
     }
 
     @FXML
@@ -366,13 +392,13 @@ public class LoginController implements Initializable {
         checkValidate20characters(event);
     }
 
-    private void checkValidate20characters(KeyEvent event) {
-        if (pfPassword_Login.getText().length() >= 20) {
-            // Hiển thị thông báo khi độ dài vượt quá 20 ký tự
+    private void checkValidate20characters(KeyEvent event) {///
+        if (pfPassword_Login.getText().length() >= 18) {
+            // Hiển thị thông báo khi độ dài vượt quá 18 ký tự
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText(null);
-            alert.setContentText("Password must be 20 characters or less.");
+            alert.setContentText("Password must be 18 characters or less.");
             alert.showAndWait();
             event.consume(); // Hủy sự kiện
 
@@ -381,7 +407,18 @@ public class LoginController implements Initializable {
             pfPassword_Login.deleteText(caretPos - 1, caretPos);
         }
     }
-
+    private boolean isLess6characters(TextField tf) {
+        if (tf.getText().length() <6) {
+            // Hiển thị thông báo khi độ dài vượt quá 15 ký tự
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText(null);
+            alert.setContentText("Password must be 6 character or more!");
+            alert.showAndWait();
+            return true;
+        }
+        return false;
+    }
     private void showAlert(String tilte,String string) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(tilte);

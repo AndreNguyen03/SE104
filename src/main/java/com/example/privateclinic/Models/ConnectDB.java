@@ -20,18 +20,18 @@ public class ConnectDB {
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;
         //String urlNeon_DB= "jdbc:postgresql://ep-jolly-block-a52e1a3c.us-east-2.aws.neon.tech/ClinicDB?user=PharmacyDB_owner&password=xKkZe1NrSpq7&sslmode=require";
         try{
-            if(isInternetAvailable())
-            {
+            /*if(isInternetAvailable())
+            {*/
                 //Class.forName("com.mysql.cj.jdbc.Driver");
                 Class.forName("org.postgresql.Driver");
                 databaseLink= DriverManager.getConnection(urlPostgres,databaseUser,databasePassword);
                //databaseLink= DriverManager.getConnection(urlNeon_DB);
                 if(databaseLink!=null) System.out.println("Connection Established");
                 else System.out.println("Connection Failed");
-            }
+           /* }
             else {
                 JOptionPane.showMessageDialog(null,"Không có kết nối internet");
-            }
+            }*/
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -84,13 +84,5 @@ public class ConnectDB {
             preparedStatement.close();
         }
     }
-
-    public ResultSet getResultSet(String sql) throws SQLException {
-        Statement statement = databaseLink.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-        return resultSet;
-    }
-
-
 
 }
