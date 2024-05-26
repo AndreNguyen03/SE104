@@ -29,7 +29,7 @@ public class ExaminationHistoryDAO {
     {
         ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
         String query = "SELECT kb.*,bn.*, b1.tenbenh as tenBenhChinh, b2.tenbenh as tenBenhPhu " +
-                "FROM khambenh kb, kethuoc kt,benh b1,benh b2, benhnhan bn WHERE EXTRACT(YEAR FROM kb.ngay) = ? and bn.mabn= ?  AND bn.mabn = kb.mabn AND kt.makhambenh = kb.makb AND b1.mabenh=kb.benhchinh AND b2.mabenh=kb.benhphu";
+                "FROM khambenh kb, kethuoc kt,benh b1,benh b2, benhnhan bn WHERE EXTRACT(YEAR FROM kb.ngay) <= ? and bn.mabn= ?  AND bn.mabn = kb.mabn AND kt.makhambenh = kb.makb AND b1.mabenh=kb.benhchinh AND b2.mabenh=kb.benhphu";
         ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, year);

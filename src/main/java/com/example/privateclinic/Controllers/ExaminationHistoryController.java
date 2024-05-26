@@ -65,6 +65,7 @@ public class ExaminationHistoryController implements Initializable {
      ObservableList<Examination> listExaminationsHistory;
      ExaminationHistory examHistoryBeforeClicked;
     ExaminationController examinationController ;
+    boolean firstAccess =true;
     public void initData(Customer _customer, ExaminationController _examinationController)
     {
         this.customer = _customer;
@@ -90,16 +91,15 @@ public class ExaminationHistoryController implements Initializable {
         examinationHistoryDAO = new ExaminationHistoryDAO();
         listExaminationsHistory = FXCollections.observableArrayList();
         currentYear= java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1900, currentYear, currentYear);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1950, currentYear,currentYear);
         spinnerYear.setValueFactory(valueFactory);
         setUpTableView();
         setAction();
 
     }
-
     private void setAction() {
         spinnerYear.valueProperty().addListener((obs, oldValue, newValue) -> {
-            LoadHistory_Date(newValue);
+            LoadHistory_Date(spinnerYear.getValue());
         });
         tbl_examHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -150,6 +150,7 @@ public class ExaminationHistoryController implements Initializable {
     }
 
     private void LoadHistory_Date(int year) {
+        listExaminationsHistory.clear();
         listExaminationsHistory_detail=examinationHistoryDAO.getPatientsByDate(customer.getMaBN(), year);
         for(ExaminationHistory examinationHistory : listExaminationsHistory_detail) {
             listExaminationsHistory.add(examinationHistory.getExamination());
@@ -157,9 +158,14 @@ public class ExaminationHistoryController implements Initializable {
         tbl_examHistory.setItems(listExaminationsHistory);
         if(!tbl_examHistory.getItems().isEmpty()) {
         } else {
-            showAlert("Warning",customer.getHoTen() +" không có trong dữ liệu đã khám!");
-            Model.getInstance().getViewFactory().closeStage((Stage) btnReuse.getScene().getWindow());
+            if (firstAccess) {
+                showAlert("Warning",customer.getHoTen() +" không có trong dữ liệu đã khám!");
+                Model.getInstance().getViewFactory().closeStage((Stage) btnReuse.getScene().getWindow());
+            } else {
+                showAlert("Warning", String.format("Năm %d không ghi nhận bệnh nhân %s đến khám", spinnerYear.getValue(), customer.getHoTen()));            }
+
         }
+        firstAccess=false;
     }
     private ExaminationHistory FindExamHistoryByExamination(Examination examination)
     {

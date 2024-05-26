@@ -81,6 +81,8 @@ public  class ExaminationController implements Initializable {
     public TextField tf_searchIDName;
     public Button btnLuu;
     public Button btnCancel;
+    public Button btnInToaThuoc;
+    public Button btnInBangKe;
     @FXML
     RadioButton rad_patientWaiting,rad_patientDone;
     public Label  lbl_soLuong;
@@ -246,8 +248,7 @@ public  class ExaminationController implements Initializable {
                 SearchPatientResultList(tf_searchIDName.getText().toString());
             } else {
                 tbl_customer.setItems(listWaitingCustomers);
-                if(!listWaitingCustomers.isEmpty())
-                lbl_noPatientResult.setVisible(false);
+                if(!listWaitingCustomers.isEmpty()) lbl_noPatientResult.setVisible(false);
                 rad_patientWaiting.setSelected(true);
             }
         });
