@@ -6,6 +6,8 @@ import com.example.privateclinic.DataAccessObject.ExaminationHistoryDAO;
 import com.example.privateclinic.DataAccessObject.PrescribeDAO;
 import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXRadioButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,15 +24,17 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class ExaminationHistoryController implements Initializable {
 
     public Pane btnClose;
-    public Spinner<Integer> spinnerYear;
     public TableView<Examination> tbl_examHistory;
     public TableColumn<Examination,String> col_ngayvaoHistory;
     public Button btnReuse;
+    public ComboBox<Integer> cbYear;
     public TableView<Prescribe> tbl_kethuocHistory;
     public TableColumn<Prescribe,Integer> col_stt;
     public TableColumn<Prescribe,String> col_tenThuoc;
@@ -59,7 +63,6 @@ public class ExaminationHistoryController implements Initializable {
     private Customer customer;
     int currentYear;
      CustomerDAO customerDAO;
-     PrescribeDAO prescribeDAO;
      ExaminationHistoryDAO examinationHistoryDAO;
      ObservableList<ExaminationHistory> listExaminationsHistory_detail;
      ObservableList<Examination> listExaminationsHistory;
@@ -76,7 +79,7 @@ public class ExaminationHistoryController implements Initializable {
             rad_menHistory.setSelected(true);
         else rad_womenHistory.setSelected(true);
         examinationController = _examinationController;
-        LoadHistory_Date(spinnerYear.getValue());
+        LoadHistory_Date(cbYear.getValue());
 
     }
     public void close(MouseEvent mouseEvent) {
@@ -91,15 +94,29 @@ public class ExaminationHistoryController implements Initializable {
         examinationHistoryDAO = new ExaminationHistoryDAO();
         listExaminationsHistory = FXCollections.observableArrayList();
         currentYear= java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1950, currentYear,currentYear);
-        spinnerYear.setValueFactory(valueFactory);
+        cbYear.setValue(currentYear);
+        SetUp();
         setUpTableView();
         setAction();
 
     }
+
+    private void SetUp() {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        ObservableList<Integer> years = FXCollections.observableArrayList();
+        for (int i = 0; i < currentYear -1950; i++) {
+            years.add(1951 + i);
+        }
+        years.sort(Comparator.reverseOrder());
+        cbYear.setItems(years);
+    }
+
     private void setAction() {
-        spinnerYear.valueProperty().addListener((obs, oldValue, newValue) -> {
-            LoadHistory_Date(spinnerYear.getValue());
+        cbYear.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observableValue, Integer integer, Integer t1) {
+                LoadHistory_Date(cbYear.getValue());
+            }
         });
         tbl_examHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -162,7 +179,7 @@ public class ExaminationHistoryController implements Initializable {
                 showAlert("Warning",customer.getHoTen() +" không có trong dữ liệu đã khám!");
                 Model.getInstance().getViewFactory().closeStage((Stage) btnReuse.getScene().getWindow());
             } else {
-                showAlert("Warning", String.format("Năm %d không ghi nhận bệnh nhân %s đến khám", spinnerYear.getValue(), customer.getHoTen()));            }
+                showAlert("Warning", String.format("Từ năm %d về trước không ghi nhận bệnh nhân %s đến khám", cbYear.getValue(), customer.getHoTen()));            }
 
         }
         firstAccess=false;

@@ -11,9 +11,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -21,17 +18,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.MediaName;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
-import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public  class ExaminationController implements Initializable {
@@ -81,6 +77,7 @@ public  class ExaminationController implements Initializable {
     public TextField tf_searchIDName;
     public Button btnLuu;
     public Button btnCancel;
+    public Button btnCallPatient;
     public Button btnInToaThuoc;
     public Button btnInBangKe;
     @FXML
@@ -89,7 +86,7 @@ public  class ExaminationController implements Initializable {
     @FXML
     Button btnLamMoi;
     @FXML
-    RadioButton rad_men,rad_women;
+    RadioButton rad_men,rad_women, rad_womenVoice;
     @FXML
     TextField tf_mabn,tf_tenbn,tf_ngaysinh;
     @FXML
@@ -329,11 +326,13 @@ public  class ExaminationController implements Initializable {
         btnKham.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(!tbl_customer.getSelectionModel().isEmpty())
-                {
-                    SetUnDisable();
-                    fillDataCustomer_exam();
-                    tbl_customer.getSelectionModel().clearSelection();
+                if(rad_patientWaiting.isSelected()) {
+                    if(!tbl_customer.getSelectionModel().isEmpty())
+                    {
+                        SetUnDisable();
+                        fillDataCustomer_exam();
+                        tbl_customer.getSelectionModel().clearSelection();
+                    }
                 }
             }
         });
@@ -404,16 +403,33 @@ public  class ExaminationController implements Initializable {
         btnCancel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int request = ShowYesNoAlert("Cancel");
-                if(request == JOptionPane.YES_OPTION){
-                    ResetAllTextField();
-                    SetDisable();
-                    lbl_noPatientResult.setVisible(false);
-                } else {
+                {
+                    if(IsBlank()) {
+                        int request = ShowYesNoAlert("Cancel");
+                        if(request == JOptionPane.YES_OPTION){
+                            ResetAllTextField();
+                            SetDisable();
+                            lbl_noPatientResult.setVisible(false);
+                        } else {
+
+                        }
+                    }
 
                 }
             }
         });
+        btnCallPatient.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               /* if(rad_womenVoice.isSelected()) {
+                } else {
+                }*/
+            }
+        });
+    }
+
+    private boolean IsBlank() { // tồn tại một tf đã điền thì trả về false
+        return !tbl_chosenMedicine.getItems().isEmpty() && !tf_trieuChung.getText().isEmpty() && !tf_luuY.getText().isEmpty() && !tf_maBenhPhu.getText().isEmpty() && !tf_maBenhChinh.getText().isEmpty();
     }
 
 
