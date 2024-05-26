@@ -1,6 +1,5 @@
 package com.example.privateclinic;
 
-import com.example.privateclinic.Controllers.ExaminationController;
 import com.example.privateclinic.Controllers.LoginController;
 import com.example.privateclinic.Models.Model;
 
