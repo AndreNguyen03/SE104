@@ -22,9 +22,9 @@ public class ProfileController {
     public ProfileController()
     {
     }
-    public void initData(int _id,String _name,String _username,String _pos)
+    public void initData(String _id,String _name,String _username,String _pos)
     {
-        employee_id_lbl.setText(String.valueOf(_id));
+        employee_id_lbl.setText(_id);
         employname_lbl.setText(_name);
         username_lbl.setText(_username);
         position_lbl.setText(_pos);
