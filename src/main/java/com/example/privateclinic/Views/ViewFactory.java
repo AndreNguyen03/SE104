@@ -32,7 +32,7 @@ public class ViewFactory {
         MenuController menuController = loader.getController();
         menuController.initData(user);
     }
-    public void showProfileWindow(String id,String name,String username,String pos)
+    public void showProfileWindow(int id,String name,String username,String pos)
     {
         if(stageProfile==null)
         {

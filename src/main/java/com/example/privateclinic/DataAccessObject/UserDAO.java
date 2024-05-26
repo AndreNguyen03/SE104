@@ -2,6 +2,8 @@ package com.example.privateclinic.DataAccessObject;
 
 import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.Employee;
+import com.example.privateclinic.Models.User;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,30 +12,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeDAO {
+public class UserDAO {
     ConnectDB connectDB = new ConnectDB();
 
-    public EmployeeDAO() {
+    public UserDAO() {
     }
 
-    public void addEmployee(Employee employee) {
+    public void addEmployee(User user) {
         String query = "INSERT INTO nhanvien (hoten, sdt, cccd, username, password, vitri, defaultpassword, diachi, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = connectDB.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, employee.getName());
-            statement.setString(2, employee.getPhoneNumber());
-            statement.setString(3, employee.getCitizenId());
-            statement.setString(4, employee.getUsername());
+            statement.setString(1, user.getEmployName());
+            statement.setString(2, user.getPhoneNumber());
+            statement.setString(3, user.getCitizen_id());
+            statement.setString(4, user.getUsername());
             statement.setString(5, "");
-            statement.setString(6, employee.getPosition());
+            statement.setString(6, user.getPosition());
             statement.setString(7, "123");
-            statement.setString(8, employee.getAddress());
-            statement.setString(9, employee.getEmail());
+            statement.setString(8, user.getAddress());
+            statement.setString(9, user.getEmail());
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet rs = statement.getGeneratedKeys()) {
                     if (rs.next()) {
-                        employee.setId(rs.getInt(1));
+                        user.setEmployee_id(rs.getInt(1));
                     }
                 }
             }
@@ -42,17 +44,17 @@ public class EmployeeDAO {
         }
     }
 
-    public void updateEmployee(Employee employee) {
+    public void updateEmployee(User user) {
         String query = "UPDATE nhanvien SET hoten = ?, sdt = ?, cccd = ?, diachi = ?, vitri = ?, email = ? WHERE manv = ?";
         try (Connection connection = connectDB.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, employee.getName());
-            statement.setString(2, employee.getPhoneNumber());
-            statement.setString(3, employee.getCitizenId());
-            statement.setString(4, employee.getAddress());
-            statement.setString(5, employee.getPosition());
-            statement.setString(6, employee.getEmail());
-            statement.setInt(7, employee.getId());
+            statement.setString(1, user.getEmployName());
+            statement.setString(2, user.getPhoneNumber());
+            statement.setString(3, user.getCitizen_id());
+            statement.setString(4, user.getAddress());
+            statement.setString(5, user.getPosition());
+            statement.setString(6, user.getEmail());
+            statement.setInt(7, user.getEmployee_id());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,28 +73,28 @@ public class EmployeeDAO {
         }
     }
 
-    public List<Employee> getAllEmployees() {
-        List<Employee> employees = new ArrayList<>();
+    public List<User> getAllEmployees() {
+        List<User> users = new ArrayList<>();
         String query = "SELECT * FROM nhanvien";
         try (Connection connection = connectDB.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                Employee employee = new Employee();
-                employee.setId(resultSet.getInt("manv"));
-                employee.setName(resultSet.getString("hoten"));
-                employee.setCitizenId(resultSet.getString("cccd"));
-                employee.setPhoneNumber(resultSet.getString("sdt"));
-                employee.setAddress(resultSet.getString("diachi"));
-                employee.setPosition(resultSet.getString("vitri"));
-                employee.setUsername(resultSet.getString("username"));
-                employee.setEmail(resultSet.getString("email"));
-                employees.add(employee);
+                User user = new User();
+                user.setEmployee_id(resultSet.getInt("manv"));
+                user.setEmployName(resultSet.getString("hoten"));
+                user.setCitizen_id(resultSet.getString("cccd"));
+                user.setPhoneNumber(resultSet.getString("sdt"));
+                user.setAddress(resultSet.getString("diachi"));
+                user.setPosition(resultSet.getString("vitri"));
+                user.setUsername(resultSet.getString("username"));
+                user.setEmail(resultSet.getString("email"));
+                users.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return employees;
+        return users;
     }
 
     public Employee getEmployeeById(int employeeId) {
@@ -142,4 +144,5 @@ public class EmployeeDAO {
         }
         return employee;
     }
+
 }

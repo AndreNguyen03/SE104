@@ -1,7 +1,8 @@
 package com.example.privateclinic.Controllers;
 
-import com.example.privateclinic.DataAccessObject.EmployeeDAO;
+import com.example.privateclinic.DataAccessObject.UserDAO;
 import com.example.privateclinic.Models.Employee;
+import com.example.privateclinic.Models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,26 +38,26 @@ public class EmployeeController implements Initializable {
     @FXML
     private TextField addPosition;
     @FXML
-    private TableView<Employee> employeeTableView;
+    private TableView<User> employeeTableView;
     @FXML
-    private TableColumn<Employee, Integer> idColumn;
+    private TableColumn<User, Integer> idColumn;
     @FXML
-    private TableColumn<Employee, String> nameColumn;
+    private TableColumn<User, String> nameColumn;
     @FXML
-    private TableColumn<Employee, String> citizenIdColumn;
+    private TableColumn<User, String> citizenIdColumn;
     @FXML
-    private TableColumn<Employee, String> addressColumn;
+    private TableColumn<User, String> addressColumn;
     @FXML
-    private TableColumn<Employee, String> phoneNumColumn;
+    private TableColumn<User, String> phoneNumColumn;
     @FXML
-    private TableColumn<Employee, String> emailColumn;
+    private TableColumn<User, String> emailColumn;
     @FXML
-    private TableColumn<Employee, String> positionColumn;
+    private TableColumn<User, String> positionColumn;
     @FXML
-    private TableColumn<Employee, String> usernameColumn;
+    private TableColumn<User, String> usernameColumn;
 
-    private EmployeeDAO employeeDAO = new EmployeeDAO();
-    private ObservableList<Employee> employees;
+    private UserDAO employeeDAO = new UserDAO();
+    private ObservableList<User> users;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -78,43 +79,43 @@ public class EmployeeController implements Initializable {
     }
 
     private void configureTableColumns() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        citizenIdColumn.setCellValueFactory(new PropertyValueFactory<>("citizenId"));
-        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        phoneNumColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Employee_id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("EmployName"));
+        citizenIdColumn.setCellValueFactory(new PropertyValueFactory<>("Citizen_id"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("Address"));
+        phoneNumColumn.setCellValueFactory(new PropertyValueFactory<>("PhoneNumber"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        positionColumn.setCellValueFactory(new PropertyValueFactory<>("Position"));
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("Username"));
     }
 
     private void loadEmployeeData() {
-        employees = FXCollections.observableArrayList(employeeDAO.getAllEmployees());
-        employeeTableView.setItems(employees);
+        users = FXCollections.observableArrayList(employeeDAO.getAllEmployees());
+        employeeTableView.setItems(users);
     }
 
     @FXML
     private void handleSearchAction() {
         String searchText = tfEmployee.getText().trim().toLowerCase();
         if (!searchText.isEmpty()) {
-            ObservableList<Employee> filteredEmployees = FXCollections.observableArrayList(
-                    employees.stream()
-                            .filter(emp -> String.valueOf(emp.getId()).toLowerCase().contains(searchText)
-                                    || emp.getName().toLowerCase().contains(searchText))
+            ObservableList<User> filteredEmployees = FXCollections.observableArrayList(
+                    users.stream()
+                            .filter(emp -> String.valueOf(emp.getCitizen_id()).toLowerCase().contains(searchText)
+                                    || emp.getEmployName().toLowerCase().contains(searchText))
                             .collect(Collectors.toList())
             );
             employeeTableView.setItems(filteredEmployees);
         } else {
-            employeeTableView.setItems(employees);
+            employeeTableView.setItems(users);
         }
     }
 
     @FXML
     private void handleDeleteAction() {
-        Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
-        if (selectedEmployee != null) {
-            employeeDAO.deleteEmployee(selectedEmployee.getId());
-            employees.remove(selectedEmployee);
+        User selectedUser = employeeTableView.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            employeeDAO.deleteEmployee(selectedUser.getEmployee_id());
+            users.remove(selectedUser);
         }
     }
 
@@ -136,17 +137,17 @@ public class EmployeeController implements Initializable {
         String username = addEmail.getText();
 
         if (!name.isEmpty() && !citizenId.isEmpty() && !address.isEmpty() && !phoneNum.isEmpty() && !email.isEmpty() && !position.isEmpty()) {
-            Employee newEmployee = new Employee(name, citizenId, address, phoneNum, email, position, username);
-            employeeDAO.addEmployee(newEmployee);
-            employees.add(newEmployee);
+            User user = new User(username,name,citizenId,email,phoneNum,address,position);
+            employeeDAO.addEmployee(user);
+            users.add(user);
             clearAddEmployeeFields();
         }
     }
 
     @FXML
     private void handleEditAction() {
-        Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
-        if (selectedEmployee != null) {
+        User selectedUser = employeeTableView.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
             String name = addName.getText();
             String citizenId = addcitizenId.getText();
             String address = addAddress.getText();
@@ -156,15 +157,15 @@ public class EmployeeController implements Initializable {
             String username = addEmail.getText();
 
             if (!name.isEmpty() && !citizenId.isEmpty() && !address.isEmpty() && !phoneNum.isEmpty() && !email.isEmpty() && !position.isEmpty()) {
-                selectedEmployee.setName(name);
-                selectedEmployee.setCitizenId(citizenId);
-                selectedEmployee.setAddress(address);
-                selectedEmployee.setPhoneNumber(phoneNum);
-                selectedEmployee.setEmail(email);
-                selectedEmployee.setPosition(position);
-                selectedEmployee.setUsername(username);
+                selectedUser.setEmployName(name);
+                selectedUser.setCitizen_id(citizenId);
+                selectedUser.setAddress(address);
+                selectedUser.setPhoneNumber(phoneNum);
+                selectedUser.setEmail(email);
+                selectedUser.setPosition(position);
+                selectedUser.setUsername(username);
 
-                employeeDAO.updateEmployee(selectedEmployee);
+                employeeDAO.updateEmployee(selectedUser);
                 employeeTableView.refresh();
                 clearAddEmployeeFields();
             }
@@ -177,8 +178,8 @@ public class EmployeeController implements Initializable {
             btnAddEmployee.setDisable(employeeSelected); // Vô hiệu hóa nút Add khi chọn nhân viên
             if (employeeSelected) {
                 // Hiển thị thông tin nhân viên lên các TextField
-                addName.setText(newValue.getName());
-                addcitizenId.setText(newValue.getCitizenId());
+                addName.setText(newValue.getEmployName());
+                addcitizenId.setText(newValue.getCitizen_id());
                 addAddress.setText(newValue.getAddress());
                 addPhoneNum.setText(newValue.getPhoneNumber());
                 addEmail.setText(newValue.getEmail());
@@ -187,6 +188,7 @@ public class EmployeeController implements Initializable {
                 clearAddEmployeeFields();
             }
         });
+
     }
 
     private void clearAddEmployeeFields() {

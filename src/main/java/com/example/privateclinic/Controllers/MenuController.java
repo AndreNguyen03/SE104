@@ -132,7 +132,7 @@ public class MenuController {
         this.user=_user;
     }
     public void ProfileEmploy_Clicked(MouseEvent mouseEvent) {
-        String id = this.user.getEmployee_id();
+        int id = this.user.getEmployee_id();
         String name = this.user.getEmployName();
         String username = this.user.getUsername();
         String pos = this.user.getPosition();

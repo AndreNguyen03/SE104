@@ -11,16 +11,19 @@ import static java.lang.StringTemplate.STR;
 
 public class User {
     private String Username ;
-    public User()
-    {}
+
     private String Password ;
-    private String Employee_id;
+    private int Employee_id;
     private String EmployName;
     private String Citizen_id;
     private String Email;
     private String PhoneNumber;
     private String Address;
     private String Position;
+    public User()
+    {
+
+    }
     public String getEmail() {
         return Email;
     }
@@ -51,6 +54,15 @@ public class User {
         Address = address;
     }
 
+    public User(String username, String employName, String citizen_id, String email, String phoneNumber, String address, String position) {
+        Username = username;
+        EmployName = employName;
+        Citizen_id = citizen_id;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Address = address;
+        Position = position;
+    }
 
     public String getUsername() {
         return Username;
@@ -89,11 +101,11 @@ public class User {
     public void setPassword(String password) {
         Password = password;
     }
-    public String getEmployee_id() {
+    public int getEmployee_id() {
         return Employee_id;
     }
 
-    public void setEmployee_id(String employee_id) {
+    public void setEmployee_id(int employee_id) {
         Employee_id = employee_id;
     }
 
@@ -195,7 +207,7 @@ public class User {
     }
 
     private void filldata(ResultSet resultSet) throws SQLException {
-        setEmployee_id(resultSet.getString("manv").toString());
+        setEmployee_id(resultSet.getInt("manv"));
         setEmployName(resultSet.getString("hoten").toString());
         setUsername(resultSet.getString("username").toString());
         setPassword(resultSet.getString("password").toString());
@@ -238,12 +250,6 @@ public class User {
     }
     // Forgot password
     */
-    public ResultSet LoadListEmployee () throws SQLException {
-        ConnectDB connect = new ConnectDB();
-        String query = "SELECT manv as \"ID\", HoTen as \"Họ và tên\",cccd as \"CCCD\",diachi as \"Địa chỉ\",sdt as \"Số điện thoại\",email as \"Email\",vitri as \"Vị trí làm việc\",username as \"Username\"  FROM nhanvien ";
-        return connect.getData(query);
-    }
-
     final String LOWER_CASE = "abcdefghijklmnopqursuvwxyz";
     final String  UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     final String  NUMBERS = "123456789";
