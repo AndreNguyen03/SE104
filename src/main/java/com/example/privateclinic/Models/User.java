@@ -11,7 +11,8 @@ import static java.lang.StringTemplate.STR;
 
 public class User {
     private String Username ;
-
+    public User()
+    {}
     private String Password ;
     private int Employee_id;
     private String EmployName;
@@ -20,10 +21,6 @@ public class User {
     private String PhoneNumber;
     private String Address;
     private String Position;
-    public User()
-    {
-
-    }
     public String getEmail() {
         return Email;
     }
@@ -54,15 +51,6 @@ public class User {
         Address = address;
     }
 
-    public User(String username, String employName, String citizen_id, String email, String phoneNumber, String address, String position) {
-        Username = username;
-        EmployName = employName;
-        Citizen_id = citizen_id;
-        Email = email;
-        PhoneNumber = phoneNumber;
-        Address = address;
-        Position = position;
-    }
 
     public String getUsername() {
         return Username;
@@ -179,7 +167,6 @@ public class User {
     public int CheckValidate(String username, String password) throws  SQLException{
         ConnectDB connectDB = new ConnectDB();
         password = GetHash(password);
-
         String query = "SELECT * FROM nhanvien WHERE username = '"+username+"' AND (defaultpassword = '"+password+"' OR password ='"+password+"')";
         try
         {
@@ -250,6 +237,12 @@ public class User {
     }
     // Forgot password
     */
+    public ResultSet LoadListEmployee () throws SQLException {
+        ConnectDB connect = new ConnectDB();
+        String query = "SELECT manv as \"ID\", HoTen as \"Họ và tên\",cccd as \"CCCD\",diachi as \"Địa chỉ\",sdt as \"Số điện thoại\",email as \"Email\",vitri as \"Vị trí làm việc\",username as \"Username\"  FROM nhanvien ";
+        return connect.getData(query);
+    }
+
     final String LOWER_CASE = "abcdefghijklmnopqursuvwxyz";
     final String  UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     final String  NUMBERS = "123456789";

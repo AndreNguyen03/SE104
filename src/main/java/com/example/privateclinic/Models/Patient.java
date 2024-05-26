@@ -8,6 +8,7 @@ public class Patient {
     private String patientGender;
     private String patientPhoneNumber;
     private Date patientBirth;
+    private Date arrivalDate;
     private String patientAddress;
 
 
@@ -23,13 +24,14 @@ public class Patient {
                 '}';
     }
 
-    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress) {
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientGender = patientGender;
         this.patientPhoneNumber = patientPhoneNumber;
         this.patientBirth = patientBirth;
         this.patientAddress = patientAddress;
+        this.arrivalDate = arrivalDate;
     }
 
 
@@ -82,5 +84,13 @@ public class Patient {
 
     public void setPatientPhoneNumber(String patientPhoneNumber) {
         this.patientPhoneNumber = patientPhoneNumber;
+    }
+
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
     }
 }

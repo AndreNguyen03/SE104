@@ -56,13 +56,13 @@ public class Category_AspirineController implements Initializable {
         formColumn.setStyle("-fx-text-fill: white;");
         useColumn.setStyle("-fx-text-fill: white;");
         // Set up columns
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("medicineId"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("medicineName"));
-        unitColumn.setCellValueFactory(new PropertyValueFactory<>("medicineUnit"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("medicineQuantity"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("medicinePrice"));
-        formColumn.setCellValueFactory(new PropertyValueFactory<>("medicineForm"));
-        useColumn.setCellValueFactory(new PropertyValueFactory<>("medicineUse"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("maThuoc"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenThuoc"));
+        unitColumn.setCellValueFactory(new PropertyValueFactory<>("tenDonViTinh"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("giaBan"));
+        formColumn.setCellValueFactory(new PropertyValueFactory<>("tenDangThuoc"));
+        useColumn.setCellValueFactory(new PropertyValueFactory<>("tenCachDung"));
 
         // Load data into table
         loadMedicineData();

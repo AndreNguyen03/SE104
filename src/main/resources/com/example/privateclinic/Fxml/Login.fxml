@@ -180,7 +180,7 @@
                         </ImageView>
                         <Pane prefHeight="35.0" prefWidth="210.0">
                            <children>
-                              <PasswordField fx:id="tfPassword1_change" layoutX="1.0" layoutY="-2.0" prefHeight="35.0" prefWidth="210.0" promptText="Password" />
+                              <PasswordField fx:id="pfPassword1_change" layoutX="1.0" layoutY="-2.0" prefHeight="35.0" prefWidth="210.0" promptText="Password" />
                               <TextField fx:id="tfShowPasswordCP1" layoutY="-3.0" prefHeight="35.0" prefWidth="210.0" styleClass="inputText" visible="false" />
                            </children>
                         </Pane>
@@ -206,7 +206,7 @@
                         </ImageView>
                         <Pane prefHeight="35.0" prefWidth="210.0">
                            <children>
-                              <PasswordField fx:id="tfPassword2_change" layoutX="1.0" layoutY="-2.0" prefHeight="35.0" prefWidth="210.0" promptText="Confirm Password" />
+                              <PasswordField fx:id="pfPassword2_change" layoutX="1.0" layoutY="-2.0" prefHeight="35.0" prefWidth="210.0" promptText="Confirm Password" />
                               <TextField fx:id="tfShowPasswordCP2" layoutY="-3.0" prefHeight="35.0" prefWidth="210.0" styleClass="inputText" visible="false" />
                            </children>
                         </Pane>
@@ -264,9 +264,9 @@
                   </cursor>
                </ImageView>
             </Pane>
-            <Pane fx:id="paneProgress" layoutX="2.0" prefHeight="522.0" prefWidth="443.0" styleClass="pane_progress" visible="false">
+            <Pane fx:id="paneProgress" layoutX="2.0" layoutY="56.0" prefHeight="395.0" prefWidth="443.0" styleClass="pane_progress" visible="false">
                <children>
-                  <ProgressIndicator layoutX="200.0" layoutY="230.0" prefHeight="54.0" prefWidth="63.0" />
+                  <ProgressIndicator layoutX="196.0" layoutY="184.0" prefHeight="54.0" prefWidth="63.0" />
                </children>
             </Pane>
          </children>

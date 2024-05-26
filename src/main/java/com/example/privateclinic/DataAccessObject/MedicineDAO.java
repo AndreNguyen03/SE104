@@ -1,7 +1,12 @@
 package com.example.privateclinic.DataAccessObject;
 
 import com.example.privateclinic.Models.ConnectDB;
+import com.example.privateclinic.Models.Customer;
 import com.example.privateclinic.Models.Medicine;
+import com.example.privateclinic.Models.Model;
+import com.jfoenix.controls.JFXDialog;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +18,36 @@ import java.util.List;
 public class MedicineDAO {
     ConnectDB connectDB = new ConnectDB();
 
-    public MedicineDAO() {
+    public ObservableList<Medicine> searchMedicineByIDorName(String idOrName) {
+        ObservableList<Medicine> medicines = FXCollections.observableArrayList();
+        String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +
+                "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.mathuoc::text ILIKE '%" + idOrName + "%' or t.tenthuoc ILIKE '%" + idOrName + "%')";
+        ConnectDB connectDB = new ConnectDB();
+        try (ResultSet resultSet = connectDB.getData(query)) {
+            while (resultSet.next()) {
+                Medicine medicine = new Medicine();
+                medicine.setMaThuoc(resultSet.getInt("mathuoc"));
+                medicine.setTenThuoc(resultSet.getString("tenthuoc"));
+                medicine.setMaCachDung(resultSet.getInt("macd"));
+                medicine.setMaDangThuoc(resultSet.getInt("madt"));
+                medicine.setMaDonViTinh(resultSet.getInt("madvt"));
+                medicine.setTenDangThuoc(resultSet.getString("tendt"));
+                medicine.setTenCachDung(resultSet.getString("tencd"));
+                medicine.setTenDonViTinh(resultSet.getString("tendvt"));
+                medicine.setSoLuong(resultSet.getInt("soluong"));
+                medicine.setGiaBan(resultSet.getInt("giaban"));
+                medicines.add(medicine);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return medicines;
+    }
+
+    public ResultSet getMedicine(String maThuoc) {
+        String query = "SELECT * FROM THUOC WHERE mathuoc = "+maThuoc+"";
+        ConnectDB connectDB = new ConnectDB();
+        return connectDB.getData(query);
 
     }
 
@@ -24,13 +58,13 @@ public class MedicineDAO {
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
 
-            statement.setInt(1, medicine.getMedicineId());
-            statement.setString(2, medicine.getMedicineName());
-            statement.setInt(3, medicine.getMedicineUnit());
-            statement.setInt(4, medicine.getMedicineQuantity());
-            statement.setDouble(5, medicine.getMedicinePrice());
-            statement.setInt(6, medicine.getMedicineForm());
-            statement.setInt(7, medicine.getMedicineUse());
+            statement.setInt(1, medicine.getMaThuoc());
+            statement.setString(2, medicine.getTenThuoc());
+            statement.setInt(3, medicine.getMaDonViTinh());
+            statement.setInt(4, medicine.getSoLuong());
+            statement.setDouble(5, medicine.getGiaBan());
+            statement.setInt(6, medicine.getMaDangThuoc());
+            statement.setInt(7, medicine.getMaCachDung());
 
 
             statement.executeUpdate();
@@ -48,13 +82,13 @@ public class MedicineDAO {
 
             while (resultSet.next()) {
                 Medicine medicine = new Medicine();
-                medicine.setMedicineId(resultSet.getInt("mathuoc"));
-                medicine.setMedicineName(resultSet.getString("tenthuoc"));
-                medicine.setMedicineUnit(resultSet.getInt("madvt"));
-                medicine.setMedicineQuantity(resultSet.getInt("soluong"));
-                medicine.setMedicinePrice(resultSet.getDouble("giaban"));
-                medicine.setMedicineForm(resultSet.getInt("madt"));
-                medicine.setMedicineUse(resultSet.getInt("macd"));
+                medicine.setMaThuoc(resultSet.getInt("mathuoc"));
+                medicine.setTenThuoc(resultSet.getString("tenthuoc"));
+                medicine.setMaDonViTinh(resultSet.getInt("madvt"));
+                medicine.setSoLuong(resultSet.getInt("soluong"));
+                medicine.setGiaBan(resultSet.getDouble("giaban"));
+                medicine.setMaDangThuoc(resultSet.getInt("madt"));
+                medicine.setMaCachDung(resultSet.getInt("macd"));
 
                 medicines.add(medicine);
             }
@@ -69,12 +103,12 @@ public class MedicineDAO {
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
 
-            statement.setString(1, medicine.getMedicineName());
-            statement.setInt(2, medicine.getMedicineUnit());
-            statement.setInt(3, medicine.getMedicineQuantity());
-            statement.setDouble(4, medicine.getMedicinePrice());
-            statement.setInt(5, medicine.getMedicineForm());
-            statement.setInt(6, medicine.getMedicineUse());
+            statement.setString(1, medicine.getTenThuoc());
+            statement.setInt(2, medicine.getMaDonViTinh());
+            statement.setInt(3, medicine.getSoLuong());
+            statement.setDouble(4, medicine.getGiaBan());
+            statement.setInt(5, medicine.getMaDangThuoc());
+            statement.setInt(6, medicine.getMaCachDung());
 
             statement.executeUpdate();
         } catch (SQLException e) {

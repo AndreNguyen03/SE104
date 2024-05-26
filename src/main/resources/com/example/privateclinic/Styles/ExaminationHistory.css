@@ -50,7 +50,9 @@
     -fx-background-color: transparent;
     -fx-border-color: #74b60c;
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
 }
 #add:hover {
     -fx-border-width: 0;
@@ -128,9 +130,12 @@
     -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
 }
 /*header*/
+/*header*/
 .header-logo
 {
-    -fx-background-color: linear-gradient(to right,#FEFFFB,#D2FD94);
+    -fx-background-color: linear-gradient(to right,#FEFFFB, #d8eabe);
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: #ababab;
 }
 .header-logo Text
 {
@@ -139,7 +144,7 @@
 }
 .header-top
 {
-    -fx-background-color: linear-gradient(to left,#FEFFFB,#D2FD94);
+    -fx-background-color: linear-gradient(to left,#FEFFFB, #d8eabe);
     -fx-border-width: 0 0 0.5 0;
     -fx-border-color: #4A7612;
 
@@ -196,30 +201,13 @@
     -fx-background-color: #ffffff;
     -fx-border-color: #9E9DA3;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-font-style: italic;
-    -fx-font-size: 16px;
-}
-.input-field .search-input
-{
-    -fx-border-width: 0;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-    -fx-background-color: #ffffff;
-    -fx-border-color: #9E9DA3;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 13px;
-}
-.input-field .image-view
-{
-    -fx-scale-y: 0.8;
-    -fx-scale-x: 0.8;
+    -fx-font-size: 14px;
 }
 .input-field:hover
 {
     -fx-border-width: 1 1 1 1;
     -fx-border-radius: 5;
     -fx-border-color: #8BC634;
-    -fx-font-style: normal;
 
 }
 .input-field:focused
@@ -227,12 +215,7 @@
     -fx-border-width: 1 1 1 1;
     -fx-border-radius: 5;
     -fx-border-color: #8BC634;
-    -fx-font-style: normal;
     -fx-wrap-text: true;
-}
-
-#input-kethuoc{
-    -fx-font-size: 13px;
 }
 
 .container-pick
@@ -244,7 +227,7 @@
 .container-pick Text
 {
     -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 16px;
+    -fx-font-size: 16;
     -fx-text-fill: #ff0000;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
@@ -254,7 +237,6 @@
 .container-pick .combo-box .text-field
 {
     -fx-background-color: transparent;
-    -fx-font-size: 16px;
 }
 .container-pick .combo-box
 {
@@ -276,9 +258,11 @@
 }
 .container-pick .combo-box .arrow-button
 {
+    -fx-background-color: transparent;
 }
-.container-pick .combo-box .arrow-button .arrow {
+.container-pick .combo-box .arrow-button .arrow{
     -fx-background-color: green;
+
 }
 .container-pick .combo-box-base
 {
@@ -436,6 +420,7 @@
     -fx-font-family: "Segoe UI Light";
     -fx-font-weight: bold;
 
+
 }
 .table-view  .table-row-cell:hover
 {
@@ -457,7 +442,7 @@
 }
 #tableview-main .column-header-background .label
 {
-    -fx-font-size: 15px;
+    -fx-font-size: 13px;
 }
 #tableview-main
 {
@@ -476,13 +461,8 @@
 {
 
 }
-.table-row-cell-red
+.table-row-cell:selected
 {
-    -fx-background-color: #ff0000;
-}
-.table-row-cell-yellow
-{
-    -fx-background-color: #ffc306;
 }
 /*pane-infor*/
 
@@ -492,18 +472,18 @@
 }
 .anchor Text
 {
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
     -fx-font-family: "Segoe UI Semibold";
 }
 .titled-pane
 {
     -fx-border-color: #416c0d;
+    -fx-font-size: 13px;
 }
 .titled-pane .title
 {
-    -fx-background-color: linear-gradient(to top,#C1E293,#ffffff);
+    -fx-background-color: linear-gradient(to top,#D8EABEFF,#ffffff);
     -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 16px;
 }
 
 /*close*/
@@ -538,54 +518,3 @@
     -fx-font-family: "Segoe UI Black";
     -fx-font-size: 12px;
 }
-.container-medicine_menu
-{
-    -fx-background-color: rgba(227, 226, 226, 0.76);
-    -fx-background-radius: 10px;
-}
-.container-medicine_menu .label
-{
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 16px;
-}
-.container-medicine_menu #result
-{
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 16px;
-    -fx-text-fill: #949494;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-padding: 3px 8px 3px 8px;
-    -fx-background-color: rgba(255, 255, 255, 0.72);
-}
-.container-medicine_menu .panel {
-    -fx-font-size: 16px;
-    -fx-font-family: "Segoe UI Black";
-    -fx-alignment: center;
-    -fx-border-color: #cccccc;
-    -fx-border-width: 0.5;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
-.container-medicine_menu #panel-red
-{
-    -fx-background-color: #FF0000;
-}
-.container-medicine_menu #panel-orange
-{
-    -fx-background-color: yellow;
-}
-#lbl_result
-{
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-padding: 3px 8px 3px 8px    ;
-    -fx-border-color: #cccccc;
-    -fx-border-width: 0.4;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.2, 0, 2);
-    -fx-background-color: rgba(255, 255, 255, 0.72);
-
-}
-
-
-

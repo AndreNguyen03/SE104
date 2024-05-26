@@ -77,7 +77,7 @@ public class MenuController {
     }
     @FXML
     void btnExaminationClicked(ActionEvent event) throws IOException {
-        Model.getInstance().getViewFactory().showExaminationWindow();
+        Model.getInstance().getViewFactory().showExaminationWindow(user);
     }
 
     @FXML
@@ -102,12 +102,6 @@ public class MenuController {
     void btnSettingClicked(ActionEvent event) {
         Model.getInstance().getViewFactory().showSettingWindow();
     }
-    public void btnEmployeeClicked(ActionEvent actionEvent) throws IOException   {
-        mainPane.getChildren().clear();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Employee.fxml"));
-        Parent reportSceneRoot = loader.load();
-        mainPane.getChildren().add(reportSceneRoot);
-    }
     @FXML
     void closeMenu(MouseEvent event) {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
@@ -126,13 +120,12 @@ public class MenuController {
             Model.getInstance().getViewFactory().closeStage(s);
         }
     }
-
     public void initData(User _user)
     {
         this.user=_user;
     }
     public void ProfileEmploy_Clicked(MouseEvent mouseEvent) {
-        int id = this.user.getEmployee_id();
+        String id = String.valueOf(this.user.getEmployee_id());
         String name = this.user.getEmployName();
         String username = this.user.getUsername();
         String pos = this.user.getPosition();
@@ -149,6 +142,5 @@ public class MenuController {
     {
         stage.setIconified(true);
     }
-
 
 }

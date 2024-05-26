@@ -12,7 +12,7 @@ public class ConnectDB {
         databaseLink = getConnection();
     }
     public Connection getConnection(){
-        String databaseName ="ClinicNeon";
+        String databaseName ="ClinicDB";
         String databaseUser ="postgres";
         String databasePassword="phuan03042004";
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;
@@ -40,7 +40,7 @@ public class ConnectDB {
 
     private boolean isInternetAvailable() {
         try {
-            InetAddress.getByName("www.google.com").isReachable(3000); // Kiểm tra kết nối tới Google trong 3 giây
+            InetAddress.getByName("www.google.com").isReachable(200); // Kiểm tra kết nối tới Google trong 3 giây
             return true;
         } catch (IOException e) {
             return false;

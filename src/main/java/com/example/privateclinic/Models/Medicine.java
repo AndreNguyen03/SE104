@@ -1,93 +1,122 @@
 package com.example.privateclinic.Models;
 
-
 public class Medicine {
-    private int medicineId;
-    private String medicineName;
-    private int medicineUnit;
-    private int medicineQuantity;
-    private double medicinePrice;
-    private int medicineForm;
-    private int medicineUse;
+    int maThuoc;
+    String tenThuoc;
+    int maDonViTinh;
+    int maCachDung;
+    int maDangThuoc;
+    int soLuong;
+    double giaBan;
 
-    @Override
-    public String toString() {
-        return "Medicine{" +
-                "medicineId=" + medicineId + '\'' +
-                ", medicineName='" + medicineName + '\'' +
-                ", medicineUnit='" + medicineUnit + '\'' +
-                ", medicinePrice='" + medicinePrice + '\'' +
-                ", medicineForm=" + medicineForm +
-                ", medicineUse='" + medicineUse + '\'' +
-                ", medicineQuantity=" + medicineQuantity +
-                '}';
+
+    String tenDonViTinh;
+
+    String tenCachDung;
+    String tenDangThuoc;
+    public String getTenDonViTinh() {
+        return tenDonViTinh;
     }
+
+    public void setTenDonViTinh(String tenDonViTinh) {
+        this.tenDonViTinh = tenDonViTinh;
+    }
+
+    public String getTenCachDung() {
+        return tenCachDung;
+    }
+
+    public void setTenCachDung(String tenCachDung) {
+        this.tenCachDung = tenCachDung;
+    }
+
+    public String getTenDangThuoc() {
+        return tenDangThuoc;
+    }
+
+    public void setTenDangThuoc(String tenDangThuoc) {
+        this.tenDangThuoc = tenDangThuoc;
+    }
+
+
 
     public Medicine() {
     }
 
     public Medicine(int medicineId, String medicineName, int medicineUnit, double medicinePrice, int medicineForm, int medicineUse) {
-        this.medicineId = medicineId;
-        this.medicineName = medicineName;
-        this.medicineUnit = medicineUnit;
-        this.medicinePrice = medicinePrice;
-        this.medicineForm = medicineForm;
-        this.medicineUse = medicineUse;
+        this.maThuoc = medicineId;
+        this.tenThuoc = medicineName;
+        this.maDonViTinh = medicineUnit;
+        this.giaBan = medicinePrice;
+        this.maDangThuoc = medicineForm;
+        this.maCachDung = medicineUse;
     }
 
-
-
-    public int getMedicineId() { return medicineId; }
-
-    public void setMedicineId(int medicineId) {
-        this.medicineId = medicineId;
+    public int getMaThuoc() {
+        return maThuoc;
     }
 
-    public String getMedicineName() {
-        return medicineName;
+    public void setMaThuoc(int maThuoc) {
+        this.maThuoc = maThuoc;
     }
 
-    public void setMedicineName(String medicineName) {
-        this.medicineName = medicineName;
+    public String getTenThuoc() {
+        return tenThuoc;
     }
 
-    public int getMedicineUnit() {
-        return medicineUnit;
+    public void setTenThuoc(String tenThuoc) {
+        this.tenThuoc = tenThuoc;
     }
 
-    public void setMedicineUnit(int medicineUnit) {
-        this.medicineUnit = medicineUnit;
+    public int getMaDonViTinh() {
+        return maDonViTinh;
     }
 
-    public int getMedicineQuantity() {
-        return medicineQuantity;
+    public void setMaDonViTinh(int maDonViTinh) {
+        this.maDonViTinh = maDonViTinh;
     }
 
-    public void setMedicineQuantity(int medicineQuantity) {
-        this.medicineQuantity = medicineQuantity;
+    public int getMaCachDung() {
+        return maCachDung;
     }
 
-    public double getMedicinePrice() {
-        return medicinePrice;
+    public void setMaCachDung(int maCachDung) {
+        this.maCachDung = maCachDung;
     }
 
-    public void setMedicinePrice(double medicinePrice) {
-        this.medicinePrice = medicinePrice;
+    public int getMaDangThuoc() {
+        return maDangThuoc;
     }
 
-    public int getMedicineForm() {
-        return medicineForm;
+    public void setMaDangThuoc(int maDangThuoc) {
+        this.maDangThuoc = maDangThuoc;
     }
 
-    public void setMedicineForm(int medicineForm) { this.medicineForm = medicineForm;
+    public int getSoLuong() {
+        return soLuong;
     }
 
-    public int getMedicineUse() {
-        return medicineUse;
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
     }
 
-    public void setMedicineUse(int medicineUse) {
-        this.medicineUse = medicineUse;
+    public double getGiaBan() {
+        return giaBan;
     }
 
+    public void setGiaBan(double giaBan) {
+        this.giaBan = giaBan;
+    }
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "medicineId=" + maThuoc + '\'' +
+                ", medicineName='" + tenThuoc + '\'' +
+                ", medicineUnit='" + tenDonViTinh + '\'' +
+                ", medicinePrice='" + giaBan + '\'' +
+                ", medicineForm=" + tenDangThuoc +
+                ", medicineUse='" + tenCachDung + '\'' +
+                ", medicineQuantity=" + soLuong +
+                '}';
+    }
 }
