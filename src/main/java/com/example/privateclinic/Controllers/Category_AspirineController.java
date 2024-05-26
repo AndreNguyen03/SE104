@@ -77,13 +77,6 @@ public class Category_AspirineController implements Initializable {
 
         medicineDAO = new MedicineDAO();
 
-        idColumn.setStyle("-fx-text-fill: white;");
-        nameColumn.setStyle("-fx-text-fill: white;");
-        unitColumn.setStyle("-fx-text-fill: white;");
-        quantityColumn.setStyle("-fx-text-fill: white;");
-        priceColumn.setStyle("-fx-text-fill: white;");
-        formColumn.setStyle("-fx-text-fill: white;");
-        useColumn.setStyle("-fx-text-fill: white;");
         // Set up columns
         idColumn.setCellValueFactory(new PropertyValueFactory<>("maThuoc"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenThuoc"));

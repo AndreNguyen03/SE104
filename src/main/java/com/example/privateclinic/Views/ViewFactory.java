@@ -1,10 +1,8 @@
 package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.*;
-import com.example.privateclinic.Models.Customer;
 import com.example.privateclinic.Models.Patient;
 import com.example.privateclinic.Models.User;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -22,6 +20,7 @@ public class ViewFactory {
     Stage stageMenu = null;
     Stage stageProfile= null;
     Stage stageExaminationHistory = null;
+    Stage stageAddEmployee = null;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -34,7 +33,7 @@ public class ViewFactory {
         MenuController menuController = loader.getController();
         menuController.initData(user);
     }
-    public void showProfileWindow(String id,String name,String username,String pos)
+    public void showProfileWindow(int id,String name,String username,String pos)
     {
         if(stageProfile==null)
         {
@@ -73,6 +72,7 @@ public class ViewFactory {
         {
             stageExamination.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
         }
+
     }
     public void showSettingWindow()
     {
@@ -100,6 +100,19 @@ public class ViewFactory {
             stageExaminationHistory.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
         }
     }
+    public void showAddEmployee(){
+        /*if(stageAddEmployee==null) //xử lí mở 2 lần scene
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Add_Employee.fxml"));
+            stageAddEmployee=createStage(loader);
+            AddEmployeeController addEmployeeController = loader.getController();
+            addEmployeeController.initData();
+        }
+        else
+        {
+            stageExaminationHistory.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
+        }*/
+    }
 
     private Stage createStage(FXMLLoader loader ) {
         Scene scene = null;
@@ -117,6 +130,7 @@ public class ViewFactory {
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
         return stage;
     }
+
     public void closeStage(Stage stage)
     {
         stage.close();
