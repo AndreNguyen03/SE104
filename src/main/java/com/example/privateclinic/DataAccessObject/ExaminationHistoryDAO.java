@@ -10,21 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ExaminationHistoryDAO {
-    /*public ObservableList<ExaminationHistory> getExaminationCustomerHistory(int id, Date date)
-    {
-        ObservableList<ExaminationHistory> ListExaminations = FXCollections.observableArrayList();
-        String query = "SELECT * FROM khambenh kb, kethuoc kt WHERE kb.ngay = ? AND kb.mabn = ? AND kt.makhambenh = kb.makb ";
-        ConnectDB connectDB = new ConnectDB();
-        try (PreparedStatement statement = connectDB.getConnection().prepareStatement(query))
-        {
-            *//*statement.setDate(1,);*//*
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return ListExaminations;
-    }*/
+    ConnectDB connectDB = new ConnectDB();
+
     public  ObservableList<ExaminationHistory> getPatientsByDate(int id, int year)
     {
         ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
@@ -72,7 +59,6 @@ public class ExaminationHistoryDAO {
         ObservableList<Prescribe> prescribes = FXCollections.observableArrayList();
         String query ="SELECT kt.*, t.*, cd.tencd,dvt.tendvt,dt.tendt FROM kethuoc kt,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t WHERE makhambenh = ? AND kt.mathuoc = t.mathuoc"+
                 " AND t.macd = cd.macd AND t.madt = dt.madt AND t.madvt = dvt.madvt";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1,exam_id);
             try(ResultSet resultSet = statement.executeQuery()) {
@@ -102,4 +88,19 @@ public class ExaminationHistoryDAO {
         }
         return prescribes;
     }
+        /*public ObservableList<ExaminationHistory> getExaminationCustomerHistory(int id, Date date)
+    {
+        ObservableList<ExaminationHistory> ListExaminations = FXCollections.observableArrayList();
+        String query = "SELECT * FROM khambenh kb, kethuoc kt WHERE kb.ngay = ? AND kb.mabn = ? AND kt.makhambenh = kb.makb ";
+        ConnectDB connectDB = new ConnectDB();
+        try (PreparedStatement statement = connectDB.getConnection().prepareStatement(query))
+        {
+            *//*statement.setDate(1,);*//*
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return ListExaminations;
+    }*/
 }

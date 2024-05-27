@@ -24,7 +24,6 @@ public class MedicineDAO {
         ObservableList<Medicine> medicines = FXCollections.observableArrayList();
         String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +
                 "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.mathuoc::text ILIKE '%" + idOrName + "%' or t.tenthuoc ILIKE '%" + idOrName + "%')";
-        ConnectDB connectDB = new ConnectDB();
         try (ResultSet resultSet = connectDB.getData(query)) {
             while (resultSet.next()) {
                 Medicine medicine = new Medicine();

@@ -10,11 +10,11 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class ExaminationDAO {
+    ConnectDB connectDB = new ConnectDB();
     public int addExamination(Examination examination)
     {
         String query = "INSERT INTO khambenh (manv, mabn, ngay, benhchinh, benhphu, trieuchung, luuy) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING makb";
-        ConnectDB connectDB = new ConnectDB();
         int examId = -1;
         try (PreparedStatement statement =connectDB.databaseLink.prepareStatement(query)){
 
@@ -41,7 +41,6 @@ public class ExaminationDAO {
     {
         ObservableList<Examination> examinations = FXCollections.observableArrayList();
         String query = "SELECT ngay FROM khambenh WHERE EXTRACT(YEAR FROM ngay) = ? and mabn= ? ";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, year);
             statement.setInt(2, id);

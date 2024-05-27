@@ -2,6 +2,13 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.*;
 import com.example.privateclinic.Models.*;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -10,24 +17,36 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.print.PrinterJob;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.text.Normalizer;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public  class ExaminationController implements Initializable {
@@ -50,6 +69,7 @@ public  class ExaminationController implements Initializable {
     public Button btnKham;
     public Button btnThem;
     public Button btnXoa;
+    public Button btnInBangKe;
     public Button btnLichSuKham;
     public AnchorPane pane_footer;
     public TitledPane tp_thongTin;
@@ -79,7 +99,6 @@ public  class ExaminationController implements Initializable {
     public Button btnCancel;
     public Button btnCallPatient;
     public Button btnInToaThuoc;
-    public Button btnInBangKe;
     @FXML
     RadioButton rad_patientWaiting,rad_patientDone;
     public Label  lbl_soLuong;
@@ -128,6 +147,7 @@ public  class ExaminationController implements Initializable {
     public void initFromHistory(ExaminationHistory _examinationHistory) {
         examinationHistorySent=_examinationHistory;
         FillDataFromHistory();
+        lbl_noPickMedicine.setVisible(false);
     }
 
     private void FillDataFromHistory() {
@@ -347,6 +367,7 @@ public  class ExaminationController implements Initializable {
                         //updateIndexColumn(tbl_chosenMedicine);
                         lbl_noPickMedicine.setVisible(false);
                         ResetTF_KeThuoc();
+                        tf_tenThuoc.clear();
                         medicineChosenBefore=null;
                     }
                 } else { //Luu
@@ -416,7 +437,7 @@ public  class ExaminationController implements Initializable {
                         SetDisable();
                         lbl_noPatientResult.setVisible(false);
                     }
-
+                    examinationHistorySent=null;
                 }
             }
         });
@@ -428,8 +449,34 @@ public  class ExaminationController implements Initializable {
                 }*/
             }
         });
-    }
+        btnInToaThuoc.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(IsBlank()) {
+                        printToaThuoc();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        btnInBangKe.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(IsBlank()) {
+                    if(patientChosenBefore!=null||examinationHistorySent!=null) {
+                        try {
+                            printBangke();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        });
 
+    }
     private boolean IsBlank() { // tồn tại một tf đã điền thì trả về false
         return !tbl_chosenMedicine.getItems().isEmpty() && !tf_trieuChung.getText().isEmpty() && !tf_luuY.getText().isEmpty() && !tf_maBenhPhu.getText().isEmpty() && !tf_maBenhChinh.getText().isEmpty();
     }
@@ -441,9 +488,9 @@ public  class ExaminationController implements Initializable {
         {
             saveHistory(examId);
             showAlert("Notification","Lưu dữ liệu khám bệnh và thuốc thành công!");
-            ResetAllTextField();
             SetDisable();
             LoadListPatients(Date.valueOf(LocalDate.now()));
+            lbl_noPatientResult.setVisible(false);
         }
         else {
             showAlert("Warning","Error");
@@ -783,7 +830,6 @@ public  class ExaminationController implements Initializable {
             textField.textProperty().addListener((observable,oldValues,newValue)->{
                 if (!newValue.matches("\\d*")) {
                     textField.setText(newValue.replaceAll("[^\\d]", ""));
-
                     if(textField.getText().equals("")||textField.getText().equals("0")){
                         textField.setText(newValue.replaceAll("[^\\d]", "1"));
                     }
@@ -854,5 +900,200 @@ public  class ExaminationController implements Initializable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         return JOptionPane.showConfirmDialog(frame, "Are you sure you want to "+string+"?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    }
+    private void printToaThuoc() throws IOException {
+        Document document = new Document();
+
+        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_toa.pdf";
+        try {
+            String maTenBenhPhu="";
+            PdfWriter.getInstance(document, new FileOutputStream(path));
+            document.open();
+
+            String fontPath = "notosans-regular.ttf";
+            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+            Font boldFont = new Font(baseFont, 13, Font.BOLD);
+            Font titleBoldFont = new Font(baseFont, 17, Font.BOLD);
+            Font regularFont = new Font(baseFont, 14);
+            Font footerbold = new Font(baseFont, 13,Font.BOLD);
+
+            document.add(new Paragraph("PHÒNG MẠCH TƯ", boldFont));
+            document.add(new Paragraph("UIT CLINIC", boldFont));
+            document.add(new Paragraph("Email: greenuitk17@gmail.com", footerbold));
+            document.add(new Paragraph("Số điện thoại: 1900 1555", footerbold));
+            document.add(new Paragraph("Địa chỉ:  136, Linh Trung, Thủ Đức, TP Thủ Đức", regularFont));
+            document.add(new Paragraph("                                                ĐƠN THUỐC", titleBoldFont));
+            String gioitinh ;
+            if(rad_men.isSelected()) gioitinh = "Name";
+            else {
+                gioitinh = "Nữ";
+            }
+            document.add(new Paragraph(STR."Mã BN:  \{tf_mabn.getText()} - Họ tên:  \{tf_tenbn.getText()} - Ngày sinh:  \{tf_ngaysinh.getText()} - Giới tính:  \{(gioitinh)}",regularFont));
+            document.add(new Paragraph(STR."Triệu chứng:  \{tf_trieuChung.getText()}", regularFont));
+            if(!tf_maBenhPhu.getText().isEmpty()) maTenBenhPhu = STR.";(\{tf_maBenhPhu.getText()}) \{tf_tenBenhPhu.getText()} ";
+            document.add(new Paragraph(STR."Chẩn đoán:    \{tf_maBenhPhu.getText()} - \{tf_tenBenhPhu.getText()}"+maTenBenhPhu, regularFont));
+            document.add(new Paragraph("\n                                              THUỐC ĐIỀU TRỊ", titleBoldFont));
+            int index=0;
+            for(Prescribe prescribe:tbl_chosenMedicine.getItems()){
+                index++;
+                document.add(new Paragraph(prescribe.getSothuTu() + ") " + STR."\{prescribe.getTenThuoc()}                                                                                         SL: " +prescribe.getSoLuong() , boldFont));
+                String sang="",trua="",chieu="",toi="";
+                if(prescribe.getSang()>0) sang =STR."Sáng: \{prescribe.getSang()} viên";
+                if(prescribe.getTrua()>0) trua =STR."Trưa: \{prescribe.getTrua()} viên";
+                if(prescribe.getChieu()>0) chieu =STR."Chiều: \{prescribe.getChieu()} viên";
+                if(prescribe.getToi()>0) toi =STR."Tối: \{prescribe.getToi()} viên";
+                document.add(new Paragraph("        Uống:    "+sang+"          "+trua+"          "+chieu+"             "+toi+"" , regularFont));
+            }
+            LocalDate date = LocalDate.now();
+            document.add(new Paragraph(STR."\nLời dặn: \{tf_luuY.getText()}                                                              Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
+            document.add(new Paragraph(STR."Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
+                document.add(new Paragraph(STR."Toa uống:       " + tf_ngay.getText() +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
+            document.add(new Paragraph(STR."\n\nKhám lại mang theo đơn này." , footerbold));
+            document.add(new Paragraph(STR."Ngày giờ in: " +LocalDate.now() +"                                                                         BS." +user.getEmployName(), footerbold));
+
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            File file = new File(path);
+            Desktop.getDesktop().open(file);
+            document.close();
+        }
+    }
+    private void printBangke() throws IOException {
+        Document document = new Document();
+
+        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_bangke.pdf";
+        try {
+            String maTenBenhPhu = "";
+            PdfWriter.getInstance(document, new FileOutputStream(path));
+            document.open();
+
+            String fontPath = "notosans-regular.ttf";
+            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+            Font boldFont = new Font(baseFont, 13, Font.BOLD);
+            Font titleBoldFont = new Font(baseFont, 17, Font.BOLD);
+            Font regularFont = new Font(baseFont, 14);
+            Font footerbold = new Font(baseFont, 13, Font.BOLD);
+
+            document.add(new Paragraph("PHÒNG MẠCH TƯ", boldFont));
+            document.add(new Paragraph("UIT CLINIC", boldFont));
+            document.add(new Paragraph("Email: greenuitk17@gmail.com", footerbold));
+            document.add(new Paragraph("Số điện thoại: 1900 1555", footerbold));
+            document.add(new Paragraph("Địa chỉ:  136, Linh Trung, Thủ Đức, TP Thủ Đức", regularFont));
+            document.add(new Paragraph("                                    BẢNG KÊ CHI PHÍ KHÁM BỆNH", titleBoldFont));
+            document.add(new Paragraph("I. Phần hành chính:", boldFont));
+            String gioitinh;
+            if (rad_men.isSelected()) gioitinh = "Nam";
+            else {
+                gioitinh = "Nữ";
+            }
+            document.add(new Paragraph(STR."Mã BN:  \{tf_mabn.getText()} - Họ tên:  \{tf_tenbn.getText()} - Ngày sinh:  \{tf_ngaysinh.getText()} - Giới tính:  \{(gioitinh)}", regularFont));
+            document.add(new Paragraph(STR."Triệu chứng:  \{tf_trieuChung.getText()}", regularFont));
+            if (!tf_maBenhPhu.getText().isEmpty())
+                maTenBenhPhu = STR.";(\{tf_maBenhPhu.getText()}) \{tf_tenBenhPhu.getText()} ";
+            document.add(new Paragraph(STR."Chẩn đoán:    \{tf_maBenhPhu.getText()} - \{tf_tenBenhPhu.getText()}" + maTenBenhPhu, regularFont));
+            document.add(new Paragraph("\nII. Phần chi phí khám bệnh: ", boldFont));
+
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+
+            float[] columnWidths = {1.5f, 0.5f, 0.5f, 0.5f, 0.5f};
+            float[] rowWidths = {0.2f, 0.4f, 0.2f, 0.2f, 0.2f};
+            table.setWidths(columnWidths);
+
+            PdfPCell cell = new PdfPCell(new Paragraph("Nội dung", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Paragraph("ĐVT", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Paragraph("Số lượng", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Paragraph("Đơn giá", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Paragraph("Thành tiền", boldFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            int examfree = 35000;
+            int totalexamfree = 35000;
+            int prescibefree=0;
+            for (Prescribe prescribe : tbl_chosenMedicine.getItems()) {
+                prescibefree += prescribe.getThanhTien();
+            }
+
+            table.addCell(new Paragraph("1. Khám bệnh:", boldFont));
+            table.addCell(new Paragraph("", regularFont));
+            table.addCell(new Paragraph("", regularFont));
+            table.addCell(new Paragraph("", regularFont));
+            table.addCell(new Paragraph(String.valueOf(totalexamfree), boldFont));
+
+            table.addCell(new Paragraph("   1. Công khám", regularFont));
+            table.addCell(new Paragraph("Lần", regularFont));
+            table.addCell(new Paragraph("1", regularFont));
+            table.addCell(new Paragraph("35000", regularFont));
+            table.addCell(new Paragraph(String.valueOf((int)examfree), regularFont));
+
+            table.addCell(new Paragraph("2. Thuốc", boldFont));
+            table.addCell(new Paragraph("", boldFont));
+            table.addCell(new Paragraph("", boldFont));
+            table.addCell(new Paragraph("", boldFont));
+            table.addCell(new Paragraph(String.valueOf(prescibefree), boldFont));
+            for (Prescribe prescribe : tbl_chosenMedicine.getItems()) {
+                table.addCell(new Paragraph("   "+prescribe.getSothuTu()+STR.". \{prescribe.getTenThuoc()}", regularFont));
+                table.addCell(new Paragraph(String.valueOf(prescribe.getTenDonViTinh()), regularFont));
+                table.addCell(new Paragraph(String.valueOf(prescribe.getSoLuong()), regularFont));
+                table.addCell(new Paragraph(String.valueOf((int)prescribe.getDonGia()), regularFont));
+                table.addCell(new Paragraph(String.valueOf((int)prescribe.getThanhTien()), regularFont));
+            }
+            table.addCell(new Paragraph("Cộng", boldFont));
+            table.addCell(new Paragraph("", boldFont));
+            table.addCell(new Paragraph("", boldFont));
+            table.addCell(new Paragraph("", boldFont));
+            int total =(int)(examfree+prescibefree);
+            table.addCell(new Paragraph(String.valueOf(total), boldFont));
+            for (int i = 0; i < rowWidths.length; i++) {
+                table.getRow(i).setMaxHeights(rowWidths[i] * table.getTotalHeight());
+            }
+            document.add(table);
+            document.add(new Paragraph("\nTổng chi phí lần khám bệnh (làm tròn đến đơn vị đồng):            "+total+" đ",boldFont));
+            LocalDate date = LocalDate.now();
+            document.add(new Paragraph(STR."\n                                                                                       Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), regularFont));
+            document.add(new Paragraph(STR."                           NGƯỜI LẬP BẢNG KÊ                                    NGƯỜI THU TIỀN", boldFont));
+            document.add(new Paragraph(STR."                            (Ký, ghi rõ họ tên)                                 (Ký, ghi rõ họ tên) ", regularFont));
+
+
+
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            File file = new File(path);
+            Desktop.getDesktop().open(file);
+            document.close();
+        }
+    }
+    public static String removeAccentsAndSpaces(String input) {
+        // Chuẩn hóa chuỗi, loại bỏ các dấu
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String noAccents = pattern.matcher(normalized).replaceAll("");
+
+        // Loại bỏ các khoảng trắng thừa
+        String noSpaces = noAccents.replaceAll("\\s+", "");
+
+        return noSpaces;
     }
 }

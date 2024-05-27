@@ -18,14 +18,14 @@ public class ConnectDB {
         String databaseUser ="postgres";
         String databasePassword="phuan03042004";
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;
-        //String urlNeon_DB= "jdbc:postgresql://ep-jolly-block-a52e1a3c.us-east-2.aws.neon.tech/ClinicDB?user=PharmacyDB_owner&password=xKkZe1NrSpq7&sslmode=require";
+        //String urlNeon_DB= "jdbc:postgresql://ep-jolly-block-a52e1a3c.us-east-2.aws.neon.tech/ClinicDB2705?user=PharmacyDB_owner&password=xKkZe1NrSpq7&sslmode=require";
         try{
             /*if(isInternetAvailable())
             {*/
                 //Class.forName("com.mysql.cj.jdbc.Driver");
                 Class.forName("org.postgresql.Driver");
                 databaseLink= DriverManager.getConnection(urlPostgres,databaseUser,databasePassword);
-               //databaseLink= DriverManager.getConnection(urlNeon_DB);
+                //databaseLink= DriverManager.getConnection(urlNeon_DB);
                 if(databaseLink!=null) System.out.println("Connection Established");
                 else System.out.println("Connection Failed");
            /* }
