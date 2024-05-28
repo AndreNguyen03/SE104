@@ -12,7 +12,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Medicine{" +
+        return "Employee{" +
                 "employeeId=" + employeeId + '\'' +
                 ", employeeName='" + employeeName + '\'' +
                 ", employeeCitizenId='" + employeeCitizenId + '\'' +
