@@ -90,7 +90,8 @@ public class MedicineDAO {
                 medicine.setTenThuoc(resultSet.getString("tenthuoc"));
                 medicine.setTenDonViTinh(resultSet.getString("tendvt"));
                 medicine.setSoLuong(resultSet.getInt("soluong"));
-                medicine.setGiaBan(resultSet.getDouble("giaban"));
+                double roundedPrice = Math.round(resultSet.getDouble("giaban") * 100.0) / 100.0;
+                medicine.setGiaBan(roundedPrice);
                 medicine.setTenDangThuoc(resultSet.getString("tendt"));
                 medicine.setTenCachDung(resultSet.getString("tencd"));
 
@@ -177,6 +178,66 @@ public class MedicineDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isMedicineNameExists(String medicineName) {
+        String query = "SELECT COUNT(*) FROM thuoc WHERE tenthuoc = ?";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1, medicineName);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getMedicineIDByName(String medicineName) {
+        int medicineID = -1; // Giả sử không tìm thấy
+
+        // Kiểm tra nếu tên thuốc tồn tại trong cơ sở dữ liệu
+        if (isMedicineNameExists(medicineName)) {
+            // Truy vấn cơ sở dữ liệu để lấy mã thuốc
+            String query = "SELECT mathuoc FROM thuoc WHERE tenthuoc = ?";
+            try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+                statement.setString(1, medicineName);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        medicineID = resultSet.getInt("mathuoc");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return medicineID;
+    }
+
+    public Medicine getMedicineByName(String medicineName) {
+        String query = "SELECT * FROM thuoc WHERE tenthuoc = ?";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1, medicineName);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Medicine medicine = new Medicine();
+                    medicine.setMaThuoc(resultSet.getInt("mathuoc"));
+                    medicine.setTenThuoc(resultSet.getString("tenthuoc"));
+                    medicine.setMaDonViTinh(resultSet.getInt("madvt"));
+                    medicine.setSoLuong(resultSet.getInt("soluong"));
+                    medicine.setGiaBan(resultSet.getDouble("giaban"));
+                    medicine.setMaDangThuoc(resultSet.getInt("madt"));
+                    medicine.setMaCachDung(resultSet.getInt("macd"));
+                    return medicine;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
