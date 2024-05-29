@@ -9,6 +9,6 @@
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21 (2)" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
+    <output url="file://$PROJECT_DIR$/../../../../traixuan2024/freetts-1.2.2-bin/freetts-1.2/lib/freetts" />
   </component>
 </project>

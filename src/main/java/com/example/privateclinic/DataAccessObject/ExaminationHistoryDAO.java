@@ -58,7 +58,7 @@ public class ExaminationHistoryDAO {
     private ObservableList<Prescribe> GetPrescribes(int exam_id) {
         ObservableList<Prescribe> prescribes = FXCollections.observableArrayList();
         String query ="SELECT kt.*, t.*, cd.tencd,dvt.tendvt,dt.tendt FROM kethuoc kt,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t WHERE makhambenh = ? AND kt.mathuoc = t.mathuoc"+
-                " AND t.macd = cd.macd AND t.madt = dt.madt AND t.madvt = dvt.madvt";
+                " AND t.macd = cd.macd AND t.madt = dt.madt AND t.madvt = dvt.madvt ORDER BY kt.sothutu ASC";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1,exam_id);
             try(ResultSet resultSet = statement.executeQuery()) {

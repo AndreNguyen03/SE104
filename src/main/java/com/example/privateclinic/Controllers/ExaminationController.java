@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.*;
 import com.example.privateclinic.Models.*;
+import com.example.privateclinic.WavPlayer;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
@@ -155,9 +156,9 @@ public  class ExaminationController implements Initializable {
         ObservableList<Prescribe> prescribes = examinationHistorySent.getPrescribe();
         tf_trieuChung.setText(examination.getTrieuChung());
         tf_maBenhChinh.setText(String.valueOf(examination.getMaBenhChinh()));
-        tf_tenBenhChinh.setText(examination.getTrieuChung());
-        tf_maBenhPhu.setText(examination.getTrieuChung());
-        tf_tenBenhPhu.setText(examination.getTrieuChung());
+        tf_tenBenhChinh.setText(examination.getTenBenhChinh());
+        tf_maBenhPhu.setText(String.valueOf(examination.getMaBenhPhu()));
+        tf_tenBenhPhu.setText(examination.getTenBenhPhu());
         tf_luuY.setText(examination.getLuuy());
         tbl_chosenMedicine.setItems(prescribes);
         panel_diseasesResultSearch.setVisible(false);
@@ -444,9 +445,17 @@ public  class ExaminationController implements Initializable {
         btnCallPatient.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               /* if(rad_womenVoice.isSelected()) {
-                } else {
-                }*/
+                if(rad_patientWaiting.isSelected()) {
+                    Patient patient = tbl_customer.getSelectionModel().getSelectedItem();
+                    if(patient!=null) {
+                        String gender;
+                        int id;
+                        if(rad_womenVoice.isSelected()) gender = "women";
+                        else gender ="men";
+                        id =patient.getPatientId();
+                        WavPlayer.playSound(gender+id + ".wav");
+                    }
+                }
             }
         });
         btnInToaThuoc.setOnAction(new EventHandler<ActionEvent>() {
@@ -827,7 +836,7 @@ public  class ExaminationController implements Initializable {
     private void addListenerTextChanged(TextField...tfs) {
         for(TextField textField : tfs)
         {
-            textField.textProperty().addListener((observable,oldValues,newValue)->{
+            textField.textProperty().addListener((observable,oldValue,newValue)->{
                 if (!newValue.matches("\\d*")) {
                     textField.setText(newValue.replaceAll("[^\\d]", ""));
                     if(textField.getText().equals("")||textField.getText().equals("0")){
@@ -837,6 +846,10 @@ public  class ExaminationController implements Initializable {
                 else
                 {
                     UpTotal();
+                    if(Integer.parseInt(lbl_soLuong.getText())< medicineChosenBefore.getSoLuong()) {
+                        showAlert("Warning","Trong kho hiện tại không đủ, nhập thêm rồi quay lại!");
+                        textField.setText(oldValue);
+                    }
                 }
             });
         }
@@ -967,7 +980,6 @@ public  class ExaminationController implements Initializable {
 
         String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_bangke.pdf";
         try {
-            String maTenBenhPhu = "";
             PdfWriter.getInstance(document, new FileOutputStream(path));
             document.open();
 
@@ -993,9 +1005,10 @@ public  class ExaminationController implements Initializable {
             }
             document.add(new Paragraph(STR."Mã BN:  \{tf_mabn.getText()} - Họ tên:  \{tf_tenbn.getText()} - Ngày sinh:  \{tf_ngaysinh.getText()} - Giới tính:  \{(gioitinh)}", regularFont));
             document.add(new Paragraph(STR."Triệu chứng:  \{tf_trieuChung.getText()}", regularFont));
+            String maTenBenhPhu = "";
             if (!tf_maBenhPhu.getText().isEmpty())
-                maTenBenhPhu = STR.";(\{tf_maBenhPhu.getText()}) \{tf_tenBenhPhu.getText()} ";
-            document.add(new Paragraph(STR."Chẩn đoán:    \{tf_maBenhPhu.getText()} - \{tf_tenBenhPhu.getText()}" + maTenBenhPhu, regularFont));
+                maTenBenhPhu = STR.";   Bệnh phụ: (\{tf_maBenhPhu.getText()}) - \{tf_tenBenhPhu.getText()} ";
+            document.add(new Paragraph(STR."Chẩn đoán:   Bệnh chính: \{tf_maBenhChinh.getText()} - \{tf_tenBenhChinh.getText()}" + maTenBenhPhu, regularFont));
             document.add(new Paragraph("\nII. Phần chi phí khám bệnh: ", boldFont));
 
             PdfPTable table = new PdfPTable(5);
