@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1358.0" stylesheets="@../Styles/Category_Disease.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1358.0" stylesheets="@../Styles/Category_Disease.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.Category_DiseaseController">
    <children>
       <TitledPane animated="false" collapsible="false" layoutX="359.0" prefHeight="248.0" prefWidth="635.0" style="-fx-font-size: 16;" text="Thêm trực tiếp">
         <content>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="207.0" prefWidth="631.0" styleClass="anchor-pane">
                <children>
-                  <JFXButton layoutX="132.0" layoutY="55.0" prefHeight="20.0" prefWidth="90.0" style="-fx-border-color: black;" text="Thêm" />
-                  <JFXButton id="orange" layoutX="259.0" layoutY="55.0" prefHeight="20.0" prefWidth="90.0" text="Sửa" />
-                  <JFXButton id="red" layoutX="389.0" layoutY="55.0" prefHeight="30.0" prefWidth="83.0" style="-fx-border-color: black;" text="Xóa" />
+                  <JFXButton fx:id="addButton" layoutX="132.0" layoutY="55.0" prefHeight="20.0" prefWidth="90.0" style="-fx-border-color: black;" text="Thêm" onAction="#handleAddDisease" />
+                  <JFXButton fx:id="editButton" layoutX="259.0" layoutY="55.0" prefHeight="20.0" prefWidth="90.0" text="Sửa" onAction="#handleEditDisease" />
+                  <JFXButton fx:id="deleteButton" layoutX="389.0" layoutY="55.0" prefHeight="30.0" prefWidth="83.0" style="-fx-border-color: black;" text="Xóa" onAction="#handleDeleteDisease" />
                   <Text fill="#f53535" layoutX="17.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ICD" />
                   <Text fill="#f53535" layoutX="178.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh" />
-                  <TextField layoutX="54.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" styleClass="input-field" />
-                  <TextField layoutX="258.0" layoutY="10.0" prefHeight="37.0" prefWidth="357.0" styleClass="input-field" />
+                  <TextField fx:id="diseaseICDTextField" layoutX="54.0" layoutY="10.0" prefHeight="25.0" prefWidth="112.0" styleClass="input-field" />
+                  <TextField fx:id="diseaseNameTextField" layoutX="258.0" layoutY="10.0" prefHeight="37.0" prefWidth="357.0" styleClass="input-field" />
                   <TitledPane animated="false" collapsible="false" layoutX="31.0" layoutY="104.0" prefHeight="95.0" prefWidth="571.0" text="Thêm từ excel">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="568.0" styleClass="anchor-pane">
@@ -37,7 +37,7 @@
         </content>
       </TitledPane>
       <Text layoutX="698.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="Danh sách có :" />
-      <Text layoutX="841.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="None" />
+      <Text fx:id="diseaseCount" layoutX="841.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="None" />
       <Text layoutX="909.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="Loại bệnh" wrappingWidth="82.890625" />
       <TitledPane animated="false" collapsible="false" layoutX="356.0" layoutY="282.0" prefHeight="92.0" prefWidth="641.0" text="Danh sách bệnh">
          <content>
@@ -45,16 +45,17 @@
                <children>
                   <Text fill="#f53535" layoutX="21.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ICD" />
                   <Text fill="#f53535" layoutX="184.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh" />
-                  <TextField layoutX="266.0" layoutY="5.0" prefHeight="42.0" prefWidth="358.0" styleClass="input-field" />
-                  <TextField layoutX="66.0" layoutY="5.0" prefHeight="42.0" prefWidth="109.0" styleClass="input-field" />
+                  <TextField fx:id="tf_diseaseByName" layoutX="266.0" layoutY="5.0" prefHeight="42.0" prefWidth="358.0" styleClass="input-field" />
+                  <TextField fx:id="tf_diseaseByICD" layoutX="66.0" layoutY="5.0" prefHeight="42.0" prefWidth="109.0" styleClass="input-field" />
                </children>
             </AnchorPane>
          </content>
       </TitledPane>
-      <TableView layoutX="358.0" layoutY="380.0" prefHeight="394.0" prefWidth="641.0">
+      <TableView fx:id="diseaseTableView" layoutX="358.0" layoutY="380.0" prefHeight="394.0" prefWidth="641.0">
         <columns>
-          <TableColumn prefWidth="116.0" text="Mã ICD" />
-          <TableColumn prefWidth="524.0" text="Tên bệnh" />
+          <TableColumn fx:id="idColumn" prefWidth="85.0" text="STT" />
+            <TableColumn fx:id="icdColumn" prefWidth="116.0" text="Mã ICD" />
+          <TableColumn fx:id="nameColumn" prefWidth="524.0" text="Tên bệnh" />
         </columns>
       </TableView>
    </children>

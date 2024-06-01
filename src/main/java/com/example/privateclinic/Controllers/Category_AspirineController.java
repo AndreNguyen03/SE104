@@ -148,7 +148,7 @@ public class Category_AspirineController implements Initializable {
             return;
         }
 
-        if (medicineDAO.isMedicineNameExists(medicineName)) {
+        if (medicineDAO.isMedicineNameExists(medicineName, -1)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Cảnh báo!");
             alert.setHeaderText(null);
@@ -256,7 +256,7 @@ public class Category_AspirineController implements Initializable {
     }
 
         @FXML
-        void handleEditMedicine (ActionEvent event){
+        void handleEditMedicine (ActionEvent event) {
             Medicine selectedMedicine = medicineTableView.getSelectionModel().getSelectedItem();
             String medicineName = medicineNameTextField_1.getText();
             String medicineUnit = unitComboBox.getValue();
@@ -266,77 +266,94 @@ public class Category_AspirineController implements Initializable {
             String medicineUse = useComboBox.getValue();
             int medicineUseValue;
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Xác nhận chỉnh sửa");
-            alert.setHeaderText("Bạn có chắc chắn muốn chỉnh sửa?");
+            if (medicineName.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Cảnh báo!");
+                alert.setHeaderText(null);
+                alert.setContentText("Vui lòng nhập tên thuốc!");
+                alert.showAndWait();
+                return;
+            }
 
-            Optional<ButtonType> result = alert.showAndWait();
+            if (medicineDAO.isMedicineNameExists(medicineName, selectedMedicine.getMaThuoc())) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Cảnh báo!");
+                alert.setHeaderText(null);
+                alert.setContentText("Tên thuốc đã tồn tại!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Xác nhận chỉnh sửa");
+                alert.setHeaderText("Bạn có chắc chắn muốn chỉnh sửa?");
 
-            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Optional<ButtonType> result = alert.showAndWait();
 
-                switch (medicineUnit) {
-                    case "Viên":
-                        medicineUnitValue = 1;
-                        break;
-                    case "Chai":
-                        medicineUnitValue = 2;
-                        break;
-                    default:
-                        medicineUnitValue = -1;
-                        break;
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                    switch (medicineUnit) {
+                        case "Viên":
+                            medicineUnitValue = 1;
+                            break;
+                        case "Chai":
+                            medicineUnitValue = 2;
+                            break;
+                        default:
+                            medicineUnitValue = -1;
+                            break;
+                    }
+
+                    switch (medicineForm) {
+                        case "Viên":
+                            medicineFormValue = 1;
+                            break;
+                        case "Lỏng":
+                            medicineFormValue = 2;
+                            break;
+                        case "Gel":
+                            medicineFormValue = 3;
+                            break;
+                        default:
+                            medicineFormValue = -1;
+                            break;
+                    }
+
+                    switch (medicineUse) {
+                        case "Uống":
+                            medicineUseValue = 1;
+                            break;
+                        case "Bôi ngoài":
+                            medicineUseValue = 2;
+                            break;
+                        case "Xông":
+                            medicineUseValue = 3;
+                            break;
+                        case "Nhai":
+                            medicineUseValue = 4;
+                            break;
+                        default:
+                            medicineUseValue = -1;
+                            break;
+                    }
+
+                    // Cập nhật thông tin của thuốc được chọn
+                    selectedMedicine.setTenThuoc(medicineName);
+                    selectedMedicine.setMaDonViTinh(medicineUnitValue);
+                    selectedMedicine.setMaDangThuoc(medicineFormValue);
+                    selectedMedicine.setMaCachDung(medicineUseValue);
+
+                    // Cập nhật thuốc trong cơ sở dữ liệu
+                    medicineDAO.updateMedicine(selectedMedicine);
+                    // Xóa dữ liệu hiện tại trong bảng và tải lại dữ liệu mới
+                    medicineData.clear();
+                    clearMedicineFields();
+                    loadMedicineData();
+
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Thành công");
+                    successAlert.setHeaderText(null);
+                    successAlert.setContentText("Đã cập nhật thuốc thành công.");
+                    successAlert.showAndWait();
                 }
-
-                switch (medicineForm) {
-                    case "Viên":
-                        medicineFormValue = 1;
-                        break;
-                    case "Lỏng":
-                        medicineFormValue = 2;
-                        break;
-                    case "Gel":
-                        medicineFormValue = 3;
-                        break;
-                    default:
-                        medicineFormValue = -1;
-                        break;
-                }
-
-                switch (medicineUse) {
-                    case "Uống":
-                        medicineUseValue = 1;
-                        break;
-                    case "Bôi ngoài":
-                        medicineUseValue = 2;
-                        break;
-                    case "Xông":
-                        medicineUseValue = 3;
-                        break;
-                    case "Nhai":
-                        medicineUseValue = 4;
-                        break;
-                    default:
-                        medicineUseValue = -1;
-                        break;
-                }
-
-                // Cập nhật thông tin của thuốc được chọn
-                selectedMedicine.setTenThuoc(medicineName);
-                selectedMedicine.setMaDonViTinh(medicineUnitValue);
-                selectedMedicine.setMaDangThuoc(medicineFormValue);
-                selectedMedicine.setMaCachDung(medicineUseValue);
-
-                // Cập nhật thuốc trong cơ sở dữ liệu
-                medicineDAO.updateMedicine(selectedMedicine);
-                // Xóa dữ liệu hiện tại trong bảng và tải lại dữ liệu mới
-                medicineData.clear();
-                clearMedicineFields();
-                loadMedicineData();
-
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Thành công");
-                successAlert.setHeaderText(null);
-                successAlert.setContentText("Đã cập nhật thuốc thành công.");
-                successAlert.showAndWait();
             }
         }
 
@@ -453,7 +470,7 @@ public class Category_AspirineController implements Initializable {
         Optional<ButtonType> result = confirmDeleteAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Kiểm tra xem tên thuốc có tồn tại không
-            if (medicineDAO.isMedicineNameExists(medicineName)) {
+            if (medicineDAO.isMedicineNameExists(medicineName, 0)) {
                 // Lấy mã thuốc từ tên thuốc
                 int medicineID = medicineDAO.getMedicineIDByName(medicineName);
 

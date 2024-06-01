@@ -180,27 +180,31 @@ public class MedicineDAO {
         }
     }
 
-    public boolean isMedicineNameExists(String medicineName) {
-        String query = "SELECT COUNT(*) FROM thuoc WHERE tenthuoc = ?";
+    public boolean isMedicineNameExists(String medicineName, int currentMedicineId) {
+        String query = "SELECT COUNT(*) AS count FROM thuoc WHERE tenthuoc = ? AND mathuoc != ?";
+        int count = 0;
+
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setString(1, medicineName);
+            statement.setInt(2, currentMedicineId);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int count = resultSet.getInt(1);
-                    return count > 0;
+                    count = resultSet.getInt("count");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+
+        return count > 0;
     }
 
     public int getMedicineIDByName(String medicineName) {
         int medicineID = -1; // Giả sử không tìm thấy
 
         // Kiểm tra nếu tên thuốc tồn tại trong cơ sở dữ liệu
-        if (isMedicineNameExists(medicineName)) {
+        if (isMedicineNameExists(medicineName, 0)) {
             // Truy vấn cơ sở dữ liệu để lấy mã thuốc
             String query = "SELECT mathuoc FROM thuoc WHERE tenthuoc = ?";
             try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
