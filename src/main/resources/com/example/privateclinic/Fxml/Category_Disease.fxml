@@ -25,9 +25,9 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="568.0" styleClass="anchor-pane">
                            <children>
-                              <JFXButton id="green" layoutX="58.0" layoutY="6.0" prefHeight="43.0" prefWidth="148.0" text="Thêm từ excel" />
-                              <JFXButton id="green" layoutX="228.0" layoutY="6.0" prefHeight="43.0" prefWidth="155.0" text="File excel mẫu" />
-                              <JFXButton layoutX="407.0" layoutY="6.0" prefHeight="25.0" prefWidth="99.0" style="-fx-border-color: black;" text="Lưu" />
+                              <JFXButton fx:id="addExcelFileBtn" layoutX="58.0" layoutY="6.0" prefHeight="43.0" prefWidth="148.0" text="Thêm từ excel" onAction="#handleAddExcelFile" />
+                              <JFXButton fx:id="sampleExcelFileBtn" layoutX="228.0" layoutY="6.0" prefHeight="43.0" prefWidth="155.0" text="File excel mẫu" onAction="#handleDownloadSampleExcelFile" />
+                              <JFXButton fx:id="saveExcelFileBtn" layoutX="407.0" layoutY="6.0" prefHeight="25.0" prefWidth="99.0" style="-fx-border-color: black;" text="Lưu" onAction="#handleSaveExcelFile" />
                            </children>
                         </AnchorPane>
                     </content>

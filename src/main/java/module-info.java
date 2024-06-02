@@ -18,6 +18,8 @@ module com.example.privateclinic {
     requires kernel;
     requires layout;
     requires io;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     opens com.example.privateclinic to javafx.fxml;
     exports com.example.privateclinic;
