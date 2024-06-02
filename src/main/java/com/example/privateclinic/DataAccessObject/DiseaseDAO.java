@@ -58,6 +58,22 @@ public class DiseaseDAO {
         }
     }
 
+    public void addDiseases(List<Disease> diseases) {
+        String query = "INSERT INTO benh (mabenh, tenbenh, maicd) VALUES (?, ?, ?)";
+
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            for (Disease disease : diseases) {
+                statement.setInt(1, disease.getMaBenh());
+                statement.setString(2, disease.getTenBenh());
+                statement.setString(3, disease.getMaICD());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Disease> getAllDiseases() {
         List<Disease> diseases = new ArrayList<>();
         String query = "SELECT * FROM benh ORDER BY mabenh ASC";
@@ -172,6 +188,26 @@ public class DiseaseDAO {
         return count > 0;
     }
 
+    public boolean isDiseaseICDExists(String diseaseICD, int currentDiseaseId) {
+        String query = "SELECT COUNT(*) AS count FROM benh WHERE maicd = ? AND mabenh != ?";
+        int count = 0;
+
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1, diseaseICD);
+            statement.setInt(2, currentDiseaseId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count > 0;
+    }
+
     public int getMaxDiseaseId() {
         int maxId = 0;
         String query = "SELECT MAX(mabenh) AS max_id FROM benh";
@@ -187,23 +223,4 @@ public class DiseaseDAO {
         }
         return maxId;
     }
-
-    /*public ObservableList<Disease> searchDiseaseByICDorName(String icdOrName) {
-        ObservableList<Disease> diseases = FXCollections.observableArrayList();
-        String query = "SELECT * FROM benh b " +
-                "WHERE b.maicd ILIKE '%" + icdOrName + "%' OR b.tenbenh ILIKE '%" + icdOrName + "%'";
-        ConnectDB connectDB = new ConnectDB();
-        try (ResultSet resultSet = connectDB.getData(query)) {
-            while (resultSet.next()) {
-                Disease disease = new Disease();
-                disease.setMaBenh(resultSet.getInt("mabenh"));
-                disease.setTenBenh(resultSet.getString("tenbenh"));
-                disease.setMaICD(resultSet.getString("maicd"));
-                diseases.add(disease);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return diseases;
-    } */
 }
