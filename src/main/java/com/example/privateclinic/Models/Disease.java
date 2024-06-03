@@ -3,8 +3,16 @@ package com.example.privateclinic.Models;
 public class Disease {
     int maBenh;
     String tenBenh;
+    String maICD;
+
 
     public Disease() {
+    }
+
+    public Disease(int maBenh, String tenBenh, String maICD ) {
+        this.maBenh = maBenh;
+        this.tenBenh = tenBenh;
+        this.maICD = maICD;
     }
 
     public int getMaBenh() {
@@ -21,5 +29,13 @@ public class Disease {
 
     public void setTenBenh(String tenbenh) {
         this.tenBenh = tenbenh;
+    }
+
+    public String getMaICD() {
+        return maICD;
+    }
+
+    public void setMaICD(String maICD) {
+        this.maICD = maICD;
     }
 }

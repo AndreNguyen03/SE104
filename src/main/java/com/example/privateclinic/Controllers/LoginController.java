@@ -121,9 +121,9 @@ public class LoginController implements Initializable {
         paneProgress.setVisible(true);
         new Thread(() -> {
             String username_result = null;
-            username_result = userDAO.getUsername(tf_username_forgot.getText().toString());
+            username_result = userDAO.getUsername(tf_username_forgot.getText());
             if (username_result == null) {
-                showAlert("Warning","Invalid username: " + tf_username_forgot.getText().toString());
+                showAlert("Warning","Invalid username: " + tf_username_forgot.getText());
                 return;
             }
             storedOTP = generateOTP();
