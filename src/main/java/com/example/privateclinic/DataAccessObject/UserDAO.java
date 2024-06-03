@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO {
+    ConnectDB connectDB = ConnectDB.getInstance();
     User user = new User();
 
     public User getEmployee() {
@@ -22,7 +23,6 @@ public class UserDAO {
     public void setEmployee(User _user) {
         this.user = _user;
     }
-    ConnectDB connectDB = ConnectDB.getInstance();
 
 
     public String GetHash(String plainText) {
@@ -52,11 +52,13 @@ public class UserDAO {
     }
     public int CheckValidate(String username, String password) {
         password = GetHash(password);
-        String query = "SELECT * FROM nhanvien WHERE username = '"+username+"' AND (defaultpassword = '"+password+"' OR password ='"+password+"')";
-        try
+        String query = "SELECT * FROM nhanvien WHERE username = ? AND (defaultpassword = ? OR password = ?)";
+        try(PreparedStatement statement = connectDB.getPreparedStatement(query))
         {
-            //thực thi truy vấn và lấy kết qua
-            ResultSet resultSet = connectDB.getData(query);
+            statement.setString(1,username);
+            statement.setString(2,password);
+            statement.setString(3,password);
+            ResultSet resultSet = statement.executeQuery();
             //kiểm tra kq trả về
             if (resultSet.next()) {
                 //tìm thấy người dùng có user và password khớp
@@ -98,23 +100,22 @@ public class UserDAO {
     {
         newPassword = GetHash(newPassword);
         String querry;
-        ConnectDB connect = new ConnectDB();
         PreparedStatement preparedStatement = null;
         if (index == 0)
         {
             querry = "UPDATE nhanvien SET password = ?, defaultpassword = NULL  WHERE username = ? ";
-            preparedStatement = connect.databaseLink.prepareStatement(querry);
+            preparedStatement = connectDB.databaseLink.prepareStatement(querry);
             preparedStatement.setString(1,newPassword);
             preparedStatement.setString(2,username);
         }
         else
         {
             querry = "UPDATE nhanvien SET password = ? WHERE username = ? ";
-            preparedStatement = connect.databaseLink.prepareStatement(querry);
+            preparedStatement = connectDB.databaseLink.prepareStatement(querry);
             preparedStatement.setString(1,newPassword);
             preparedStatement.setString(2,username);
         }
-        if (connect.handleData(preparedStatement))
+        if (connectDB.handleData(preparedStatement))
         {
             return true;
         }
@@ -183,49 +184,6 @@ public class UserDAO {
         return false;
     }
 
-    /*public Boolean AddEmployee(String name, String citizen_id, String address, String phone, String email, String position) throws SQLException
-    {
-        ConnectDB connectDB = new ConnectDB();
-        String _pass = GeneratePassword(true, true, true, false, 6);
-        String query = "INSERT INTO employee (hoten,cccd, diachi,sdt,email,vitri,username, defaultpassword) VALUES (?,?,?,?,?,?,?,?)";
-        PreparedStatement preparedStatement = connectDB.getConnection().prepareStatement(query);
-        preparedStatement.setString(1, name);
-        preparedStatement.setString(2, citizen_id);
-        preparedStatement.setString(3, address);
-        preparedStatement.setString(4, phone);
-        preparedStatement.setString(5, email);
-        preparedStatement.setString(6, position);
-        preparedStatement.setString(7, email);
-        preparedStatement.setString(8, _pass);
-
-        if (connectDB.handleData(preparedStatement)) {
-            return true;
-        }
-        return false;
-
-    }*/
-    /*public Boolean UpdateEmployee(String id, String name, String citizen_id, String address, String phone, String email,String username, String position) throws SQLException
-    {
-        ConnectDB connectDB = new ConnectDB();
-
-        String _pass = GeneratePassword(true,true,true,false,6);
-        String query = "UPDATE employee SET HoTen = ?,CCCD =?, DiaChi,SDT = ?,Email=?,ViTri=?,TK=? WHERE MaNV = ?)";
-        PreparedStatement preparedStatement = connectDB.getConnection().prepareStatement(query);
-        preparedStatement.setString(1,name);
-        preparedStatement.setString(2,citizen_id);
-        preparedStatement.setString(3,address);
-        preparedStatement.setString(4,phone);
-        preparedStatement.setString(5,email);
-        preparedStatement.setString(6,position);
-        preparedStatement.setString(7,username);
-        preparedStatement.setString(8,id);
-
-        if(connectDB.handleData(preparedStatement))
-        {
-            return true;
-        }
-        return false;
-    }*/
     public boolean addEmployee(User employee) {
         String query = "INSERT INTO nhanvien (hoten, sdt, cccd, username, password, vitri, defaultpassword, diachi, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String defaultPassword = GeneratePassword(true,true,true,true,8);
@@ -289,6 +247,38 @@ public class UserDAO {
         String query = "SELECT * FROM nhanvien ORDER BY manv ASC";
         try (PreparedStatement statement = connectDB.getPreparedStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                User employee = new User();
+                employee.setEmployeeId(resultSet.getInt("manv"));
+                employee.setEmployeeName(resultSet.getString("hoten"));
+                employee.setEmployeeCitizenId(resultSet.getString("cccd"));
+                employee.setEmployeePhoneNumber(resultSet.getString("sdt"));
+                employee.setEmployeeAddress(resultSet.getString("diachi"));
+                employee.setEmployeePosition(resultSet.getString("vitri"));
+                employee.setEmployeeUsername(resultSet.getString("username"));
+                employee.setEmployeeEmail(resultSet.getString("email"));
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
+    public ObservableList<User> seatchUser(String searchString) {
+        ObservableList<User> employees = FXCollections.observableArrayList();
+        String query = "SELECT * FROM nhanvien WHERE unaccent(hoten) ILIKE unaccent(?) ";
+        boolean isInteger = false;
+        try {
+            int id = Integer.parseInt(searchString);
+            query+= "AND manv = ? ";
+            isInteger = true;
+        } catch (NumberFormatException e) {
+        }
+        query += "ORDER BY manv ASC";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1,"%"+searchString+"%");
+            if(isInteger) statement.setInt(2,Integer.parseInt(searchString));
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User employee = new User();
                 employee.setEmployeeId(resultSet.getInt("manv"));

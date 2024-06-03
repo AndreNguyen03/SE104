@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DiseaseDAO {
-    ConnectDB connectDB = new ConnectDB();
+    ConnectDB connectDB = ConnectDB.getInstance();
 
     public DiseaseDAO() {
     }
@@ -24,8 +24,7 @@ public class DiseaseDAO {
     {
         ObservableList<Disease> diseases = FXCollections.observableArrayList();
         String query = "SELECT * FROM benh WHERE maBenh::text LIKE '"+idOrName+"%' OR tenBenh ILIKE '%"+idOrName+"%'";
-        ConnectDB connectDB = new ConnectDB();
-        try (ResultSet resultSet = connectDB.getData(query))
+        try (ResultSet resultSet = connectDB.getResultSet(query))
         {
             while(resultSet.next())
             {

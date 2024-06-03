@@ -117,20 +117,8 @@ public class EmployeeController implements Initializable {
         employeeTableView.setItems(employees);
     }
 
-    @FXML
-    private void handleSearchAction() {
-        String searchText = normalizeString(tfEmployee.getText().trim().toLowerCase());
-        if (!searchText.isEmpty()) {
-            ObservableList<User> filteredEmployees = FXCollections.observableArrayList(
-                    employees.stream()
-                            .filter(emp -> normalizeString(String.valueOf(emp.getEmployeeId()).toLowerCase()).startsWith(searchText)
-                                    || normalizeString(emp.getEmployeeName().toLowerCase()).contains(searchText))
-                            .collect(Collectors.toList())
-            );
-            employeeTableView.setItems(filteredEmployees);
-        } else {
-            employeeTableView.setItems(employees);
-        }
+    private void handleSearchAction(String search) {
+        employeeTableView.setItems(userDAO.seatchUser(search));
     }
 
     private void handleDeleteAction() {
@@ -149,7 +137,7 @@ public class EmployeeController implements Initializable {
     @FXML
     private void handleSearchKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            handleSearchAction();
+            handleSearchAction(tfEmployee.getText());
         }
     }
 

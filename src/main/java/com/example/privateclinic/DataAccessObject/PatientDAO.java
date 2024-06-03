@@ -14,12 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientDAO {
-    ConnectDB connectDB = new ConnectDB();
+    ConnectDB connectDB = ConnectDB.getInstance();
 
     public PatientDAO() {
 
     }
-
     public void addPatient(Patient patient) {
         LocalDate now = LocalDate.now();
 
@@ -159,7 +158,6 @@ public class PatientDAO {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
         String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, bn.ngayvao FROM benhnhan bn WHERE ngayvao = ? " +
                 "AND bn.mabn NOT IN (SELECT mabn FROM khambenh)";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -185,7 +183,6 @@ public class PatientDAO {
         String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, bn.ngayvao " +
                 "FROM benhnhan bn,khambenh kb " +
                 "WHERE bn.ngayvao = ? AND bn.mabn = kb.mabn";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {

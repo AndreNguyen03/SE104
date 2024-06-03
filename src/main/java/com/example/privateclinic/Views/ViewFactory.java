@@ -45,7 +45,7 @@ public class ViewFactory {
         }
         else
         {
-            stageProfile.setAlwaysOnTop(true);
+            stageProfile.toFront();
         }
 
     }
@@ -57,7 +57,7 @@ public class ViewFactory {
         }
         else
         {
-            stageReception.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
+            stageReception.toFront(); // nếu đã mở scene thì bring to front
         }
     }
     public void showExaminationWindow(User user)
@@ -71,7 +71,7 @@ public class ViewFactory {
         }
         else
         {
-            stageExamination.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
+            stageExamination.toFront(); // nếu đã mở scene thì bring to front
         }
     }
     public void showSettingWindow()
@@ -83,7 +83,7 @@ public class ViewFactory {
         }
         else
         {
-            stageSetting.setAlwaysOnTop(true);
+            stageSetting.toFront();
         }
     }
     public void showHistoryExamination(Patient patient, ExaminationController _examinationController)
@@ -97,7 +97,7 @@ public class ViewFactory {
         }
         else
         {
-            stageExaminationHistory.setAlwaysOnTop(true); // nếu đã mở scene thì bring to front
+            stageExaminationHistory.toFront(); // nếu đã mở scene thì bring to front
         }
     }
 
