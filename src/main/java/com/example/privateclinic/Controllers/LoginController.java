@@ -123,7 +123,10 @@ public class LoginController implements Initializable {
             String username_result = null;
             username_result = userDAO.getUsername(tf_username_forgot.getText());
             if (username_result == null) {
-                showAlert("Warning","Invalid username: " + tf_username_forgot.getText());
+                Platform.runLater(() -> {
+                    paneProgress.setVisible(false);
+                    showAlert("Warning","Invalid username: " + tf_username_forgot.getText());
+                });
                 return;
             }
             storedOTP = generateOTP();
