@@ -192,14 +192,8 @@ public  class ExaminationController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldValue, Toggle newValue) {
                 RadioButton rad_selected = (RadioButton)newValue;
-                if(rad_selected.getId().equals("rad_patientWaiting"))
-                {
-                    showDataPatients_waiting();// tải danh sách benh nhan cho
-                }
-                else
-                {
-                    showDataDonePatients();// tải danh sách benh nhan da kham
-                }
+                if(rad_selected.getId().equals("rad_patientWaiting")) showDataPatients_waiting();// tải danh sách benh nhan cho
+                else showDataDonePatients();// tải danh sách benh nhan da kham
                 patientChosenBefore=null;
             }
         });
