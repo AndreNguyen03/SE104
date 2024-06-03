@@ -1,7 +1,6 @@
 package com.example.privateclinic.Controllers;
 
-import com.example.privateclinic.DataAccessObject.MedicineDAO;
-import com.example.privateclinic.DataAccessObject.WarehouseDAO;
+import com.example.privateclinic.DataAccessObject.*;
 import com.example.privateclinic.Models.Medicine;
 import com.example.privateclinic.Models.Warehouse;
 import com.jfoenix.controls.JFXButton;
@@ -80,7 +79,9 @@ public class Category_AspirineController implements Initializable {
     private TableColumn<Medicine, Double> priceColumn;
 
     private MedicineDAO medicineDAO = new MedicineDAO();
-
+    private UnitDAO unitDAO = new UnitDAO();
+    private MedicineTypeDAO medicinetypeDAO = new MedicineTypeDAO();
+    private UseWayDAO usewayDAO = new UseWayDAO();
     private WarehouseDAO warehouseDAO = new WarehouseDAO();
 
 
@@ -98,14 +99,6 @@ public class Category_AspirineController implements Initializable {
         medicineDAO = new MedicineDAO();
         warehouseDAO = new WarehouseDAO();
 
-        idColumn.setStyle("-fx-text-fill: white;");
-        nameColumn.setStyle("-fx-text-fill: white;");
-        unitColumn.setStyle("-fx-text-fill: white;");
-        quantityColumn.setStyle("-fx-text-fill: white;");
-        priceColumn.setStyle("-fx-text-fill: white;");
-        formColumn.setStyle("-fx-text-fill: white;");
-        useColumn.setStyle("-fx-text-fill: white;");
-
         // Set up columns
         idColumn.setCellValueFactory(new PropertyValueFactory<>("maThuoc"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenThuoc"));
@@ -115,12 +108,12 @@ public class Category_AspirineController implements Initializable {
         formColumn.setCellValueFactory(new PropertyValueFactory<>("tenDangThuoc"));
         useColumn.setCellValueFactory(new PropertyValueFactory<>("tenCachDung"));
 
+        medicineTableView.setStyle("-fx-selection-bar: #5A8F15;");
         // Load data into table
         loadMedicineData();
-
         setDatePickerToday();
-
         MedicineSelection();
+        configureRowFactory();
 
         addButton.setOnAction(this::handleAddMedicine);
         editButton.setOnAction(this::handleEditMedicine);
@@ -156,11 +149,8 @@ public class Category_AspirineController implements Initializable {
             alert.showAndWait();
         } else {
             String medicineUnit = unitComboBox.getValue();
-            int medicineUnitValue;
             String medicineForm = formComboBox.getValue();
-            int medicineFormValue;
             String medicineUse = useComboBox.getValue();
-            int medicineUseValue;
 
             if (medicineUnit == null || medicineUnit.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -195,53 +185,11 @@ public class Category_AspirineController implements Initializable {
 
             Optional<ButtonType> result = alert.showAndWait();
 
-            switch (medicineUnit) {
-                case "Viên":
-                    medicineUnitValue = 1;
-                    break;
-                case "Chai":
-                    medicineUnitValue = 2;
-                    break;
-                default:
-                    medicineUnitValue = -1;
-                    break;
-            }
-
-            switch (medicineForm) {
-                case "Viên":
-                    medicineFormValue = 1;
-                    break;
-                case "Lỏng":
-                    medicineFormValue = 2;
-                    break;
-                case "Gel":
-                    medicineFormValue = 3;
-                    break;
-                default:
-                    medicineFormValue = -1;
-                    break;
-            }
-
-            switch (medicineUse) {
-                case "Uống":
-                    medicineUseValue = 1;
-                    break;
-                case "Bôi ngoài":
-                    medicineUseValue = 2;
-                    break;
-                case "Xông":
-                    medicineUseValue = 3;
-                    break;
-                case "Nhai":
-                    medicineUseValue = 4;
-                    break;
-                default:
-                    medicineUseValue = -1;
-                    break;
-            }
-
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                medicineDAO.addMedicine(new Medicine(medicineDAO.getNextMedicineId(), medicineName, medicineUnitValue, 0, 0, medicineFormValue, medicineUseValue));
+                int unitID = unitDAO.getUnitIDByName(medicineUnit);
+                int formID = medicinetypeDAO.getMedicineTypeIDByName(medicineForm);
+                int useID = usewayDAO.getUseWayIDByName(medicineUse);
+                medicineDAO.addMedicine(new Medicine(medicineDAO.getNextMedicineId(), medicineName, unitID, 0, 0, formID, useID));
                 medicineData.clear();
                 clearMedicineFields();
                 loadMedicineData();
@@ -260,11 +208,8 @@ public class Category_AspirineController implements Initializable {
             Medicine selectedMedicine = medicineTableView.getSelectionModel().getSelectedItem();
             String medicineName = medicineNameTextField_1.getText();
             String medicineUnit = unitComboBox.getValue();
-            int medicineUnitValue;
             String medicineForm = formComboBox.getValue();
-            int medicineFormValue;
             String medicineUse = useComboBox.getValue();
-            int medicineUseValue;
 
             if (medicineName.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -290,60 +235,18 @@ public class Category_AspirineController implements Initializable {
 
                 if (result.isPresent() && result.get() == ButtonType.OK) {
 
-                    switch (medicineUnit) {
-                        case "Viên":
-                            medicineUnitValue = 1;
-                            break;
-                        case "Chai":
-                            medicineUnitValue = 2;
-                            break;
-                        default:
-                            medicineUnitValue = -1;
-                            break;
-                    }
-
-                    switch (medicineForm) {
-                        case "Viên":
-                            medicineFormValue = 1;
-                            break;
-                        case "Lỏng":
-                            medicineFormValue = 2;
-                            break;
-                        case "Gel":
-                            medicineFormValue = 3;
-                            break;
-                        default:
-                            medicineFormValue = -1;
-                            break;
-                    }
-
-                    switch (medicineUse) {
-                        case "Uống":
-                            medicineUseValue = 1;
-                            break;
-                        case "Bôi ngoài":
-                            medicineUseValue = 2;
-                            break;
-                        case "Xông":
-                            medicineUseValue = 3;
-                            break;
-                        case "Nhai":
-                            medicineUseValue = 4;
-                            break;
-                        default:
-                            medicineUseValue = -1;
-                            break;
-                    }
+                    int unitID = unitDAO.getUnitIDByName(medicineUnit);
+                    int formID = medicinetypeDAO.getMedicineTypeIDByName(medicineForm);
+                    int useID = usewayDAO.getUseWayIDByName(medicineUse);
 
                     // Cập nhật thông tin của thuốc được chọn
                     selectedMedicine.setTenThuoc(medicineName);
-                    selectedMedicine.setMaDonViTinh(medicineUnitValue);
-                    selectedMedicine.setMaDangThuoc(medicineFormValue);
-                    selectedMedicine.setMaCachDung(medicineUseValue);
+                    selectedMedicine.setMaDonViTinh(unitID);
+                    selectedMedicine.setMaDangThuoc(formID);
+                    selectedMedicine.setMaCachDung(useID);
 
                     // Cập nhật thuốc trong cơ sở dữ liệu
                     medicineDAO.updateMedicine(selectedMedicine);
-                    // Xóa dữ liệu hiện tại trong bảng và tải lại dữ liệu mới
                     medicineData.clear();
                     clearMedicineFields();
                     loadMedicineData();
@@ -473,17 +376,14 @@ public class Category_AspirineController implements Initializable {
             if (medicineDAO.isMedicineNameExists(medicineName, 0)) {
                 // Lấy mã thuốc từ tên thuốc
                 int medicineID = medicineDAO.getMedicineIDByName(medicineName);
-
                 Medicine medicine = medicineDAO.getMedicineByName(medicineName);
                 int currentQuantity = medicine.getSoLuong();
-                double currentPrice = medicine.getGiaBan();
-
                 int newQuantity = currentQuantity + importQuantity;
-                double newPrice = (importPrice + currentPrice) / newQuantity;
+
                 // Thêm hàng nhập vào cơ sở dữ liệu bằng cách gọi phương thức từ warehouseDAO
                 warehouseDAO.addWarehouse(new Warehouse(warehouseDAO.getNextWarehouseId(), medicineID, 9, importTimes, importQuantity, selectedDate, importPrice));
                 medicine.setSoLuong(newQuantity);
-                medicine.setGiaBan(newPrice);
+                medicine.setGiaBan(importPrice);
                 medicineDAO.updateMedicine(medicine);
                 medicineData.clear();
                 loadMedicineData();
@@ -541,5 +441,30 @@ public class Category_AspirineController implements Initializable {
         importTimesTextField.clear();
         importQuantityTextField.clear();
         importPriceTextField.clear();
+    }
+
+    private void configureRowFactory() {
+        medicineTableView.setRowFactory(tv -> {
+            TableRow<Medicine> row = new TableRow<Medicine>() {
+                @Override
+                protected void updateItem(Medicine medicine, boolean empty) {
+                    super.updateItem(medicine, empty);
+                    if (medicine == null || empty) {
+                        setStyle("");
+                    } else {
+                        int quantity = medicine.getSoLuong();
+                        if (quantity < 50 && quantity > 0) {
+                            setStyle("-fx-background-color: yellow;");
+                        } else if (quantity == 0) {
+                            setStyle("-fx-background-color: red;");
+                        } else {
+                            setStyle("");
+                        }
+                    }
+                }
+            };
+
+            return row;
+        });
     }
 }

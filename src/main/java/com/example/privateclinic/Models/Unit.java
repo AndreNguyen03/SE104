@@ -6,23 +6,23 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 
 public class Unit { // Đơn vị tính
-    private String MaDVT;
-    private String TenDVT;
+    private int madvt;
+    private String tendvt;
 
-    public String getMaDVT() {
-        return MaDVT;
+    public int getMaDVT() {
+        return madvt;
     }
 
-    public void setMaDVT(String maDVT) {
-        MaDVT = maDVT;
+    public void setMaDVT(int madvt) {
+        this.madvt = madvt;
     }
 
     public String getTenDVT() {
-        return TenDVT;
+        return tendvt;
     }
 
-    public void setTenDVT(String tenDVT) {
-        TenDVT = tenDVT;
+    public void setTenDVT(String tendvt) {
+        this.tendvt = tendvt;
     }
 
     public Unit() {
