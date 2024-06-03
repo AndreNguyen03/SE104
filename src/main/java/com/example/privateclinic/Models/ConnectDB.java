@@ -6,15 +6,28 @@ import java.net.InetAddress;
 import java.sql.*;
 
 public class ConnectDB {
+    private static ConnectDB instance;
     public Connection databaseLink;
-    private String sqlQuery;
-
     public ConnectDB()
     {
         databaseLink = getConnection();
     }
+
+
+    public static ConnectDB getInstance() {
+        if (instance == null) {
+            synchronized (ConnectDB.class) {
+                if (instance == null) {
+                    instance = new ConnectDB();
+                }
+            }
+        }
+        return instance;
+    }
+    private String sqlQuery;
+
     public Connection getConnection(){
-        String databaseName ="ClinicNeon";
+        String databaseName ="ClinicDB";
         String databaseUser ="postgres";
         String databasePassword="phuan03042004";
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;
@@ -83,6 +96,28 @@ public class ConnectDB {
         } finally {
             preparedStatement.close();
         }
+    }
+
+    public PreparedStatement getPreparedStatement(String sqlQuery) throws SQLException {
+        // Check if the connection is null or closed
+        if (databaseLink == null || databaseLink.isClosed()) {
+            // Handle the case when connection is not available or closed
+            // Maybe throw an exception or handle it according to your application logic
+            throw new SQLException("Connection is not available or closed.");
+        }
+
+        PreparedStatement preparedStatement = null;
+        try {
+            // Create the PreparedStatement object using the connection and SQL query
+            preparedStatement = databaseLink.prepareStatement(sqlQuery);
+        } catch (SQLException e) {
+            // Handle SQL exception
+            // Maybe log the error or throw it further
+            e.printStackTrace();
+            throw e; // Rethrow the exception to be handled by the caller
+        }
+
+        return preparedStatement;
     }
 
 }

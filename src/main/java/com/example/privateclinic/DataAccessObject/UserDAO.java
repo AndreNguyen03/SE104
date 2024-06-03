@@ -2,6 +2,8 @@ package com.example.privateclinic.DataAccessObject;
 
 import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +22,8 @@ public class UserDAO {
     public void setEmployee(User _user) {
         this.user = _user;
     }
+    ConnectDB connectDB = ConnectDB.getInstance();
+
 
     public String GetHash(String plainText) {
         try {
@@ -47,7 +51,6 @@ public class UserDAO {
         }
     }
     public int CheckValidate(String username, String password) {
-        ConnectDB connectDB = new ConnectDB();
         password = GetHash(password);
         String query = "SELECT * FROM nhanvien WHERE username = '"+username+"' AND (defaultpassword = '"+password+"' OR password ='"+password+"')";
         try
@@ -146,9 +149,8 @@ public class UserDAO {
     public String getUsername(String _username)
     {
         String username =null;
-        ConnectDB connect = new ConnectDB();
         String query = "SELECT username FROM nhanvien WHERE username = '" + _username +"'";
-        ResultSet resultSet = connect.getData(query);
+        ResultSet resultSet = connectDB.getData(query);
         try
         {
             if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
@@ -163,6 +165,24 @@ public class UserDAO {
         }
         return null;
     }
+    public boolean checkID(int id)
+    {
+        String query = "SELECT * FROM nhanvien WHERE cccd = '" + id +"'";
+        ResultSet resultSet = connectDB.getData(query);
+        try
+        {
+            if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
+            {
+                return true;
+            }
+        }
+        catch (SQLException e )
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /*public Boolean AddEmployee(String name, String citizen_id, String address, String phone, String email, String position) throws SQLException
     {
         ConnectDB connectDB = new ConnectDB();
@@ -206,4 +226,84 @@ public class UserDAO {
         }
         return false;
     }*/
+    public boolean addEmployee(User employee) {
+        String query = "INSERT INTO nhanvien (hoten, sdt, cccd, username, password, vitri, defaultpassword, diachi, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String defaultPassword = GeneratePassword(true,true,true,true,8);
+        try (PreparedStatement statement = connectDB.getPreparedStatement(query)) {
+            statement.setString(1, employee.getEmployeeUsername());
+            statement.setString(2, employee.getEmployeePhoneNumber());
+            statement.setString(3, employee.getEmployeeCitizenId());
+            statement.setString(4, employee.getEmployeeUsername());
+            statement.setString(5, "");
+            statement.setString(6, employee.getEmployeePosition());
+            statement.setString(7, defaultPassword);
+            statement.setString(8, employee.getEmployeeAddress());
+            statement.setString(9, employee.getEmployeeEmail());
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = statement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        employee.setEmployeeId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateEmployee(User employee) {
+        String query = "UPDATE nhanvien SET hoten = ?, sdt = ?, cccd = ?, diachi = ?, vitri = ?, email = ? WHERE manv = ?";
+        try (PreparedStatement statement = connectDB.getPreparedStatement(query)) {
+            statement.setString(1, employee.getEmployeeName());
+            statement.setString(2, employee.getEmployeePhoneNumber());
+            statement.setString(3, employee.getEmployeeCitizenId());
+            statement.setString(4, employee.getEmployeeAddress());
+            statement.setString(5, employee.getEmployeePosition());
+            statement.setString(6, employee.getEmployeeEmail());
+            statement.setInt(7, employee.getEmployeeId());
+            int aff =  statement.executeUpdate();
+            if (aff > 0) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteEmployee(int employeeId) {
+        String query = "DELETE FROM nhanvien WHERE manv = ?";
+        try (PreparedStatement statement = connectDB.getPreparedStatement(query)) {
+            statement.setInt(1, employeeId);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected>0) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public ObservableList<User> getAllEmployees() {
+        ObservableList<User> employees = FXCollections.observableArrayList();
+        String query = "SELECT * FROM nhanvien ORDER BY manv ASC";
+        try (PreparedStatement statement = connectDB.getPreparedStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                User employee = new User();
+                employee.setEmployeeId(resultSet.getInt("manv"));
+                employee.setEmployeeName(resultSet.getString("hoten"));
+                employee.setEmployeeCitizenId(resultSet.getString("cccd"));
+                employee.setEmployeePhoneNumber(resultSet.getString("sdt"));
+                employee.setEmployeeAddress(resultSet.getString("diachi"));
+                employee.setEmployeePosition(resultSet.getString("vitri"));
+                employee.setEmployeeUsername(resultSet.getString("username"));
+                employee.setEmployeeEmail(resultSet.getString("email"));
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
 }
