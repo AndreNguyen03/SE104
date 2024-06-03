@@ -7,10 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class HistoryDAO {
+    ConnectDB connectDB = ConnectDB.getInstance();
     public void addHistory(History history)
     {
         String query = "INSERT INTO lichsu (manv,ngay,noidung) VALUES (?,?,?)";
-        ConnectDB connectDB = new ConnectDB();
         try(PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
         {
             statement.setInt(1,history.getManv());

@@ -433,7 +433,7 @@
 {
     -fx-alignment: center;
     -fx-font-size: 12.5px;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Segoe UI Semibold";
     -fx-font-weight: bold;
 
 }
@@ -447,7 +447,7 @@
 .table-view  .table-row-cell:focused
 {
     -fx-font-size: 13px;
-    -fx-font-family: "Segoe UI ";
+    -fx-font-family: "Segoe UI Black";
     -fx-font-weight: bold;
     -fx-background-color:linear-gradient(to right, #96dabb, #c0eccf);
     -fx-border-color: #42AB9C;

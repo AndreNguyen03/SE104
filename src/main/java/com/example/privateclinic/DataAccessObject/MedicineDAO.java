@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MedicineDAO {
-    ConnectDB connectDB = new ConnectDB();
+    ConnectDB connectDB = ConnectDB.getInstance();
 
     public ObservableList<Medicine> searchMedicineByIDorName(String idOrName) {
         ObservableList<Medicine> medicines = FXCollections.observableArrayList();
@@ -47,9 +47,7 @@ public class MedicineDAO {
 
     public ResultSet getMedicine(String maThuoc) {
         String query = "SELECT * FROM THUOC WHERE mathuoc = "+maThuoc+"";
-        ConnectDB connectDB = new ConnectDB();
         return connectDB.getData(query);
-
     }
 
     public void addMedicine(Medicine medicine) {
@@ -89,7 +87,8 @@ public class MedicineDAO {
                 medicine.setTenThuoc(resultSet.getString("tenthuoc"));
                 medicine.setTenDonViTinh(resultSet.getString("tendvt"));
                 medicine.setSoLuong(resultSet.getInt("soluong"));
-                medicine.setGiaBan(resultSet.getDouble("giaban"));
+                double roundedPrice = Math.round(resultSet.getDouble("giaban") * 100.0) / 100.0;
+                medicine.setGiaBan(roundedPrice);
                 medicine.setTenDangThuoc(resultSet.getString("tendt"));
                 medicine.setTenCachDung(resultSet.getString("tencd"));
 
@@ -176,6 +175,70 @@ public class MedicineDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isMedicineNameExists(String medicineName, int currentMedicineId) {
+        String query = "SELECT COUNT(*) AS count FROM thuoc WHERE tenthuoc = ? AND mathuoc != ?";
+        int count = 0;
+
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1, medicineName);
+            statement.setInt(2, currentMedicineId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count > 0;
+    }
+
+    public int getMedicineIDByName(String medicineName) {
+        int medicineID = -1; // Giả sử không tìm thấy
+
+        // Kiểm tra nếu tên thuốc tồn tại trong cơ sở dữ liệu
+        if (isMedicineNameExists(medicineName,0)) {
+            // Truy vấn cơ sở dữ liệu để lấy mã thuốc
+            String query = "SELECT mathuoc FROM thuoc WHERE tenthuoc = ?";
+            try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+                statement.setString(1, medicineName);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        medicineID = resultSet.getInt("mathuoc");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return medicineID;
+    }
+
+    public Medicine getMedicineByName(String medicineName) {
+        String query = "SELECT * FROM thuoc WHERE tenthuoc = ?";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1, medicineName);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Medicine medicine = new Medicine();
+                    medicine.setMaThuoc(resultSet.getInt("mathuoc"));
+                    medicine.setTenThuoc(resultSet.getString("tenthuoc"));
+                    medicine.setMaDonViTinh(resultSet.getInt("madvt"));
+                    medicine.setSoLuong(resultSet.getInt("soluong"));
+                    medicine.setGiaBan(resultSet.getDouble("giaban"));
+                    medicine.setMaDangThuoc(resultSet.getInt("madt"));
+                    medicine.setMaCachDung(resultSet.getInt("macd"));
+                    return medicine;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PrescribeDAO {
+    ConnectDB connectDB = ConnectDB.getInstance();
     public PrescribeDAO() {
     }
 
@@ -18,7 +19,6 @@ public class PrescribeDAO {
     {
         String query = "INSERT INTO kethuoc (makhambenh,sothutu,mathuoc,ngay,sang,trua,chieu,toi,soluong,thanhtien)" +
                 " VALUES(?,?,?,?,?,?,?,?,?,?)";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, examinationID);
             statement.setInt(2, prescribe.getSothuTu());

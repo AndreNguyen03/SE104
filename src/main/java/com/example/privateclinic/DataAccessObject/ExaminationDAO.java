@@ -10,7 +10,8 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class ExaminationDAO {
-    ConnectDB connectDB = new ConnectDB();
+    ConnectDB connectDB = ConnectDB.getInstance();
+
     public int addExamination(Examination examination)
     {
         String query = "INSERT INTO khambenh (manv, mabn, ngay, benhchinh, benhphu, trieuchung, luuy) " +

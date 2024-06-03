@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 public class UseWayDAO {
     public UseWayDAO() {
     }
+    ConnectDB connectDB = ConnectDB.getInstance();
 
     public ResultSet LoadListUseWays() {
-        ConnectDB connectDB = new ConnectDB();
         String query ="SELECT macd,tencd FROM cachdung";
         return connectDB.getData(query);
     }
