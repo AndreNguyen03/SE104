@@ -21,6 +21,7 @@ public class User {
     private String PhoneNumber;
     private String Address;
     private String Position;
+
     public String getEmail() {
         return Email;
     }
@@ -93,6 +94,122 @@ public class User {
         Position = position;
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + Employee_id + '\'' +
+                ", employeeName='" + EmployName + '\'' +
+                ", employeeCitizenId='" + Citizen_id + '\'' +
+                ", employeeAddress='" + Address + '\'' +
+                ", employeePhoneNumber=" + PhoneNumber +
+                ", employeeEmail='" + Email + '\'' +
+                ", employeePosition=" + Position + '\'' +
+                ", employeeUsername=" + Username +
+                '}';
+    }
+
+    public User(int employeeId, String employeeName, String employeeCitizenId, String employeeAddress, String employeePhoneNumber, String employeeEmail, String employeePosition, String employeeUsername) {
+        this.Employee_id = employeeId;
+        this.EmployName = employeeName;
+        this.Citizen_id = employeeCitizenId;
+        this.Address = employeeAddress;
+        this.PhoneNumber = employeePhoneNumber;
+        this.Email = employeeEmail;
+        this.Position = employeePosition;
+        this.Username = employeeUsername;
+    }
+
+    public User(String employeeName, String employeeCitizenId, String employeeAddress, String employeePhoneNumber, String employeeEmail, String employeePosition, String employeeUsername) {
+        this.EmployName = employeeName;
+        this.Citizen_id = employeeCitizenId;
+        this.Address = employeeAddress;
+        this.PhoneNumber = employeePhoneNumber;
+        this.Email = employeeEmail;
+        this.Position = employeePosition;
+        this.Username = employeeUsername;
+    }
+
+    public int getEmployeeId() {
+        return Employee_id;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.Employee_id = employeeId;
+    }
+
+    public String getEmployeeName() {
+        return EmployName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.EmployName = employeeName;
+    }
+
+    public String getEmployeeCitizenId() {
+        return Citizen_id;
+    }
+
+    public void setEmployeeCitizenId(String employeeCitizenId) {
+        this.Citizen_id = employeeCitizenId;
+    }
+
+    public String getEmployeeAddress() {
+        return Address;
+    }
+
+    public void setEmployeeAddress(String employeeAddress) {
+        this.Address = employeeAddress;
+    }
+
+    public String getEmployeePhoneNumber() {
+        return PhoneNumber;
+    }
+
+    public void setEmployeePhoneNumber(String employeePhoneNumber) {
+        this.PhoneNumber = employeePhoneNumber;
+    }
+
+    public String getEmployeeEmail() {
+        return Email;
+    }
+
+    public void setEmployeeEmail(String employeeEmail) {
+        this.Email = employeeEmail;
+    }
+
+    public String getEmployeePosition() {
+        return Position;
+    }
+
+    public void setEmployeePosition(String employeePosition) {
+        this.Position = employeePosition;
+    }
+
+    public String getEmployeeUsername() {
+        return Username;
+    }
+
+    public void setEmployeeUsername(String employeeUsername) {
+        this.Username = employeeUsername;
+    }
+
+    public String getEmployeePassword() {
+        return Password;
+    }
+
+    public void setEmployeePassword(String employeePassword) {
+        this.Password = employeePassword;
+    }
+
+    public String getDefaultpassword() {
+        return Password;
+    }
+
+    public void setDefaultpassword(String defaultpassword) {
+        this.Password = defaultpassword;
+    }
+}
+
 
 
     /*public String UserID(String username,String password) throws SQLException
@@ -157,4 +274,3 @@ public class User {
         return connect.getData(query);
     }*/
 
-}

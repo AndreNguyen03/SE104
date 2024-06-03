@@ -16,7 +16,6 @@
                 <TableColumn fx:id="priceColumn" prefWidth="197.0" text="Đơn giá" />
                 <TableColumn fx:id="formColumn" prefWidth="145.0" text="Dạng thuốc" />
                 <TableColumn fx:id="useColumn" prefWidth="154.0" text="Cách dùng" />
-
             </columns>
         </TableView>
         <TitledPane animated="false" collapsible="false" layoutX="121.0" layoutY="4.0" prefHeight="241.0" prefWidth="497.0" text="Thêm danh mục thuốc">

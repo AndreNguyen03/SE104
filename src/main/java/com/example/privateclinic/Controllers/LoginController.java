@@ -201,7 +201,7 @@ public class LoginController implements Initializable {
     void btnContinue_clicked(MouseEvent event) {
 
         if (CheckForFill()) {
-            if (!textFieldOTP.getText().toString().equals(sentEmail)) {
+            if (!textFieldOTP.getText().equals(sentEmail)) {
                 showAlert("Warning","OTP is wrong!");
                 return;
             }

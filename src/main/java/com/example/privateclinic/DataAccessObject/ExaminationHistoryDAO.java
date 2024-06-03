@@ -10,27 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ExaminationHistoryDAO {
-    /*public ObservableList<ExaminationHistory> getExaminationCustomerHistory(int id, Date date)
-    {
-        ObservableList<ExaminationHistory> ListExaminations = FXCollections.observableArrayList();
-        String query = "SELECT * FROM khambenh kb, kethuoc kt WHERE kb.ngay = ? AND kb.mabn = ? AND kt.makhambenh = kb.makb ";
-        ConnectDB connectDB = new ConnectDB();
-        try (PreparedStatement statement = connectDB.getConnection().prepareStatement(query))
-        {
-            *//*statement.setDate(1,);*//*
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return ListExaminations;
-    }*/
+    ConnectDB connectDB = ConnectDB.getInstance();
+
     public  ObservableList<ExaminationHistory> getPatientsByDate(int id, int year)
     {
         ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
         String query = "SELECT kb.*,bn.*, b1.tenbenh as tenBenhChinh, b2.tenbenh as tenBenhPhu " +
                 "FROM khambenh kb, kethuoc kt,benh b1,benh b2, benhnhan bn WHERE EXTRACT(YEAR FROM kb.ngay) <= ? and bn.mabn= ?  AND bn.mabn = kb.mabn AND kt.makhambenh = kb.makb AND b1.mabenh=kb.benhchinh AND b2.mabenh=kb.benhphu";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, year);
             statement.setInt(2, id);
@@ -72,7 +58,6 @@ public class ExaminationHistoryDAO {
         ObservableList<Prescribe> prescribes = FXCollections.observableArrayList();
         String query ="SELECT kt.*, t.*, cd.tencd,dvt.tendvt,dt.tendt FROM kethuoc kt,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t WHERE makhambenh = ? AND kt.mathuoc = t.mathuoc"+
                 " AND t.macd = cd.macd AND t.madt = dt.madt AND t.madvt = dvt.madvt";
-        ConnectDB connectDB = new ConnectDB();
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1,exam_id);
             try(ResultSet resultSet = statement.executeQuery()) {

@@ -6,12 +6,23 @@ import java.net.InetAddress;
 import java.sql.*;
 
 public class ConnectDB {
+    private static ConnectDB instance;
     public Connection databaseLink;
-    private String sqlQuery;
-
     public ConnectDB()
     {
         databaseLink = getConnection();
+    }
+
+
+    public static ConnectDB getInstance() {
+        if (instance == null) {
+            synchronized (ConnectDB.class) {
+                if (instance == null) {
+                    instance = new ConnectDB();
+                }
+            }
+        }
+        return instance;
     }
     public Connection getConnection(){
      /*   String databaseName ="ClinicNeon";
@@ -20,18 +31,18 @@ public class ConnectDB {
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;*/
         String urlNeon_DB= "jdbc:postgresql://ep-jolly-block-a52e1a3c.us-east-2.aws.neon.tech/ClinicDB2705?user=PharmacyDB_owner&password=xKkZe1NrSpq7&sslmode=require";
         try{
-            /*if(isInternetAvailable())
-            {*/
+            if(isInternetAvailable())
+            {
                 //Class.forName("com.mysql.cj.jdbc.Driver");
                 Class.forName("org.postgresql.Driver");
                 //databaseLink= DriverManager.getConnection(urlPostgres,databaseUser,databasePassword);
                 databaseLink= DriverManager.getConnection(urlNeon_DB);
                 if(databaseLink!=null) System.out.println("Connection Established");
                 else System.out.println("Connection Failed");
-           /* }
+            }
             else {
                 JOptionPane.showMessageDialog(null,"Không có kết nối internet");
-            }*/
+            }
         }
         catch (Exception e ){
             e.printStackTrace();
@@ -40,25 +51,23 @@ public class ConnectDB {
        return databaseLink;
     }
 
-    private boolean isInternetAvailable() {
+    private static boolean isInternetAvailable() {
+        boolean reachable = false;
         try {
-            InetAddress.getByName("www.google.com").isReachable(200); // Kiểm tra kết nối tới Google trong 3 giây
-            return true;
+            reachable = InetAddress.getByName("www.google.com").isReachable(500);// Kiểm tra kết nối tới Google trong 3 giây
         } catch (IOException e) {
-            return false;
+            e.printStackTrace();
         }
+        return reachable;
     }
 
-    public ResultSet getData(String sqlQuery)  {
-        this.sqlQuery = sqlQuery;
-        try
-        {
+    public ResultSet getData(String sqlQuery) {
+        try {
             PreparedStatement preparedStatement = databaseLink.prepareStatement(sqlQuery);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             return resultSet;
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -83,6 +92,32 @@ public class ConnectDB {
         } finally {
             preparedStatement.close();
         }
+    }
+
+    public ResultSet getResultSet(String sql) throws SQLException {
+        Statement statement = databaseLink.createStatement();
+        return statement.executeQuery(sql);
+    }
+
+
+    public PreparedStatement getPreparedStatement(String sqlQuery) throws SQLException {
+        // Check if the connection is null or closed
+        if (databaseLink == null || databaseLink.isClosed()) {
+            // Handle the case when connection is not available or closed
+            // Maybe throw an exception or handle it according to your application logic
+            throw new SQLException("Connection is not available or closed.");
+        }
+
+        PreparedStatement preparedStatement = null;
+        try {
+            // Create the PreparedStatement object using the connection and SQL query
+            preparedStatement = databaseLink.prepareStatement(sqlQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return preparedStatement;
     }
 
 }

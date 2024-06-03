@@ -18,13 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MedicineDAO {
-    ConnectDB connectDB = new ConnectDB();
+    ConnectDB connectDB = ConnectDB.getInstance();
 
     public ObservableList<Medicine> searchMedicineByIDorName(String idOrName) {
         ObservableList<Medicine> medicines = FXCollections.observableArrayList();
         String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +
                 "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.mathuoc::text ILIKE '%" + idOrName + "%' or t.tenthuoc ILIKE '%" + idOrName + "%')";
-        ConnectDB connectDB = new ConnectDB();
         try (ResultSet resultSet = connectDB.getData(query)) {
             while (resultSet.next()) {
                 Medicine medicine = new Medicine();
@@ -48,9 +47,7 @@ public class MedicineDAO {
 
     public ResultSet getMedicine(String maThuoc) {
         String query = "SELECT * FROM THUOC WHERE mathuoc = "+maThuoc+"";
-        ConnectDB connectDB = new ConnectDB();
         return connectDB.getData(query);
-
     }
 
     public void addMedicine(Medicine medicine) {
@@ -204,7 +201,7 @@ public class MedicineDAO {
         int medicineID = -1; // Giả sử không tìm thấy
 
         // Kiểm tra nếu tên thuốc tồn tại trong cơ sở dữ liệu
-        if (isMedicineNameExists(medicineName, 0)) {
+        if (isMedicineNameExists(medicineName,0)) {
             // Truy vấn cơ sở dữ liệu để lấy mã thuốc
             String query = "SELECT mathuoc FROM thuoc WHERE tenthuoc = ?";
             try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {

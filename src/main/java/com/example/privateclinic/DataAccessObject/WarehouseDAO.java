@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WarehouseDAO {
-    ConnectDB connectDB = new ConnectDB();
+    ConnectDB connectDB = ConnectDB.getInstance();
 
     public void addWarehouse(Warehouse warehouse) {
         LocalDate now = LocalDate.now();

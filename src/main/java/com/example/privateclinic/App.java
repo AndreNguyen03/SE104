@@ -13,9 +13,10 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        LoginController loginController = new LoginController();
-        loginController.showLogin();
-       /* User user = new User();
-        Model.getInstance().getViewFactory().showExaminationWindow(user);*/
+     /*   LoginController loginController = new LoginController();
+        loginController.showLogin();*/
+        User user = new User();
+        //Model.getInstance().getViewFactory().showExaminationWindow(user);
+        Model.getInstance().getViewFactory().showMenuWindow(user);
     }
 }
