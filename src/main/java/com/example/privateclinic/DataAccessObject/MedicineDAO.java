@@ -1,9 +1,6 @@
 package com.example.privateclinic.DataAccessObject;
 
-import com.example.privateclinic.Models.ConnectDB;
-import com.example.privateclinic.Models.Customer;
-import com.example.privateclinic.Models.Medicine;
-import com.example.privateclinic.Models.Model;
+import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +20,19 @@ public class MedicineDAO {
     public ObservableList<Medicine> searchMedicineByIDorName(String idOrName) {
         ObservableList<Medicine> medicines = FXCollections.observableArrayList();
         String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +
-                "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.mathuoc::text ILIKE '%" + idOrName + "%' or t.tenthuoc ILIKE '%" + idOrName + "%')";
-        try (ResultSet resultSet = connectDB.getData(query)) {
+                "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.tenthuoc ILIKE ? ";
+        boolean isInteger = false;
+        try {
+            int id = Integer.parseInt(idOrName);
+            query += " OR t.mathuoc = ? ";
+            isInteger = true;
+        } catch (NumberFormatException e ){
+        }
+        query += ")";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1,"%" + idOrName + "%");
+            if(isInteger) statement.setInt(2, Integer.parseInt(idOrName));
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Medicine medicine = new Medicine();
                 medicine.setMaThuoc(resultSet.getInt("mathuoc"));
@@ -44,10 +52,31 @@ public class MedicineDAO {
         }
         return medicines;
     }
+    public boolean UpdateMedicineAfterExam(int _maThuoc, int _soluongBan) {
+        int newQuantity = getCurrentQuantityMedicine(_maThuoc) - _soluongBan;
+        String query = "UPDATE thuoc SET soluong = ? WHERE mathuoc = ?";
+        try(PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setInt(1,newQuantity);
+            statement.setInt(2,_maThuoc);
+            return statement.executeUpdate()>0;
+        } catch (SQLException e ){
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-    public ResultSet getMedicine(String maThuoc) {
-        String query = "SELECT * FROM THUOC WHERE mathuoc = "+maThuoc+"";
-        return connectDB.getData(query);
+    public int getCurrentQuantityMedicine(int _mathuoc) {
+        String query = "SELECT soluong FROM thuoc WHERE mathuoc = ?";
+        try(PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
+        {
+            statement.setInt(1,_mathuoc);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) return rs.getInt(1);
+        } catch (SQLException e ){
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
     }
 
     public void addMedicine(Medicine medicine) {

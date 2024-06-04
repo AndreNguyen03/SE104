@@ -1,3 +1,22 @@
+.container {
+    -fx-background-color: #f6ffec;
+}
+.image_logo{
+    -fx-scale-x: 5.5;
+    -fx-scale-y: 5.5;
+}
+.lbl_tiltle{
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 25px;
+}
+.pane-top
+{
+    -fx-background-color: linear-gradient(to bottom, #beee7b, #e2f1c5);
+    -fx-border-color: #c9c9cc;
+    -fx-border-width: 0 0 0.4 0;
+    -fx-background-radius: 15px 15px 0 0;
+    -fx-border-radius: 15px 15px 0 0;
+}
 .anchor-pane Text
 {
     -fx-font-family: "Segoe UI Semibold";
@@ -34,31 +53,55 @@
 }
 
 
-/*table view*/
+/*table-view*/
 .table-view {
     -fx-text-fill: #ffffff;
+    -fx-alignment: center ;
+    -fx-border-color: #578c16;
+    -fx-border-width: 1.5;
 }
-
-.table-view .column-header-background
+.table-view .table-column
 {
-    -fx-pref-height: 30;
+    -fx-text-fill: #000000;
+    -fx-font-size: 14px;
 }
 .table-view .column-header-background .label
 {
     -fx-text-fill: #ffffff;
-    -fx-background-color: #5A8F15;
-
-    -fx-alignment: center ;
     -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
+    -fx-background-color: linear-gradient(to bottom , #42AB9C, #6BD299);
+    -fx-background-radius: 1px;
 }
+.table-view  .table-row-cell
+{
+    -fx-alignment: center;
+    -fx-font-size: 12.5px;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: bold;
 
-.table-view:row-selection {
-    -fx-background-color: white;
 }
-
-.table-cell {
+.table-view  .table-row-cell:hover
+{
+    -fx-font-size: 12.5px;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: bold;
+    -fx-background-color:linear-gradient(to right, #96dabb, #c0eccf);
+}
+.table-view  .table-row-cell:focused
+{
     -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI Black";
+    -fx-font-weight: bold;
+    -fx-background-color:linear-gradient(to right, #96dabb, #c0eccf);
+    -fx-border-color: #42AB9C;
+    -fx-border-width: 1 0 1 0;
+    -fx-text-fill: #ffffff;
+    -fx-focus-color: transparent;
+}
+#tableview-main .column-header-background .label
+{
+    -fx-font-size: 15px;
 }
 
 .lbl
@@ -74,12 +117,15 @@
     -fx-background-color: #ffffff;
     -fx-border-color: #9E9DA3;
     -fx-font-family: "Segoe UI Semibold";
+    -fx-font-style: italic;
+    -fx-font-size: 16px;
 }
 .input-field:hover
 {
     -fx-border-width: 1 1 1 1;
     -fx-border-radius: 5;
     -fx-border-color: #8BC634;
+    -fx-font-style: normal;
 
 }
 .input-field:focused
@@ -87,115 +133,205 @@
     -fx-border-width: 1 1 1 1;
     -fx-border-radius: 5;
     -fx-border-color: #8BC634;
+    -fx-font-style: normal;
     -fx-wrap-text: true;
 }
 
 
-.titled-pane .title
-{
-    -fx-background-color: linear-gradient(to top, #91c054,#C1E293,#ffffff);
-    -fx-font-family: "Segoe UI Semibold";
+/**titlepane*/
+.titled-pane {
+    -fx-border-color: #578c16;
+    -fx-border-width: 0.4;
     -fx-font-size: 16px;
 }
-.titled-pane
+.titled-pane .title
 {
-    -fx-border-color: #416c0d;
+    -fx-background-color: linear-gradient(to top,#C1E293,#ffffff);
+    -fx-font-family: "Segoe UI Semibold";
 }
 .titled-pane .anchor-pane
 {
-        -fx-background-color: #f9fff1;
+    -fx-background-color: #f9fff1;
 }
 
 /*#green*/
-#green
-{
-    -fx-padding: 5 10 10 10 ;
-    -fx-background-insets: 0, 0 0 2 0 , 0 0 3 0, 0 0 4 0;
-    -fx-background-radius: 8;
-    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #a0d355, #93cc3c);
+
+#add {
+    -fx-padding: 5 10 10 10;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-background-radius: 20;
+    -fx-pref-width: 100;
+    -fx-pref-height: 40;
+    -fx-text-fill: #67A10AFF;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #74b60c;
     -fx-font-weight: bold;
-    -fx-font-size: 1.08em;
-    -fx-text-fill: white;
+    -fx-font-size: 18px;
 }
-#green:hover
-{
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #71a424 0%, #629a0d 100%),
-    #8dcb32,
-    #75ab21,
-    radial-gradient(center 50% 50%, radius 100%, #a0d355, #7bbe15);
-    -fx-cursor: hand;
-}
-#green:pressed
-{
-    -fx-padding: 6 10 9 10 ;
-    -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
-    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
-}
-#orange
-{
-    -fx-padding: 5 10 10 10 ;
-    -fx-background-insets: 0, 0 0 2 0 , 0 0 3 0, 0 0 4 0;
-    -fx-background-radius: 8;
-    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #f69a0d, #ff8916);
-    -fx-font-weight: bold;
-    -fx-font-size: 1.08em;
-    -fx-text-fill: white;
-}
-#orange:hover
-{
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #da641a 0%, #e15802 100%),
-    #e07939,
-    #ea5c03,
-    radial-gradient(center 50% 50%, radius 100%, #f8a933, #f69e44);
+#add:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #78b713 0%, #67a10a 100%),
+    #6faf0a,
+    #7cc40c,
+    linear-gradient(to right, #adea4e, #7abe0d);
+    -fx-text-fill: #ffffff;
     -fx-cursor: hand;
 }
 
-#orange:pressed
+#add:pressed
 {
-    -fx-padding: 6 10 9 10 ;
+    --fx-padding: 6 10 9 10 ;
     -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
     -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
 }
-#orange:hover
-{
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #da641a 0%, #e15802 100%),
-    #e07939,
-    #ea5c03,
-    radial-gradient(center 50% 50%, radius 100%, #f8a933, #f69e44);
+#cancel {
+    -fx-padding: 5 10 10 10;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-border-width: 2;
+    -fx-pref-width: 100;
+    -fx-pref-height: 40;
+    -fx-text-fill: #ff9100;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #ff9100;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+#cancel:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #ea8a07 0%, #d27700 100%),
+    #dc820d,
+    #ea8f1d,
+    linear-gradient(to right, #ffc57e, #ea8400);
+    -fx-text-fill: #ffffff;
     -fx-cursor: hand;
 }
 
-#orange:pressed
+#cancel:pressed
 {
     --fx-padding: 6 10 9 10 ;
     -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
     -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
 }
 
-#red
-{
-    -fx-padding: 5 10 10 10 ;
-    -fx-background-insets: 0, 0 0 2 0 , 0 0 3 0, 0 0 4 0;
-    -fx-background-radius: 8;
-    -fx-background-color:
-            radial-gradient(center 50% 50%, radius 100%, #f36a6a, #fc4141);
-    -fx-font-weight: bold;
-    -fx-font-size: 1.08em;
-    -fx-text-fill: white;
+/*create*/
+#create {
+    -fx-padding: 5 10 10 10;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-border-width: 2;
+    -fx-pref-width: 450;
+    -fx-pref-height: 50;
+    -fx-text-fill: #2DD4CD;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #2DD4CD;
+    -fx-font-size: 18px;
 }
-#red:hover
-{
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #e34646 0%, #b02525 100%),
-    #c93131,
-    #d23d3d,
-    radial-gradient(center 50% 50%, radius 100%, #f56f6f, #ff0000);
+#create:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #0fcbc4 0%, #09b6b0 100%),
+    #0bc7c1,
+    #0dd9d2,
+    linear-gradient(to right, #89f6f2, #2DD4CD);
+    -fx-text-fill: #ffffff;
     -fx-cursor: hand;
 }
 
-#red:pressed
+#create:pressed
 {
     --fx-padding: 6 10 9 10 ;
     -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
-    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),1,0,0,1);
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
+}
+#delete {
+    -fx-padding: 5 10 10 10;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-border-width: 2;
+    -fx-pref-width: 100;
+    -fx-pref-height: 40;
+    -fx-text-fill: #ff0000;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #ff0000;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+#delete:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #ab0202 0%, #a10303 100%),
+    #da0909,
+    #f62121,
+    linear-gradient(to right, #ff7979, #ff0000);
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
 }
 
+#delete:pressed
+{
+    --fx-padding: 6 10 9 10 ;
+    -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
+}
+
+#edit {
+    -fx-padding: 5 10 10 10;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-border-width: 2;
+    -fx-pref-width: 100;
+    -fx-pref-height: 40;
+    -fx-text-fill: #3ca7f8;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #3ea9f9;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+#edit:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #4694ce 0%, #298dd7 100%),
+    #0b90f1,
+    #3296e0,
+    linear-gradient(to right, #91d0fd, #3ea9f9);
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}
+
+/*close*/
+.image
+{
+    -fx-opacity: 100;
+}
+.image_hover
+{
+    -fx-opacity: 0;
+}
+.pane_close
+{
+    -fx-background-color: transparent;
+}
+.pane_close:hover
+{
+    -fx-background-color: #FF0000;
+    -fx-border-radius: 0 15px 0 0;
+    -fx-background-radius: 0 15px 0 0;
+}
+
+.pane_close:hover .image_hover
+{
+    -fx-opacity: 100;
+}
+.pane_close:hover .image
+{
+    -fx-opacity: 0;
+}

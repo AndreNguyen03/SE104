@@ -25,7 +25,7 @@ public class ConnectDB {
         return instance;
     }
     public Connection getConnection(){
-     /*   String databaseName ="ClinicNeon";
+        /*String databaseName ="ClinicNeon";
         String databaseUser ="postgres";
         String databasePassword="phuan03042004";
         String urlPostgres="jdbc:postgresql://localhost:5432/"+databaseName;*/
@@ -94,9 +94,15 @@ public class ConnectDB {
         }
     }
 
-    public ResultSet getResultSet(String sql) throws SQLException {
-        Statement statement = databaseLink.createStatement();
-        return statement.executeQuery(sql);
+    public ResultSet getResultSet(String sql) {
+        ResultSet resultSet = null;
+        try {
+            Statement statement = databaseLink.createStatement();
+            resultSet = statement.getResultSet();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
 

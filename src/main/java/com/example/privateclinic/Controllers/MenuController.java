@@ -71,18 +71,12 @@ public class MenuController {
 
     @FXML
     void btnAspirineClicked(ActionEvent event) throws IOException {
-        mainPane.getChildren().clear();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Aspirine.fxml"));
-        Parent reportSceneRoot = loader.load();
-        mainPane.getChildren().add(reportSceneRoot);
+        Model.getInstance().getViewFactory().showCategoryAspirine();
     }
 
     @FXML
     void btnDiseaseClicked(ActionEvent event) throws IOException {
-        mainPane.getChildren().clear();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Disease.fxml"));
-        Parent reportSceneRoot = loader.load();
-        mainPane.getChildren().add(reportSceneRoot);
+        Model.getInstance().getViewFactory().showCategoryDisease();
     }
     @FXML
     void btnExaminationClicked(ActionEvent event) throws IOException {

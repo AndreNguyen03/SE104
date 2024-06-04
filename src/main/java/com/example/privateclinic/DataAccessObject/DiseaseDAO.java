@@ -20,12 +20,23 @@ public class DiseaseDAO {
 
     public DiseaseDAO() {
     }
-    public ObservableList<Disease> searchMedicineByIDorName(String idOrName)
+    public ObservableList<Disease> searchDiseaseByIDorName(String idOrName)
     {
         ObservableList<Disease> diseases = FXCollections.observableArrayList();
-        String query = "SELECT * FROM benh WHERE maBenh::text LIKE '"+idOrName+"%' OR tenBenh ILIKE '%"+idOrName+"%'";
-        try (ResultSet resultSet = connectDB.getResultSet(query))
+        String query = "SELECT * FROM benh WHERE unaccent(tenbenh) ILIKE unaccent(?) ";
+        boolean isInteger = false;
+        try {
+            int id = Integer.parseInt(idOrName);
+            query+="OR mabenh = ?";
+            isInteger = true;
+        } catch (NumberFormatException e )
         {
+        }
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
+        {
+            statement.setString(1,"%"+idOrName + "%");
+            if(isInteger) statement.setInt(2,Integer.parseInt(idOrName));
+            ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {
                 Disease disease = new Disease();

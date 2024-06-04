@@ -11,9 +11,8 @@ public class History {
     public History() {
     }
 
-    public History(int manv,Date ngay, String noiDung) {
+    public History(int manv, String noiDung) {
         this.manv = manv;
-        this.ngay = ngay;
         this.noiDung = noiDung;
     }
 

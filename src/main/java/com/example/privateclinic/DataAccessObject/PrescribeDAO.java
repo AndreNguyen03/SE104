@@ -29,7 +29,7 @@ public class PrescribeDAO {
             statement.setInt(7, prescribe.getChieu());
             statement.setInt(8, prescribe.getToi());
             statement.setInt(9, prescribe.getSoLuong());
-            statement.setDouble(10, prescribe.getSoLuong());
+            statement.setDouble(10, prescribe.getThanhTien());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

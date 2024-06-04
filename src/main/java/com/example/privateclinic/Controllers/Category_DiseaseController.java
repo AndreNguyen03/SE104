@@ -2,18 +2,23 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.DiseaseDAO;
 import com.example.privateclinic.Models.Disease;
+import com.example.privateclinic.Models.Model;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
+import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 
 import java.awt.*;
@@ -94,6 +99,8 @@ public class Category_DiseaseController implements Initializable {
         addExcelFileBtn.setOnAction(this::handleAddExcelFile);
         sampleExcelFileBtn.setOnAction(this::handleDownloadSampleExcelFile);
         saveExcelFileBtn.setOnAction(this::handleSaveExcelFile);
+
+
     }
 
     private void loadDiseaseData() {
@@ -448,6 +455,17 @@ public class Category_DiseaseController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    void close(MouseEvent event) {
+        Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Model.getInstance().getViewFactory().closeStage(s);
+    }
+
+    public void handleOnMouseDrag(MouseDragEvent mouseDragEvent) {
+        Stage stage  = (Stage) addButton.getScene().getWindow();
+        stage.setX(mouseDragEvent.getScreenX() - stage.getX());
+        stage.setY(mouseDragEvent.getScreenY() - stage.getY());
     }
 }
 

@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.*;
 import com.example.privateclinic.Models.Medicine;
+import com.example.privateclinic.Models.Model;
 import com.example.privateclinic.Models.Warehouse;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
@@ -9,9 +10,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.net.URL;
@@ -466,5 +470,10 @@ public class Category_AspirineController implements Initializable {
 
             return row;
         });
+    }
+    @FXML
+    void close(MouseEvent event) {
+        Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Model.getInstance().getViewFactory().closeStage(s);
     }
 }

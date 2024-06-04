@@ -218,7 +218,7 @@ public class LoginController implements Initializable {
     private boolean CheckForFill() {
         if (index == 0) // đang ở màn login
         {
-            if ((tfUsername_Login.getText().isBlank()) && pfPassword_Login.getText().isBlank()) {
+            if ((tfUsername_Login.getText().isBlank()) || pfPassword_Login.getText().isBlank()) {
                 showAlert("Warning","Please enter username and password");
                 tfUsername_Login.setText("");
                 pfPassword_Login.setText("");
@@ -262,41 +262,44 @@ public class LoginController implements Initializable {
         loginPane.toFront();
         userDAO =  new UserDAO();
         index = 0;
+        setListener();
+    }
+
+    private void setListener() {
+        tfShowPasswordLogin.textProperty().addListener((observable,oldValue, newValue )-> {
+            pfPassword_Login.setText(newValue);
+        } );
+        pfPassword_Login.textProperty().addListener((observable,oldValue, newValue )-> {
+            tfShowPasswordLogin.setText(newValue);
+        } );
+        tfShowPasswordCP1.textProperty().addListener((observable,oldValue, newValue )-> {
+            pfPassword1_change.setText(newValue);
+        } );
+        tfShowPasswordCP2.textProperty().addListener((observable,oldValue, newValue )-> {
+            pfPassword2_change.setText(newValue);
+        } );
+        pfPassword1_change.textProperty().addListener((observable,oldValue, newValue )-> {
+            tfShowPasswordCP1.setText(newValue);
+        } );
+        pfPassword2_change.textProperty().addListener((observable,oldValue, newValue )-> {
+            tfShowPasswordCP2.setText(newValue);
+        } );
     }
 
     private void showPassword() {
         if (index == 0 && radioHideShow.isSelected()) {
-
             //show password va an password field
             tfShowPasswordLogin.setVisible(true);
             pfPassword_Login.setVisible(false);
-            tfShowPasswordLogin.setText(pfPassword_Login.getText());
-
         } else if (index == 0 && !radioHideShow.isSelected()) {
-
-            // set lai matkhau da hien vao passwordfield
-            pfPassword_Login.setText(tfShowPasswordLogin.getText());
-
-            //an textfield va show lai passwordfield
             pfPassword_Login.setVisible(true);
             tfShowPasswordLogin.setVisible(false);
-
         } else if (index == 2 && radioHideShowChange.isSelected()) {
-
-            // show password va an passwordfield
             tfShowPasswordCP1.setVisible(true);
             pfPassword1_change.setVisible(false);
-            tfShowPasswordCP1.setText(pfPassword1_change.getText());
             tfShowPasswordCP2.setVisible(true);
             pfPassword2_change.setVisible(false);
-            tfShowPasswordCP2.setText(pfPassword2_change.getText());
-
         } else if (index == 2 && !radioHideShowChange.isSelected()) {
-
-            //set lai mat khau da hien vao passwordfield
-            pfPassword1_change.setText(tfShowPasswordCP1.getText());
-            pfPassword2_change.setText(tfShowPasswordCP2.getText());
-
             //an textfield va show lai passwordfield
             tfShowPasswordCP1.setVisible(false);
             pfPassword1_change.setVisible(true);
@@ -307,6 +310,8 @@ public class LoginController implements Initializable {
 
 
     public void loginButtonOnAction() {
+        if(isLess6characters(tfShowPasswordLogin)) return;
+        if(!CheckForFill()) return;
         paneProgress.setVisible(true);
         paneProgress.toFront();
         new Thread(() -> {
@@ -349,6 +354,8 @@ public class LoginController implements Initializable {
     @FXML
     public void btnConfirm_clicked(MouseEvent mouseEvent) {
         if(isLess6characters(pfPassword1_change)) return;
+        if(isLess6characters(pfPassword2_change)) return;
+        if(!CheckForFill()) return;
         paneProgress.setVisible(true);
         paneProgress.toFront();
         new Thread(() -> {
