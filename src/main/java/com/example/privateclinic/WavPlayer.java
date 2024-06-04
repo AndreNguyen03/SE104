@@ -16,10 +16,10 @@ public class WavPlayer {
             clip.start();
             // Đợi cho clip phát hết
             while (!clip.isRunning()) {
-                Thread.sleep(5);
+                Thread.sleep(2000);
             }
             while (clip.isRunning()) {
-                Thread.sleep(5);
+                Thread.sleep(2000);
             }
 
             clip.close();

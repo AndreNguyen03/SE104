@@ -23,8 +23,19 @@ public class MedicineDAO {
     public ObservableList<Medicine> searchMedicineByIDorName(String idOrName) {
         ObservableList<Medicine> medicines = FXCollections.observableArrayList();
         String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +
-                "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.mathuoc::text ILIKE '%" + idOrName + "%' or t.tenthuoc ILIKE '%" + idOrName + "%')";
-        try (ResultSet resultSet = connectDB.getData(query)) {
+                "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd and (t.tenthuoc ILIKE ? ";
+        boolean isInteger = false;
+        try {
+            int id = Integer.parseInt(idOrName);
+            query += " OR t.mathuoc = ? ";
+            isInteger = true;
+        } catch (NumberFormatException e ){
+        }
+        query += ")";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setString(1,"%" + idOrName + "%");
+            if(isInteger) statement.setInt(2, Integer.parseInt(idOrName));
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Medicine medicine = new Medicine();
                 medicine.setMaThuoc(resultSet.getInt("mathuoc"));

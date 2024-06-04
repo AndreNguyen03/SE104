@@ -10,6 +10,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -225,7 +226,7 @@ public  class ExaminationController implements Initializable {
             //hiển thi ket qua tim kiem
             if(!newValue.trim().equals(""))
             {
-                showResultMedicineList(tf_tenThuoc.getText().toString());
+                showResultMedicineList(tf_tenThuoc.getText());
                 if(panel_diseasesResultSearch.isVisible()) panel_diseasesResultSearch.setVisible(false); // hide disease to open medicine
                 panel_MedicineResultSearch.setVisible(true);
                 medicineChosenBefore=null;
@@ -236,16 +237,13 @@ public  class ExaminationController implements Initializable {
         });
         tbl_resultSearchMedicine.setRowFactory(medicineTableView -> new TableRow<>() {
             @Override
-            protected void updateItem(Medicine medicine,boolean empty)
-            {
-                super.updateItem(medicine,empty);
-                if(medicine==null|| empty)
-                {
-                }
-                else {
-                    if(medicine.getSoLuong()==0)
+            protected void updateItem(Medicine medicine, boolean empty) {
+                super.updateItem(medicine, empty);
+                getStyleClass().removeAll("table-row-cell-red", "table-row-cell-yellow");
+                if (medicine != null && !empty) {
+                    if (medicine.getSoLuong() == 0) {
                         getStyleClass().add("table-row-cell-red");
-                    else if(medicine.getSoLuong()<30) {
+                    } else if (medicine.getSoLuong() < 30) {
                         getStyleClass().add("table-row-cell-yellow");
                     }
                 }
@@ -253,11 +251,11 @@ public  class ExaminationController implements Initializable {
         });
         tf_searchIDName.textProperty().addListener((observable, oldValue,newValue) ->
         {
-            if(!newValue.trim().equals(""))
+            if(!newValue.trim().isEmpty())
             {
                 if(rad_patientWaiting.isSelected()) tbl_customer.setItems(listWaitingPatients);
                 else tbl_customer.setItems(listDonePatients); // cap nhat lai danh sach goc vao tbl
-                SearchPatientResultList(tf_searchIDName.getText().toString());
+                SearchPatientResultList(tf_searchIDName.getText());
             } else {
                 tbl_customer.setItems(listWaitingPatients);
                 if(!listWaitingPatients.isEmpty()) lbl_noPatientResult.setVisible(false);
@@ -291,6 +289,7 @@ public  class ExaminationController implements Initializable {
                         medicineChosenBefore=medicine;
                         btnThem.setDisable(false);
                         panel_MedicineResultSearch.setVisible(false);
+                        SetDisableKeThuoc(false);
                     }
                     else {
                         showAlert("Warning","Thuốc mà bạn chọn đã có trong danh sách!");
@@ -323,16 +322,25 @@ public  class ExaminationController implements Initializable {
                     Disease disease = tbl_resultSearchDisease.getSelectionModel().getSelectedItem();
                     if(disease!=null)
                     {
-                        if(panel_diseasesResultSearch.getLayoutY()==191)
+                        if(panel_diseasesResultSearch.getLayoutY()==191) // benh chinh
                         {
-                            tf_maBenhChinh.setText(String.valueOf(disease.getMaBenh()));
-                            tf_tenBenhChinh.setText(String.valueOf(disease.getTenBenh()));
-                            panel_diseasesResultSearch.setVisible(false);
+                            if(tf_maBenhPhu.getText().isEmpty()||disease.getMaBenh()!=Integer.parseInt(tf_maBenhPhu.getText())) {
+                                tf_maBenhChinh.setText(String.valueOf(disease.getMaBenh()));
+                                tf_tenBenhChinh.setText(String.valueOf(disease.getTenBenh()));
+                                panel_diseasesResultSearch.setVisible(false);
+                            } else {
+                                showAlert("Warning","Không được trùng với bệnh phụ!");
+                            }
+
                         }
-                        else {
-                            tf_maBenhPhu.setText(String.valueOf(disease.getMaBenh()));
-                            tf_tenBenhPhu.setText(String.valueOf(disease.getTenBenh()));
-                            panel_diseasesResultSearch.setVisible(false);
+                        else { // benh phu
+                            if(tf_maBenhChinh.getText().isEmpty()|| disease.getMaBenh()!=Integer.parseInt(tf_maBenhChinh.getText())) {
+                                tf_maBenhPhu.setText(String.valueOf(disease.getMaBenh()));
+                                tf_tenBenhPhu.setText(String.valueOf(disease.getTenBenh()));
+                                panel_diseasesResultSearch.setVisible(false);
+                            }else {
+                                showAlert("Warning","Không được trùng với bệnh chính!");
+                            }
                         }
                     }
                 }
@@ -361,6 +369,7 @@ public  class ExaminationController implements Initializable {
                         addMedicineToMedicineTable(medicineChosenBefore.getMaThuoc(), medicineChosenBefore.getGiaBan(),-1);
                         //updateIndexColumn(tbl_chosenMedicine);
                         lbl_noPickMedicine.setVisible(false);
+                        SetDisableKeThuoc(true);
                         ResetTF_KeThuoc();
                         tf_tenThuoc.clear();
                         medicineChosenBefore=null;
@@ -480,6 +489,15 @@ public  class ExaminationController implements Initializable {
         });
 
     }
+
+    private void SetDisableKeThuoc(boolean bool) {
+        tf_sang.setDisable(bool);
+        tf_trua.setDisable(bool);
+        tf_chieu.setDisable(bool);
+        tf_toi.setDisable(bool);
+        tf_ngay.setDisable(bool);
+    }
+
     private boolean IsBlank() { // tồn tại một tf đã điền thì trả về false
         return !tbl_chosenMedicine.getItems().isEmpty() && !tf_trieuChung.getText().isEmpty() && !tf_luuY.getText().isEmpty() && !tf_maBenhPhu.getText().isEmpty() && !tf_maBenhChinh.getText().isEmpty();
     }
@@ -579,14 +597,14 @@ public  class ExaminationController implements Initializable {
                         tf.setText(newValue.replaceAll("[^\\d]", ""));
                     }
                 } else {
-                    if (newValue.matches("\\d*")) {
-                        tf.setText(newValue.replaceAll("[^\\d]", ""));
+                    if (!newValue.matches("[^\\d]*")) {
+                        tf.setText(newValue.replaceAll("\\d", ""));
                     }
                 }
 
-                if(!newValue.trim().equals("")&&!tp_khamBenh.isDisable())
+                if(!newValue.isEmpty()&&!tp_khamBenh.isDisable())
                 {
-                    showResultDiseasesSearch(tf.getText().toString());
+                    showResultDiseasesSearch(tf.getText());
                     if(panel_MedicineResultSearch.isVisible()) panel_MedicineResultSearch.setVisible(false);
                     panel_diseasesResultSearch.setVisible(true);
                     panel_diseasesResultSearch.setLayoutX(1000);
@@ -602,14 +620,14 @@ public  class ExaminationController implements Initializable {
         {
             tf.textProperty().addListener((observable,oldValue,newValue) ->
             {
-                if(tf.getId().equals("tf_maBenhChinh"))
+                if(tf.getId().equals("tf_maBenhPhu"))
                 {
                     if (!newValue.matches("\\d*")) {
                         tf.setText(newValue.replaceAll("[^\\d]", ""));
                     }
                 } else {
-                    if (newValue.matches("\\d*")) {
-                        tf.setText(newValue.replaceAll("[^\\d]", ""));
+                    if (!newValue.matches("[^\\d]*")) {
+                        tf.setText(newValue.replaceAll("\\d", ""));
                     }
                 }
                 if(!newValue.trim().equals("")&&!tp_khamBenh.isDisable())
@@ -735,6 +753,11 @@ public  class ExaminationController implements Initializable {
         {
             return false;
         }
+        if(medicineChosenBefore.getSoLuong()<= Integer.parseInt(lbl_soLuong.getText())) {
+            showAlert("Warning","Số lượng "+medicineChosenBefore.getTenThuoc()+" trong kho là "+medicineChosenBefore.getSoLuong()+", hãy nhập thêm rồi quay lại!");
+            ResetTF_KeThuoc();
+            return false;
+        }
         return true;
     }
 
@@ -818,7 +841,7 @@ public  class ExaminationController implements Initializable {
         if(!tbl_resultSearchMedicine.getItems().isEmpty())
         {
             lbl_noMedicineResult.setVisible(false);
-            if(panel_diseasesResultSearch.isVisible()) panel_diseasesResultSearch.setVisible(false); // hide disease to open medicine
+            panel_diseasesResultSearch.setVisible(false); // hide disease to open medicine
             panel_MedicineResultSearch.setVisible(true);
         }
         else
@@ -833,24 +856,16 @@ public  class ExaminationController implements Initializable {
             textField.textProperty().addListener((observable,oldValue,newValue)->{
                 if (!newValue.matches("\\d*")) {
                     textField.setText(newValue.replaceAll("[^\\d]", ""));
-                    if(textField.getText().equals("")||textField.getText().equals("0")){
+                    if(textField.getText().isEmpty()){
                         textField.setText(newValue.replaceAll("[^\\d]", "1"));
                     }
-                }
-                else
-                {
-                    UpTotal();
-                    if(Integer.parseInt(lbl_soLuong.getText())< medicineChosenBefore.getSoLuong()) {
-                        showAlert("Warning","Trong kho hiện tại không đủ, nhập thêm rồi quay lại!");
-                        textField.setText(oldValue);
-                    }
-                }
+                } UpTotal();
             });
         }
     }
     private void UpTotal() {
        int total =0;
-       int ngay = tf_ngay.getText().isBlank()?1:Integer.parseInt(tf_ngay.getText().trim());
+       int ngay = tf_ngay.getText().isBlank()? 1:Integer.parseInt(tf_ngay.getText().trim());
        int sang= tf_sang.getText().isBlank() ? 0 : Integer.parseInt(tf_sang.getText().trim());
        int trua= tf_trua.getText().isBlank() ? 0 : Integer.parseInt(tf_trua.getText().trim());
        int chieu= tf_chieu.getText().isBlank() ? 0 : Integer.parseInt(tf_chieu.getText().trim());
@@ -1102,5 +1117,16 @@ public  class ExaminationController implements Initializable {
         String noSpaces = noAccents.replaceAll("\\s+", "");
 
         return noSpaces;
+    }
+
+    public void closeDisease(MouseEvent mouseEvent) {
+        if (panel_diseasesResultSearch.getLayoutY()==191) {
+            tf_maBenhChinh.clear();
+            tf_tenBenhChinh.clear();
+        } else  {
+            tf_maBenhPhu.clear();
+            tf_tenBenhPhu.clear();
+        }
+        tbl_resultSearchDisease.setVisible(false);
     }
 }
