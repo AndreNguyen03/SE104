@@ -94,9 +94,15 @@ public class ConnectDB {
         }
     }
 
-    public ResultSet getResultSet(String sql) throws SQLException {
-        Statement statement = databaseLink.createStatement();
-        return statement.executeQuery(sql);
+    public ResultSet getResultSet(String sql) {
+        ResultSet resultSet = null;
+        try {
+            Statement statement = databaseLink.createStatement();
+            resultSet = statement.getResultSet();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
 

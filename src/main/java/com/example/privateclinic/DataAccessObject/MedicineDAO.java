@@ -1,9 +1,6 @@
 package com.example.privateclinic.DataAccessObject;
 
-import com.example.privateclinic.Models.ConnectDB;
-import com.example.privateclinic.Models.Customer;
-import com.example.privateclinic.Models.Medicine;
-import com.example.privateclinic.Models.Model;
+import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,10 +52,31 @@ public class MedicineDAO {
         }
         return medicines;
     }
+    public boolean UpdateMedicineAfterExam(int _maThuoc, int _soluongBan) {
+        int newQuantity = getCurrentQuantityMedicine(_maThuoc) - _soluongBan;
+        String query = "UPDATE thuoc SET soluong = ? WHERE mathuoc = ?";
+        try(PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setInt(1,newQuantity);
+            statement.setInt(2,_maThuoc);
+            return statement.executeUpdate()>0;
+        } catch (SQLException e ){
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-    public ResultSet getMedicine(String maThuoc) {
-        String query = "SELECT * FROM THUOC WHERE mathuoc = "+maThuoc+"";
-        return connectDB.getData(query);
+    public int getCurrentQuantityMedicine(int _mathuoc) {
+        String query = "SELECT soluong FROM thuoc WHERE mathuoc = ?";
+        try(PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
+        {
+            statement.setInt(1,_mathuoc);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) return rs.getInt(1);
+        } catch (SQLException e ){
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
     }
 
     public void addMedicine(Medicine medicine) {

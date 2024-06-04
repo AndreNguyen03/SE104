@@ -140,6 +140,7 @@ public  class ExaminationController implements Initializable {
     Medicine medicineChosenBefore;
     Prescribe prescribeChosenBefore;
     ExaminationHistory examinationHistorySent;
+    Disease disease_main,disease_sub;
     boolean isChanged;
     User user;
     public void initData(User _user)
@@ -168,17 +169,7 @@ public  class ExaminationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Initialization
-        patientDAO = new PatientDAO();
-        medicineDAO= new MedicineDAO();
-        diseaseDAO = new DiseaseDAO();
-        examinationDAO= new ExaminationDAO();
-        prescribeDAO = new PrescribeDAO();
-        historyDAO = new HistoryDAO();
-        dp_date.setValue(LocalDate.now());
-        lbl_soLuong.setText("0");
-        pane_optionPatient.setDisable(true);
-        rad_patientWaiting.setSelected(true);
-        isChanged=false;
+        SetUp();
         //set up
         SetDisable();
         setUpTableView();
@@ -212,7 +203,7 @@ public  class ExaminationController implements Initializable {
             {
                     /*int response = ShowYesNoAlert("Thay doi a");
                 if (response == JOptionPane.YES_OPTION) {*/
-                    //existFilled();
+                   /* existFilled();*/
                     SetDisable();
                     ResetAllTextField();
                     ResetTF(tf_maBenhChinh,tf_tenBenhChinh,tf_tenBenhPhu,tf_tenBenhPhu);
@@ -307,6 +298,11 @@ public  class ExaminationController implements Initializable {
                     prescribeChosenBefore = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
                     if(prescribeChosenBefore!=null)
                     {
+                        tf_ngay.setDisable(false);
+                        tf_sang.setDisable(false);
+                        tf_trua.setDisable(false);
+                        tf_chieu.setDisable(false);
+                        tf_toi.setDisable(false);
                         FillToPanel_KeThuoc(prescribeChosenBefore);
                         panel_MedicineResultSearch.setVisible(false);
                         btnThem.setText("Lưu");
@@ -328,6 +324,7 @@ public  class ExaminationController implements Initializable {
                                 tf_maBenhChinh.setText(String.valueOf(disease.getMaBenh()));
                                 tf_tenBenhChinh.setText(String.valueOf(disease.getTenBenh()));
                                 panel_diseasesResultSearch.setVisible(false);
+                                disease_main=disease;
                             } else {
                                 showAlert("Warning","Không được trùng với bệnh phụ!");
                             }
@@ -338,6 +335,7 @@ public  class ExaminationController implements Initializable {
                                 tf_maBenhPhu.setText(String.valueOf(disease.getMaBenh()));
                                 tf_tenBenhPhu.setText(String.valueOf(disease.getTenBenh()));
                                 panel_diseasesResultSearch.setVisible(false);
+                                disease_sub=disease;
                             }else {
                                 showAlert("Warning","Không được trùng với bệnh chính!");
                             }
@@ -413,15 +411,17 @@ public  class ExaminationController implements Initializable {
             public void handle(ActionEvent event) {
                 if(isFullFilled())
                 {
-                    int requestResult = ShowYesNoAlert("save");
+                    int requestResult = ShowYesNoAlert("lưu và kết thúc khám bệnh");
                     if(requestResult == JOptionPane.YES_OPTION)
                     {
-                        saveExaminationInformationToDabase();
+                        if(saveExaminationInformationToDabase())  {
+                            showAlert("Notification","Lưu dữ liệu khám bệnh thành công!");
+                            SetDisable();
+                            LoadListPatients(Date.valueOf(dp_date.getValue()));
+                            lbl_noPatientResult.setVisible(false);
+                        }
                     }
-                    else
-                    {
-
-                    }
+                    else {}
                 }
             }
         });
@@ -489,6 +489,19 @@ public  class ExaminationController implements Initializable {
         });
 
     }
+    private void SetUp() {
+        patientDAO = new PatientDAO();
+        medicineDAO= new MedicineDAO();
+        diseaseDAO = new DiseaseDAO();
+        examinationDAO= new ExaminationDAO();
+        prescribeDAO = new PrescribeDAO();
+        historyDAO = new HistoryDAO();
+        dp_date.setValue(LocalDate.now());
+        lbl_soLuong.setText("0");
+        pane_optionPatient.setDisable(true);
+        rad_patientWaiting.setSelected(true);
+        isChanged=false;
+    }
 
     private void SetDisableKeThuoc(boolean bool) {
         tf_sang.setDisable(bool);
@@ -503,25 +516,18 @@ public  class ExaminationController implements Initializable {
     }
 
 
-    private void saveExaminationInformationToDabase() {
+    private boolean saveExaminationInformationToDabase() {
         int examId =saveExamination();// lay ma kham benh
-        if(savePrescides(examId)&&examId>0)
+        if(savePrescibes(examId)&&examId>0)
         {
-            saveHistory(examId);
-            showAlert("Notification","Lưu dữ liệu khám bệnh và thuốc thành công!");
-            SetDisable();
-            LoadListPatients(Date.valueOf(LocalDate.now()));
-            lbl_noPatientResult.setVisible(false);
+            return saveHistory(examId);
         }
-        else {
-            showAlert("Warning","Error");
-        }
+        return false;
     }
 
-    private void saveHistory(int _id) {
-        History history = new History(user.getEmployee_id(),Date.valueOf(LocalDate.now()), STR."Khám bệnh ID: \{_id}");
-        historyDAO.addHistory(history);
-        System.out.println("Saved History!");
+    private boolean saveHistory(int _id) {
+        History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{_id}");
+        return historyDAO.addHistory(history);
     }
 
     private int saveExamination() {
@@ -533,11 +539,14 @@ public  class ExaminationController implements Initializable {
         return examId;
     }
 
-    private boolean savePrescides(int id) {
+    private boolean savePrescibes(int id) {
         ObservableList<Prescribe> listChosenPrescribe = tbl_chosenMedicine.getItems();
         for(Prescribe prescribe: listChosenPrescribe)
         {
-            if(!prescribeDAO.addPrescribe(id,prescribe)) return false;
+            if(prescribeDAO.addPrescribe(id,prescribe)) {
+                System.out.println("saved Prescibes;");
+                if (!medicineDAO.UpdateMedicineAfterExam(prescribe.getMaThuoc(),prescribe.getSoLuong())) return false;
+            } else return false;
         }
         System.out.println("savePrescides");
         return true;
@@ -557,10 +566,6 @@ public  class ExaminationController implements Initializable {
             return false;
         }
         return true;
-    }
-
-    private boolean existFilled() {
-        return false;
     }
 
     private void SearchPatientResultList(String searchString) {
@@ -591,6 +596,7 @@ public  class ExaminationController implements Initializable {
         {
             tf.textProperty().addListener((observable,oldValue,newValue) ->
             {
+                disease_main = null;
                 if(tf.getId().equals("tf_maBenhChinh"))
                 {
                     if (!newValue.matches("\\d*")) {
@@ -602,7 +608,7 @@ public  class ExaminationController implements Initializable {
                     }
                 }
 
-                if(!newValue.isEmpty()&&!tp_khamBenh.isDisable())
+                if(!newValue.isEmpty()&&!tp_khamBenh.isDisable()&&disease_main==null)
                 {
                     showResultDiseasesSearch(tf.getText());
                     if(panel_MedicineResultSearch.isVisible()) panel_MedicineResultSearch.setVisible(false);
@@ -620,6 +626,7 @@ public  class ExaminationController implements Initializable {
         {
             tf.textProperty().addListener((observable,oldValue,newValue) ->
             {
+                disease_sub=null;
                 if(tf.getId().equals("tf_maBenhPhu"))
                 {
                     if (!newValue.matches("\\d*")) {
@@ -630,9 +637,9 @@ public  class ExaminationController implements Initializable {
                         tf.setText(newValue.replaceAll("\\d", ""));
                     }
                 }
-                if(!newValue.trim().equals("")&&!tp_khamBenh.isDisable())
+                if(!newValue.trim().isEmpty()&&!tp_khamBenh.isDisable()&&disease_sub==null)
                 {
-                    showResultDiseasesSearch(tf.getText().toString());
+                    showResultDiseasesSearch(tf.getText());
                     if(panel_MedicineResultSearch.isVisible()) panel_MedicineResultSearch.setVisible(false);
                     panel_diseasesResultSearch.setVisible(true);
                     panel_diseasesResultSearch.setLayoutX(1000);
@@ -643,7 +650,7 @@ public  class ExaminationController implements Initializable {
         }
     }
     private void showResultDiseasesSearch(String string) {;
-        listDisiseases = diseaseDAO.searchMedicineByIDorName(string);
+        listDisiseases = diseaseDAO.searchDiseaseByIDorName(string);
         tbl_resultSearchDisease.setItems(listDisiseases);
         tbl_resultSearchDisease.getSelectionModel().clearSelection();
         lbl_searchDiseaseString.setText(string);
@@ -828,9 +835,10 @@ public  class ExaminationController implements Initializable {
     }
 
     private void LoadListPatients(Date date) {
-
         listWaitingPatients=patientDAO.getPatientsByDate(date);
+        tbl_customer.setItems(listWaitingPatients);
         listDonePatients=patientDAO.getPatientsDoneByDate(date);
+        tbl_customer.setItems(listDonePatients);
     }
 
     private void showResultMedicineList(String search) {
@@ -857,9 +865,10 @@ public  class ExaminationController implements Initializable {
                 if (!newValue.matches("\\d*")) {
                     textField.setText(newValue.replaceAll("[^\\d]", ""));
                     if(textField.getText().isEmpty()){
-                        textField.setText(newValue.replaceAll("[^\\d]", "1"));
+                        textField.setText(newValue.replaceAll("[^\\d]", "0"));
                     }
-                } UpTotal();
+                }
+                UpTotal();
             });
         }
     }
@@ -876,22 +885,20 @@ public  class ExaminationController implements Initializable {
 
     private void showDataPatients_waiting() {
         //tbl_customer.getItems().clear();
-        tbl_customer.setItems(listWaitingPatients);
         tbl_customer.getSelectionModel().clearSelection();
         //Kiem tra danh sách cho co null khong
         if(listWaitingPatients.isEmpty()) {
-            showAlert("Warning","List is empty");
+            showAlert("Warning","Danh sách bệnh nhân chờ vào ngày " +dp_date.getValue() +" trống!");
             lbl_noPatientResult.setVisible(true);
         }
         else lbl_noPatientResult.setVisible(false);
     }
     private void showDataDonePatients() {
         //tbl_customer.getItems().clear();
-        tbl_customer.setItems(listDonePatients);
         tbl_customer.getSelectionModel().clearSelection();
         //Kiem tra danh sách cho co null khong
         if(listDonePatients.isEmpty()) {
-            showAlert("Warning","List is empty");
+            showAlert("Warning","Danh sách đã khám vào ngày "+dp_date.getValue()+ " trống!");
             lbl_noPatientResult.setVisible(true);
         }
         else lbl_noPatientResult.setVisible(false);
@@ -921,7 +928,7 @@ public  class ExaminationController implements Initializable {
         JFrame frame = new JFrame("Table Example");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
-        return JOptionPane.showConfirmDialog(frame, "Are you sure you want to "+string+"?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        return JOptionPane.showConfirmDialog(frame, "Có phải bạn muốn "+string+"?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     }
     private void printToaThuoc() throws IOException {
         Document document = new Document();
