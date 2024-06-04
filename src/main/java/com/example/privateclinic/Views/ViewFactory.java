@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Screen;
@@ -22,10 +23,13 @@ public class ViewFactory {
     Stage stageMenu = null;
     Stage stageProfile= null;
     Stage stageExaminationHistory = null;
+    Stage stageCategoryAspirine= null;
+    Stage stageCategoryDisease = null;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
         createStage(loader);
+
     }
 
     public void showMenuWindow(User user) {
@@ -100,7 +104,22 @@ public class ViewFactory {
             stageExaminationHistory.toFront(); // nếu đã mở scene thì bring to front
         }
     }
-
+    public void showCategoryDisease() {
+        if(stageCategoryDisease==null){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Disease.fxml"));
+            stageCategoryDisease=createStage(loader);
+        } else {
+            stageCategoryDisease.toFront();
+        }
+    }
+    public void showCategoryAspirine() {
+        if(stageCategoryAspirine==null){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Aspirine.fxml"));
+            stageCategoryDisease=createStage(loader);
+        } else {
+            stageCategoryAspirine.toFront();
+        }
+    }
     private Stage createStage(FXMLLoader loader ) {
         Scene scene = null;
         try {
@@ -127,13 +146,18 @@ public class ViewFactory {
             if(stageSetting!=null) stageSetting.close();
             if(stageProfile!=null) stageProfile.close();
             if(stageExaminationHistory!=null) stageExaminationHistory.close();
+            if(stageCategoryAspirine!=null) stageCategoryAspirine.close();
+            if(stageCategoryDisease!=null) stageCategoryDisease.close();
         }
         //khi 1 stage nào đó đóng thì cập nhật tình hình các stage khác
         if(stageExamination!=null && !stageExamination.isShowing()) stageExamination=null;  // nếu khác null nhưng ko còn show thì cập nhật về null
         if(stageReception!=null && !stageReception.isShowing()) stageReception=null;
         if(stageSetting!=null && !stageSetting.isShowing()) stageSetting=null;
         if(stageProfile!=null &&!stageProfile.isShowing()) stageProfile=null;
-        if(stageExaminationHistory!=null &&!stageExaminationHistory.isShowing()) stageExaminationHistory=null;
+        if(stageExaminationHistory!=null && !stageExaminationHistory.isShowing()) stageExaminationHistory=null;
+        if(stageCategoryAspirine!=null && !stageCategoryAspirine.isShowing()) stageCategoryAspirine=null;
+        if(stageCategoryDisease!=null && !stageCategoryDisease.isShowing()) stageCategoryDisease=null;
+
     }
     public void minimizeStage(Stage stage)
     {

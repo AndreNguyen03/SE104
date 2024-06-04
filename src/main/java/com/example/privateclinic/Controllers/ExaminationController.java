@@ -185,7 +185,7 @@ public  class ExaminationController implements Initializable {
             public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldValue, Toggle newValue) {
                 RadioButton rad_selected = (RadioButton)newValue;
                 if(rad_selected.getId().equals("rad_patientWaiting")) showDataPatients_waiting();// tải danh sách benh nhan cho
-                else showDataDonePatients();// tải danh sách benh nhan da kham
+                else showDataPatients_done();// tải danh sách benh nhan da kham
                 patientChosenBefore=null;
             }
         });
@@ -193,6 +193,7 @@ public  class ExaminationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
+                tbl_customer.setItems(listWaitingPatients);
                 rad_patientWaiting.setSelected(true);
                 showDataPatients_waiting();
             }
@@ -258,6 +259,7 @@ public  class ExaminationController implements Initializable {
             public void handle(ActionEvent event) {
                 SetDisable();
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
+                tbl_customer.setItems(listWaitingPatients);
                 rad_patientWaiting.setSelected(true);
                 showDataPatients_waiting();
                 ResetAllTextField();
@@ -418,6 +420,7 @@ public  class ExaminationController implements Initializable {
                             showAlert("Notification","Lưu dữ liệu khám bệnh thành công!");
                             SetDisable();
                             LoadListPatients(Date.valueOf(dp_date.getValue()));
+                            tbl_customer.setItems(listWaitingPatients);
                             lbl_noPatientResult.setVisible(false);
                         }
                     }
@@ -836,9 +839,7 @@ public  class ExaminationController implements Initializable {
 
     private void LoadListPatients(Date date) {
         listWaitingPatients=patientDAO.getPatientsByDate(date);
-        tbl_customer.setItems(listWaitingPatients);
         listDonePatients=patientDAO.getPatientsDoneByDate(date);
-        tbl_customer.setItems(listDonePatients);
     }
 
     private void showResultMedicineList(String search) {
@@ -884,7 +885,7 @@ public  class ExaminationController implements Initializable {
     }
 
     private void showDataPatients_waiting() {
-        //tbl_customer.getItems().clear();
+        tbl_customer.setItems(listWaitingPatients);
         tbl_customer.getSelectionModel().clearSelection();
         //Kiem tra danh sách cho co null khong
         if(listWaitingPatients.isEmpty()) {
@@ -893,8 +894,8 @@ public  class ExaminationController implements Initializable {
         }
         else lbl_noPatientResult.setVisible(false);
     }
-    private void showDataDonePatients() {
-        //tbl_customer.getItems().clear();
+    private void showDataPatients_done() {
+        tbl_customer.setItems(listDonePatients);
         tbl_customer.getSelectionModel().clearSelection();
         //Kiem tra danh sách cho co null khong
         if(listDonePatients.isEmpty()) {
