@@ -115,7 +115,7 @@ public class ViewFactory {
     public void showCategoryAspirine() {
         if(stageCategoryAspirine==null){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Aspirine.fxml"));
-            stageCategoryDisease=createStage(loader);
+            stageCategoryAspirine=createStage(loader);
         } else {
             stageCategoryAspirine.toFront();
         }
