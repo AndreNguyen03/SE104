@@ -38,10 +38,7 @@
 .table-view {
     -fx-text-fill: #ffffff;
 }
-.table-view .table-column
-{
-    -fx-background-color: #5A8F15;
-}
+
 .table-view .column-header-background
 {
     -fx-pref-height: 30;
@@ -49,10 +46,19 @@
 .table-view .column-header-background .label
 {
     -fx-text-fill: #ffffff;
+    -fx-background-color: #5A8F15;
 
     -fx-alignment: center ;
     -fx-font-weight: bold;
     -fx-font-size: 15px;
+}
+
+.table-view:row-selection {
+    -fx-background-color: white;
+}
+
+.table-cell {
+    -fx-font-size: 13px;
 }
 
 .lbl

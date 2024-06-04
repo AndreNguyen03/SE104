@@ -76,16 +76,12 @@ public class Category_DiseaseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         diseaseDAO = new DiseaseDAO();
-
-        idColumn.setStyle("-fx-text-fill: white;");
-        icdColumn.setStyle("-fx-text-fill: white;");
-        nameColumn.setStyle("-fx-text-fill: white;");
-
         // Set up columns
         idColumn.setCellValueFactory(new PropertyValueFactory<>("maBenh"));
         icdColumn.setCellValueFactory(new PropertyValueFactory<>("maICD"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenBenh"));
 
+        diseaseTableView.setStyle("-fx-selection-bar: #5A8F15;");
         // Load data into table
         loadDiseaseData();
         searchDiseaseByICDAndByName();
