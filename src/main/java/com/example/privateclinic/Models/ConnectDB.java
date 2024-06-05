@@ -72,7 +72,6 @@ public class ConnectDB {
             return null;
         }
     }
-
     public boolean handleData(PreparedStatement preparedStatement) throws SQLException {
         try {
             int rowsAffected = preparedStatement.executeUpdate();
