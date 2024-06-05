@@ -174,10 +174,10 @@ public class PatientDAO {
     }*/
     public ObservableList<Patient> getPatientsFromReceptionByDate(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao, tn.stt FROM benhnhan bn, tiepnhan tn WHERE tn.ngayvao = ? AND bn.mabn = tn.mabn " +
-                "AND bn.mabn NOT IN (SELECT mabn FROM khambenh)";
+        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao, tn.stt FROM benhnhan bn, tiepnhan tn WHERE bn.mabn = tn.mabn AND tn.ngayvao::date = ? " +
+                "AND tn.mabn NOT IN (SELECT mabn FROM khambenh)";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
-            statement.setObject(1, date);
+            statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Patient patient = new Patient(

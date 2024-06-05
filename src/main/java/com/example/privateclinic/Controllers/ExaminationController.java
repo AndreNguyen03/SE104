@@ -178,7 +178,7 @@ public  class ExaminationController implements Initializable {
         setFindDiseasesByIDorName_subDisease(tf_maBenhPhu,tf_tenBenhPhu);
         //load
         LoadListPatients(Date.valueOf(LocalDate.now()));
-        //showDataCustomers_waiting();// tải danh sách customers
+        showDataPatients_waiting();// tải danh sách customers
         //addListener
         addListenerTextChanged(tf_ngay,tf_sang,tf_sang,tf_trua,tf_chieu,tf_toi);
         tg_listCustomer.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -947,7 +947,7 @@ public  class ExaminationController implements Initializable {
     private void printToaThuoc() throws IOException {
         Document document = new Document();
 
-        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_toa.pdf";
+        String path = STR."\\Prescription\\\{removeAccentsAndSpaces(tf_tenbn.getText())}_toa.pdf";
         try {
             String maTenBenhPhu="";
             PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -1008,7 +1008,7 @@ public  class ExaminationController implements Initializable {
     private void printBangke() throws IOException {
         Document document = new Document();
 
-        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_bangke.pdf";
+        String path = STR."\\Prescription\\\{removeAccentsAndSpaces(tf_tenbn.getText())}_bangke.pdf";
         try {
             PdfWriter.getInstance(document, new FileOutputStream(path));
             document.open();
