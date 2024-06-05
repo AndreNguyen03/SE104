@@ -62,11 +62,13 @@ public class ConnectDB {
     }
 
     public ResultSet getData(String sqlQuery) {
-        try {
-            PreparedStatement preparedStatement = databaseLink.prepareStatement(sqlQuery);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet;
+        try (PreparedStatement preparedStatement = databaseLink.prepareStatement(sqlQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet;
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -93,18 +95,11 @@ public class ConnectDB {
         }
     }
 
-    public ResultSet getResultSet(String sql) {
-        ResultSet resultSet = null;
-        try {
-            Statement statement = databaseLink.createStatement();
-            resultSet = statement.getResultSet();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+    public ResultSet getResultSet(String sql) throws SQLException {
+        Statement statement = databaseLink.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
         return resultSet;
     }
-
-
     public PreparedStatement getPreparedStatement(String sqlQuery) throws SQLException {
         // Check if the connection is null or closed
         if (databaseLink == null || databaseLink.isClosed()) {

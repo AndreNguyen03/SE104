@@ -90,8 +90,8 @@ public class UserDAO {
     public String getEmail(String username) throws SQLException {
         String username_result =null;
         String query = "SELECT email FROM nhanvien WHERE username = '" + username +"'";
-        ResultSet resultSet = connectDB.getData(query);
-        if(resultSet!=null) // kiểm tra xem resultSet có dữ liệu hay không
+        ResultSet resultSet = connectDB.getResultSet(query);
+        if(resultSet.next()) // kiểm tra xeem resultSet có dữ liệu hay không
         {
             username_result = resultSet.getString("email");
         }
@@ -152,10 +152,9 @@ public class UserDAO {
     {
         String username =null;
         String query = "SELECT username FROM nhanvien WHERE username = '" + _username +"'";
-        ResultSet resultSet = connectDB.getData(query);
-        try
+        try(ResultSet resultSet = connectDB.getResultSet(query))
         {
-            if(resultSet!=null) // kiểm tra xem resultSet có dữ liệu hay không
+            if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
             {
                 username = resultSet.getString("username");
             }

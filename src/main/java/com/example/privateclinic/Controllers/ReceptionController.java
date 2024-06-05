@@ -219,7 +219,7 @@ public class ReceptionController implements Initializable {
     }
 
     private void searchPatientByIdAndByName() {
-        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsByDate(Date.valueOf(dpDate.getValue())));
+        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsFromReceptionByDate(Date.valueOf(dpDate.getValue())));
         tfPatientById.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
                 tvPatient.setItems(patientList);
@@ -317,7 +317,7 @@ public class ReceptionController implements Initializable {
         tcNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatient.getItems().indexOf(cellData.getValue()) + 1).asObject());
         tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        patients = patientDAO.getPatientsByDate(date);
+        patients = patientDAO.getPatientsFromReceptionByDate(date);
         tvPatient.getItems().clear();
         tvPatient.setItems(patients);
     }
@@ -330,7 +330,7 @@ public class ReceptionController implements Initializable {
         tcPatientBirthDetail.setCellValueFactory(new PropertyValueFactory<>("patientBirth"));
         tcPatientPhoneNumberDetail.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
         tcPatientAddressDetail.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
-        patientsDetails = patientDAO.getPatientsByDate(date);
+        patientsDetails = patientDAO.getPatientsFromReceptionByDate(date);
         tvPatientDetails.getItems().clear();
         tvPatientDetails.setItems(patients);
     }
