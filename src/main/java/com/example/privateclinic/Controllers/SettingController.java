@@ -58,10 +58,6 @@ public class SettingController implements Initializable {
             int maxPatient = Integer.parseInt(tf_MaxPatient.getText());
             int maxMoney = Integer.parseInt(tf_MaxMoney.getText());
 
-            // Giả sử mã quy định cho MaxPatient là 1
-            int maxPatientRegulationId = 1;
-            int maxMoneyRegulationId = 2;
-
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Xác nhận chỉnh sửa");
             alert.setHeaderText("Bạn có chắc chắn muốn chỉnh sửa?");
@@ -69,8 +65,8 @@ public class SettingController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                regulationDAO.updateRegulationValue(maxPatientRegulationId, maxPatient);
-                regulationDAO.updateRegulationValue(maxMoneyRegulationId, maxMoney);
+                regulationDAO.updateRegulationValue(1, maxPatient);
+                regulationDAO.updateRegulationValue(2, maxMoney);
                 loadSettings();
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
