@@ -431,12 +431,14 @@ public class Category_AspirineController implements Initializable {
 
                 // Đặt thông tin của thuốc vào các trường TextField và ComboBox
                 medicineNameTextField_1.setText(selectedMedicine.getTenThuoc());
+                medicineNameTextField_2.setText(selectedMedicine.getTenThuoc());
                 unitComboBox.setValue(selectedMedicine.getTenDonViTinh());
                 formComboBox.setValue(selectedMedicine.getTenDangThuoc());
                 useComboBox.setValue(selectedMedicine.getTenCachDung());
             } else {
                 // Nếu không có hàng nào được chọn, xóa nội dung của các trường
                 medicineNameTextField_1.clear();
+                medicineNameTextField_2.clear();
                 unitComboBox.getSelectionModel().clearSelection();
                 formComboBox.getSelectionModel().clearSelection();
                 useComboBox.getSelectionModel().clearSelection();
