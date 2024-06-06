@@ -142,12 +142,18 @@
     /*Set focus color*/
     -fx-focus-color: -fx-secondary-color;
     /*Increase font size*/
-    -fx-font-size: 1.05em;
+    -fx-font-size: 1.4em;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
 }
 .date-picker {
     -fx-font-size: 1.4em;
 }
-
+.date-picker:disabled .arrow-button {
+    --fx-font-size: 1.4em;
+    -fx-text-fill: #000000;
+    -fx-background-color: #000000;
+}
 /*-----------------------------------------
 Customize the right button background color
 -------------------------------------------*/
@@ -529,4 +535,13 @@ Customize left and right arrow
 .pane_close:hover .image
 {
     -fx-opacity: 0;
+}
+/*minimized*/
+.minimize
+{
+    -fx-background-color: transparent;
+}
+.minimize:hover
+{
+    -fx-background-color: #EFFDDB;
 }

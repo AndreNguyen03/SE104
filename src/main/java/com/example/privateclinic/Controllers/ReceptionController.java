@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -130,7 +131,9 @@ public class ReceptionController implements Initializable {
 
     private ObservableList<Patient> patientsDetails;
     private ObservableList<Patient> patients;
-
+    public AnchorPane lbl_header,lbl_header2;
+    private double xOffset = 0;
+    private double yOffset =0;
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,6 +144,25 @@ public class ReceptionController implements Initializable {
         setPatientDetailList(Date.valueOf(dpDate.getValue()));
         setTableViewByDate();
         setOnOffAddDeleteBtn();
+        lbl_header.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        lbl_header.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) lbl_header.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
+        lbl_header2.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+
+        lbl_header2.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) lbl_header.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void setOnOffAddDeleteBtn() {
@@ -441,5 +463,9 @@ public class ReceptionController implements Initializable {
             }
         }
 
+    }
+
+    public void minimizeReception(MouseEvent mouseEvent) {
+        Model.getInstance().getViewFactory().minimizeStage((Stage) btnClose.getScene().getWindow());
     }
 }

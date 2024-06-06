@@ -16,7 +16,7 @@
 
 <HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="816.0" styleClass="login_container" stylesheets="@../Styles/Login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.LoginController">
    <children>
-      <Pane prefHeight="522.0" prefWidth="403.0" style="-fx-background-color: linear-gradient(to bottom,#4B7813,#8BC634)" styleClass="login_logo_container">
+      <Pane fx:id="container_left" prefHeight="522.0" prefWidth="403.0" style="-fx-background-color: linear-gradient(to bottom,#4B7813,#8BC634)" styleClass="login_logo_container">
          <children>
             <Text fx:id="textWelcome" fill="WHITE" layoutX="70.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào mừng quay trở lại">
                <font>
@@ -30,7 +30,7 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane prefHeight="522.0" prefWidth="473.0" style="-fx-background-color: E9E9E9;">
+      <Pane fx:id="container_right" prefHeight="522.0" prefWidth="473.0" style="-fx-background-color: E9E9E9;">
          <children>
             <Pane fx:id="changePane" layoutX="37.0" layoutY="108.0" prefHeight="305.0" prefWidth="361.0" style="-fx-background-color: E9E9E9;">
                <children>

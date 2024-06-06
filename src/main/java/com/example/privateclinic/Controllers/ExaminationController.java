@@ -143,8 +143,10 @@ public  class ExaminationController implements Initializable {
     Disease disease_main,disease_sub;
     boolean isChanged;
     User user;
+    public AnchorPane lbl_header,lbl_header2;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
+    private double xOffset = 0;
+    private double yOffset =0;
     public void initData(User _user)
     {
         this.user=_user;
@@ -195,6 +197,7 @@ public  class ExaminationController implements Initializable {
             public void handle(ActionEvent event) {
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
                 tbl_customer.setItems(listWaitingPatients);
+                tbl_customer.getSelectionModel().clearSelection();
                 rad_patientWaiting.setSelected(true);
                 showDataPatients_waiting();
             }
@@ -256,11 +259,15 @@ public  class ExaminationController implements Initializable {
         {
             if(!newValue.trim().isEmpty())
             {
-                if(rad_patientWaiting.isSelected()) tbl_customer.setItems(listWaitingPatients);
+                if(rad_patientWaiting.isSelected()) {
+                    tbl_customer.setItems(listWaitingPatients);
+                    tbl_customer.getSelectionModel().clearSelection();
+                }
                 else tbl_customer.setItems(listDonePatients); // cap nhat lai danh sach goc vao tbl
                 SearchPatientResultList(tf_searchIDName.getText());
             } else {
                 tbl_customer.setItems(listWaitingPatients);
+                tbl_customer.getSelectionModel().clearSelection();
                 if(!listWaitingPatients.isEmpty()) lbl_noPatientResult.setVisible(false);
                 rad_patientWaiting.setSelected(true);
             }
@@ -272,6 +279,7 @@ public  class ExaminationController implements Initializable {
                 tbl_chosenMedicine.getItems().clear();
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
                 tbl_customer.setItems(listWaitingPatients);
+                tbl_customer.getSelectionModel().clearSelection();
                 rad_patientWaiting.setSelected(true);
                 showDataPatients_waiting();
                 ResetAllTextField();
@@ -431,6 +439,7 @@ public  class ExaminationController implements Initializable {
                             SetDisable();
                             LoadListPatients(Date.valueOf(dp_date.getValue()));
                             tbl_customer.setItems(listWaitingPatients);
+                            tbl_customer.getSelectionModel().clearSelection();
                             lbl_noPatientResult.setVisible(false);
                         }
                     }
@@ -442,8 +451,8 @@ public  class ExaminationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 {
-                    if(tp_thongTin.isVisible()&&!IsBlank()) {
-                        int request = ShowYesNoAlert("Cancel");
+                    if(!IsBlank()) {
+                        int request = ShowYesNoAlert("huỷ khám");
                         if(request == JOptionPane.YES_OPTION){
                             ResetAllTextField();
                             SetDisable();
@@ -518,6 +527,26 @@ public  class ExaminationController implements Initializable {
         isChanged=false;
         SetDisable();
         tbl_chosenMedicine.getItems().clear();
+        lbl_header.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+
+        lbl_header.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) lbl_header.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
+        lbl_header2.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+
+        lbl_header2.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) lbl_header.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void SetDisableKeThuoc(boolean bool) {
@@ -1149,5 +1178,9 @@ public  class ExaminationController implements Initializable {
             tf_tenBenhPhu.clear();
         }
         tbl_resultSearchDisease.setVisible(false);
+    }
+
+    public void minimizeExam(MouseEvent mouseEvent) {
+        Model.getInstance().getViewFactory().minimizeStage((Stage) btnClose.getScene().getWindow());
     }
 }

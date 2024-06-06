@@ -44,6 +44,7 @@ public class LoginController implements Initializable {
     private int index;
     private int time_remaining = 50;
     private Timeline timeline;
+    public Pane container_left,container_right;
     @FXML
     private Button btnChange;
 
@@ -86,6 +87,8 @@ public class LoginController implements Initializable {
     private JFXRadioButton radioHideShow, radioHideShowChange;
     @FXML
     private Pane paneProgress;
+    private double xOffset = 0;
+    private double yOffset =0;
 
     @FXML
     void backToLogin(MouseEvent event) {
@@ -282,6 +285,24 @@ public class LoginController implements Initializable {
         pfPassword2_change.textProperty().addListener((observable,oldValue, newValue )-> {
             tfShowPasswordCP2.setText(newValue);
         } );
+        container_left.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        container_left.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) btnLogin.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
+        container_right.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        container_right.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) btnLogin.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void showPassword() {

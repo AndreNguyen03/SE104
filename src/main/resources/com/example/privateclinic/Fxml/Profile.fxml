@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="350.0" prefWidth="500.0" styleClass="container" stylesheets="@../Styles/Profile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ProfileController">
    <children>
-      <Pane prefHeight="60.0" prefWidth="500.0" styleClass="container_top">
+      <Pane fx:id="lbl_header" prefHeight="60.0" prefWidth="500.0" styleClass="container_top">
          <children>
             <Pane fx:id="btnClose" layoutX="457.0" onMouseClicked="#closeProfileView" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
                <children>
@@ -35,12 +35,24 @@
                   </ImageView>
                </children>
             </Pane>
-            <Text layoutX="67.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Thông tin nhân viên" />
-            <ImageView fitHeight="51.0" fitWidth="68.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+            <Text layoutX="118.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Thông tin nhân viên" />
+            <ImageView fitHeight="54.0" fitWidth="113.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Images/logoMenu.png" />
+                  <Image url="@../Images/Clinic_hori.png" />
                </image>
             </ImageView>
+            <Pane layoutX="414.0" layoutY="1.0" onMouseClicked="#minimizeProfile" prefHeight="35.0" prefWidth="43.0" styleClass="minimize">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="18.0" layoutX="12.0" layoutY="10.0"  pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/minimize-sign.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
       </Pane>
       <VBox layoutY="60.0" prefHeight="291.0" prefWidth="500.0">

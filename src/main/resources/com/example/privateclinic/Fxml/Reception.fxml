@@ -23,9 +23,10 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="header-top" stylesheets="@../Styles/Reception.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReceptionController">
    <children>
+      <AnchorPane fx:id="lbl_header2" layoutX="348.0" layoutY="-3.0" prefHeight="59.0" prefWidth="1252.0" />
       <VBox prefHeight="900.0" prefWidth="345.0" style="-fx-border-color: black;">
          <children>
-            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" styleClass="header-logo">
+            <AnchorPane fx:id="lbl_header" minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" styleClass="header-logo">
                <children>
                   <ImageView fitHeight="105.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -124,7 +125,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXButton>
-      <Pane fx:id="btnClose" layoutX="1555.0" layoutY="3.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
+      <Pane fx:id="btnClose" layoutX="1556.0" layoutY="1.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
          <children>
             <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image_hover">
                <image>
@@ -137,6 +138,18 @@
             <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image">
                <image>
                   <Image url="@../Images/close-gray.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="1511.0" layoutY="1.0" onMouseClicked="#minimizeReception" prefHeight="35.0" prefWidth="43.0" styleClass="minimize">
+         <children>
+            <ImageView fitHeight="27.0" fitWidth="18.0" layoutX="12.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/minimize-sign.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />

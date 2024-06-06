@@ -29,7 +29,7 @@
          <HBox.margin>
             <Insets left="2.0" top="2.0" />
          </HBox.margin>
-         <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="111.0" prefWidth="347.0" styleClass="header-logo">
+         <AnchorPane fx:id="lbl_header2" minHeight="-Infinity" minWidth="-Infinity" prefHeight="111.0" prefWidth="347.0" styleClass="header-logo">
             <VBox.margin>
                <Insets />
             </VBox.margin>
@@ -126,7 +126,7 @@
          </AnchorPane>
       </VBox>
    </HBox>
-   <AnchorPane layoutX="350.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1248.0" styleClass="header-top">
+   <AnchorPane fx:id="lbl_header" layoutX="350.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1248.0" styleClass="header-top">
       <Text layoutX="91.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày khám">
          <font>
             <Font name="Segoe UI Semibold" size="14.0" />
@@ -146,6 +146,18 @@
             <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image">
                <image>
                   <Image url="@../Images/close-gray.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="1162.0" onMouseClicked="#minimizeExam" prefHeight="35.0" prefWidth="43.0" styleClass="minimize">
+         <children>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0"  pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/minimize-sign.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
