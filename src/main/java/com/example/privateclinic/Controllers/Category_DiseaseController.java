@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -72,11 +73,13 @@ public class Category_DiseaseController implements Initializable {
 
     @FXML
     private Text diseaseCount;
-
+    @FXML
+    private Pane lbl_header;
     private DiseaseDAO diseaseDAO = new DiseaseDAO();
 
     private final ObservableList<Disease> diseaseData = FXCollections.observableArrayList();
-
+    private double xOffset;
+    private  double yOffset;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -100,7 +103,16 @@ public class Category_DiseaseController implements Initializable {
         sampleExcelFileBtn.setOnAction(this::handleDownloadSampleExcelFile);
         saveExcelFileBtn.setOnAction(this::handleSaveExcelFile);
 
+        lbl_header.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
 
+        lbl_header.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) addButton.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void loadDiseaseData() {
@@ -462,10 +474,8 @@ public class Category_DiseaseController implements Initializable {
         Model.getInstance().getViewFactory().closeStage(s);
     }
 
-    public void handleOnMouseDrag(MouseDragEvent mouseDragEvent) {
-        Stage stage  = (Stage) addButton.getScene().getWindow();
-        stage.setX(mouseDragEvent.getScreenX() - stage.getX());
-        stage.setY(mouseDragEvent.getScreenY() - stage.getY());
+    public void minimizeCategory(MouseEvent mouseEvent) {
+        Model.getInstance().getViewFactory().minimizeStage((Stage) addExcelFileBtn.getScene().getWindow());
     }
 }
 

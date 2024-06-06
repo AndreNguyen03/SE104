@@ -139,11 +139,4 @@ public class MenuController {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
         s.setIconified(true);
     }
-
-
-    public void minimizeStage(Stage stage)
-    {
-        stage.setIconified(true);
-    }
-
 }

@@ -13,11 +13,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import javax.swing.plaf.synth.Region;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -87,12 +90,12 @@ public class Category_AspirineController implements Initializable {
     private MedicineTypeDAO medicinetypeDAO = new MedicineTypeDAO();
     private UseWayDAO usewayDAO = new UseWayDAO();
     private WarehouseDAO warehouseDAO = new WarehouseDAO();
-
-
+    public Pane lbl_header;
     private final ObservableList<Medicine> medicineData = FXCollections.observableArrayList();
 
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
+    private double xOffset = 0;
+    private double yOffset =0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -123,6 +126,15 @@ public class Category_AspirineController implements Initializable {
         editButton.setOnAction(this::handleEditMedicine);
         deleteButton.setOnAction(this::handleDeleteMedicine);
         importButton.setOnAction(this::handleImportButton);
+        lbl_header.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        lbl_header.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) addButton.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void loadMedicineData() {
@@ -476,4 +488,9 @@ public class Category_AspirineController implements Initializable {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(s);
     }
+
+    public void minimizeCategory(MouseEvent mouseEvent) {
+        Model.getInstance().getViewFactory().minimizeStage((Stage) importTimesTextField.getScene().getWindow());
+    }
+
 }

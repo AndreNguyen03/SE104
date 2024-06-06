@@ -12,6 +12,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -34,7 +35,7 @@ public class ViewFactory {
 
     public void showMenuWindow(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Menu.fxml"));
-        createStage(loader);
+        stageMenu = createStage(loader);
         MenuController menuController = loader.getController();
         menuController.initData(user);
     }
@@ -108,6 +109,7 @@ public class ViewFactory {
         if(stageCategoryDisease==null){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Disease.fxml"));
             stageCategoryDisease=createStage(loader);
+
         } else {
             stageCategoryDisease.toFront();
         }
@@ -157,7 +159,6 @@ public class ViewFactory {
         if(stageExaminationHistory!=null && !stageExaminationHistory.isShowing()) stageExaminationHistory=null;
         if(stageCategoryAspirine!=null && !stageCategoryAspirine.isShowing()) stageCategoryAspirine=null;
         if(stageCategoryDisease!=null && !stageCategoryDisease.isShowing()) stageCategoryDisease=null;
-
     }
     public void minimizeStage(Stage stage)
     {

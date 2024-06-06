@@ -29,8 +29,7 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
 /*        LoginController loginController = new LoginController();
         loginController.showLogin();*/
-        /*Model.getInstance().getViewFactory().showLoginWindow();*/
-        Model.getInstance().getViewFactory().showMenuWindow(new User());
-
+        Model.getInstance().getViewFactory().showLoginWindow();
+     /*   Model.getInstance().getViewFactory().showMenuWindow(new User());*/
     }
 }

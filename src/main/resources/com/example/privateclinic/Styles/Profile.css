@@ -55,3 +55,12 @@
 {
     -fx-opacity: 0;
 }
+/*minimized*/
+.minimize
+{
+    -fx-background-color: transparent;
+}
+.minimize:hover
+{
+    -fx-background-color: #DFDFE2;
+}
