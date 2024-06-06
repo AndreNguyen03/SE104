@@ -3,14 +3,12 @@ package com.example.privateclinic.Controllers;
 import com.example.privateclinic.DataAccessObject.*;
 import com.example.privateclinic.Models.*;
 import com.example.privateclinic.WavPlayer;
-import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,7 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,9 +29,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -43,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,12 +50,12 @@ public  class ExaminationController implements Initializable {
     public Pane btnClose;
     public DatePicker dp_date;
     public TableView<Medicine>  tbl_resultSearchMedicine;
-    public TableView<Prescribe> tbl_chosenMedicine;
-    public TableColumn<Prescribe,Integer> col_stt,
+    public TableView<Receipt> tbl_chosenMedicine;
+    public TableColumn<Receipt,Integer> col_stt,
             col_ngay, col_sang, col_trua,col_chieu, col_toi,col_soLuongChosen;
-    public TableColumn<Prescribe,String> col_tenthuocChosen,col_donViChosen,col_dangThuocChosen,
+    public TableColumn<Receipt,String> col_tenthuocChosen,col_donViChosen,col_dangThuocChosen,
             col_cachDungChosen,col_maThuocChosen;
-    public TableColumn<Prescribe,Double> col_donGiaChosen,col_thanhTienChosen;
+    public TableColumn<Receipt,Double> col_donGiaChosen,col_thanhTienChosen;
     public TableColumn<Medicine,String> col_tenThuocResult,
             col_donViResult,col_dangThuocResult,
             col_cachDungResult;
@@ -80,6 +75,7 @@ public  class ExaminationController implements Initializable {
     public TextField tf_maBenhPhu;
     public TextField tf_tenBenhPhu;
     public TextField tf_luuY;
+    public TextField tf_tenbs;
     public TitledPane tpkeThuoc;
 
     public HBox pane_optionPatient;
@@ -104,6 +100,7 @@ public  class ExaminationController implements Initializable {
     @FXML
     RadioButton rad_patientWaiting,rad_patientDone;
     public Label  lbl_soLuong;
+    public Text examfee;
     @FXML
     Button btnLamMoi;
     @FXML
@@ -134,11 +131,11 @@ public  class ExaminationController implements Initializable {
     PatientDAO patientDAO;
     DiseaseDAO diseaseDAO;
     ExaminationDAO examinationDAO;
-    PrescribeDAO prescribeDAO;
+    ReceiptDAO receiptDAO;
     HistoryDAO historyDAO;
     Patient patientChosenBefore;
     Medicine medicineChosenBefore;
-    Prescribe prescribeChosenBefore;
+    Receipt prescribeChosenBefore;
     ExaminationHistory examinationHistorySent;
     Disease disease_main,disease_sub;
     boolean isChanged;
@@ -147,24 +144,28 @@ public  class ExaminationController implements Initializable {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private double xOffset = 0;
     private double yOffset =0;
+    int examfree=0;
+    int prescibefree=0;
     public void initData(User _user)
     {
         this.user=_user;
+        /*tf_tenbs.setText("BS."+user.getEmployName());*/
     }
     public void initFromHistory(ExaminationHistory _examinationHistory) {
-        examinationHistorySent=_examinationHistory;
+        examinationHistorySent = _examinationHistory;
         FillDataFromHistory();
         lbl_noPickMedicine.setVisible(false);
     }
 
     private void FillDataFromHistory() {
         Examination examination = examinationHistorySent.getExamination();
-        ObservableList<Prescribe> prescribes = examinationHistorySent.getPrescribe();
+        ObservableList<Receipt> prescribes = examinationHistorySent.getPrescribe();
         tf_trieuChung.setText(examination.getTrieuChung());
         tf_maBenhChinh.setText(String.valueOf(examination.getMaBenhChinh()));
         tf_tenBenhChinh.setText(examination.getTenBenhChinh());
         tf_maBenhPhu.setText(String.valueOf(examination.getMaBenhPhu()));
         tf_tenBenhPhu.setText(examination.getTenBenhPhu());
+      /*  tf_tenbs.setText("BS."+examination.getTenNhanVien());*/
         tf_luuY.setText(examination.getLuuy());
         tbl_chosenMedicine.setItems(prescribes);
         panel_diseasesResultSearch.setVisible(false);
@@ -200,6 +201,11 @@ public  class ExaminationController implements Initializable {
                 tbl_customer.getSelectionModel().clearSelection();
                 rad_patientWaiting.setSelected(true);
                 showDataPatients_waiting();
+                try {
+                    examfee.setText(examinationDAO.getValueRole(2));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         tbl_customer.setOnMouseClicked(mouseEvent -> {
@@ -213,13 +219,15 @@ public  class ExaminationController implements Initializable {
                         SetDisable();
                         ResetAllTextField();
                         tbl_chosenMedicine.getItems().clear();
+                       /* tf_tenbs.setText("BS."+user.getEmployName());*/
                         ResetTF(tf_maBenhChinh, tf_tenBenhChinh, tf_tenBenhPhu, tf_tenBenhPhu);
                         fillDataPatient_exam();
                         lbl_noPatientResult.setVisible(false);
-                    }
+                    } else {}
                 } else {
                         SetDisable();
                         ResetAllTextField();
+                      /*  tf_tenbs.setText("BS."+user.getEmployName());*/
                         tbl_chosenMedicine.getItems().clear();
                         ResetTF(tf_maBenhChinh, tf_tenBenhChinh, tf_tenBenhPhu, tf_tenBenhPhu);
                         fillDataPatient_exam();
@@ -406,11 +414,10 @@ public  class ExaminationController implements Initializable {
         btnXoa.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Prescribe prescribe = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
+                Receipt prescribe = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
                 if(!tbl_chosenMedicine.getItems().isEmpty()||prescribe==null)
                 {
-                    int response = ShowYesNoAlert("delete");
-                    if (response == JOptionPane.YES_OPTION) {
+                    if (ShowYesNoAlert("xoá") == JOptionPane.YES_OPTION) {
                         DeleteRowInChosenTable(tbl_chosenMedicine.getItems(),prescribe,true);
                         if(tbl_chosenMedicine.getItems().isEmpty())
                             lbl_noPickMedicine.setVisible(true);
@@ -434,10 +441,23 @@ public  class ExaminationController implements Initializable {
                 {
                     if(ShowYesNoAlert("lưu và kết thúc khám bệnh") == JOptionPane.YES_OPTION)
                     {
-                        if(saveExaminationInformationToDabase())  {
+                        Examination examination = new Examination(patientChosenBefore.getReceptionId(),user.getEmployee_id(), Integer.parseInt(tf_mabn.getText()),
+                                 Integer.parseInt(tf_maBenhChinh.getText()), Integer.parseInt(tf_maBenhPhu.getText()),
+                                tf_trieuChung.getText(), tf_luuY.getText());
+                        examfree = Integer.parseInt(examfee.getText());
+                        prescibefree=0;
+                        for (Receipt prescribe : tbl_chosenMedicine.getItems()) {
+                            prescibefree += (int) prescribe.getThanhTien();
+                        }
+                        if(saveExaminationInformationToDabase(examination,examfree,prescibefree))  {
                             showAlert("Notification","Lưu dữ liệu khám bệnh thành công!");
                             SetDisable();
                             LoadListPatients(Date.valueOf(dp_date.getValue()));
+                            try {
+                                examfee.setText(examinationDAO.getValueRole(2)); // cap nhat gia kham
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                             tbl_customer.setItems(listWaitingPatients);
                             tbl_customer.getSelectionModel().clearSelection();
                             lbl_noPatientResult.setVisible(false);
@@ -451,14 +471,14 @@ public  class ExaminationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 {
-                    if(!IsBlank()) {
-                        int request = ShowYesNoAlert("huỷ khám");
-                        if(request == JOptionPane.YES_OPTION){
+                    if(IsBlank()) {
+
+                        if(ShowYesNoAlert("huỷ khám") == JOptionPane.YES_OPTION){
                             ResetAllTextField();
                             SetDisable();
                             tbl_chosenMedicine.getItems().clear();
                             lbl_noPatientResult.setVisible(false);
-                        }
+                        } else {}
                     } else {
                         ResetAllTextField();
                         SetDisable();
@@ -466,6 +486,8 @@ public  class ExaminationController implements Initializable {
                         lbl_noPatientResult.setVisible(false);
                     }
                     examinationHistorySent=null;
+                    ResetTF(tf_mabn,tf_tenbn,tf_ngaysinh);
+                    tbl_customer.getSelectionModel().clearSelection();
                 }
             }
         });
@@ -479,7 +501,7 @@ public  class ExaminationController implements Initializable {
                         int id;
                         if(rad_womenVoice.isSelected()) gender = "women";
                         else gender ="men";
-                        id =patient.getPatientId();
+                        id =patient.getNumber();
                         WavPlayer.playSound(gender+id + ".wav");
                     }
                 }
@@ -518,13 +540,18 @@ public  class ExaminationController implements Initializable {
         medicineDAO= new MedicineDAO();
         diseaseDAO = new DiseaseDAO();
         examinationDAO= new ExaminationDAO();
-        prescribeDAO = new PrescribeDAO();
+        receiptDAO = new ReceiptDAO();
         historyDAO = new HistoryDAO();
         dp_date.setValue(LocalDate.now());
         lbl_soLuong.setText("0");
         pane_optionPatient.setDisable(true);
         rad_patientWaiting.setSelected(true);
         isChanged=false;
+        try {
+            examfee.setText(examinationDAO.getValueRole(2));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         SetDisable();
         tbl_chosenMedicine.getItems().clear();
         lbl_header.setOnMousePressed(mouseEvent -> {
@@ -562,40 +589,28 @@ public  class ExaminationController implements Initializable {
     }
 
 
-    private boolean saveExaminationInformationToDabase() {
-        int examId =saveExamination();// lay ma kham benh
-        if(savePrescibes(examId)&&examId>0)
-        {
-            return saveHistory(examId);
+    private boolean saveExaminationInformationToDabase(Examination examination,int examfee,int prescribefee ) {
+        int examId = examinationDAO.addExamination(examination);
+        if(examId>0) {
+            System.out.println("saved Examination!");
+            ObservableList<Receipt> listChosenPrescribe = tbl_chosenMedicine.getItems();
+            for(Receipt receipt: listChosenPrescribe){
+                receipt.setTienkham(examfee);
+                receipt.setTienthuoc(prescribefee);
+                if(receiptDAO.addReceiptAndDetailReceipt(examId,receipt)) {
+                    System.out.println("Created and saved Receipt and Detail receipt");
+                    if (medicineDAO.UpdateMedicineAfterExam(receipt.getMaThuoc(),receipt.getSoLuong())){
+                        System.out.println("updateAmount");
+                        if(examinationDAO.UpdateReception(examination.getMatn(), examination.getManv())) {
+                            System.out.println("Update reception");
+                            History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{examId}");
+                            return historyDAO.addHistory(history);
+                        }
+                    }
+                }
+            }
         }
         return false;
-    }
-
-    private boolean saveHistory(int _id) {
-        History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{_id}");
-        return historyDAO.addHistory(history);
-    }
-
-    private int saveExamination() {
-        Examination examination = new Examination(user.getEmployee_id(), Integer.parseInt(tf_mabn.getText()),
-                Date.valueOf(LocalDate.now()), Integer.parseInt(tf_maBenhChinh.getText()), Integer.parseInt(tf_maBenhPhu.getText()),
-                tf_trieuChung.getText(), tf_luuY.getText());
-        int examId = examinationDAO.addExamination(examination);
-        if(examId>=-1) System.out.println("saved Examination!");
-        return examId;
-    }
-
-    private boolean savePrescibes(int id) {
-        ObservableList<Prescribe> listChosenPrescribe = tbl_chosenMedicine.getItems();
-        for(Prescribe prescribe: listChosenPrescribe)
-        {
-            if(prescribeDAO.addPrescribe(id,prescribe)) {
-                System.out.println("saved Prescibes;");
-                if (!medicineDAO.UpdateMedicineAfterExam(prescribe.getMaThuoc(),prescribe.getSoLuong())) return false;
-            } else return false;
-        }
-        System.out.println("savePrescides");
-        return true;
     }
 
     private boolean isFullFilled() {
@@ -707,10 +722,10 @@ public  class ExaminationController implements Initializable {
             lbl_noDiseaseResult.setVisible(true);
         }
     }
-    private int DeleteRowInChosenTable(ObservableList<Prescribe> prescribes,Prescribe deletePrescribe,boolean updateIndex) {
+    private int DeleteRowInChosenTable(ObservableList<Receipt> prescribes, Receipt deletePrescribe, boolean updateIndex) {
         int index =0,pos_delete=0;
         boolean flag =false;
-        for(Prescribe prescribe : prescribes)
+        for(Receipt prescribe : prescribes)
         {
             if(prescribe.getMaThuoc()==deletePrescribe.getMaThuoc()) {
                 pos_delete=index;
@@ -727,7 +742,7 @@ public  class ExaminationController implements Initializable {
         return pos_delete;
     }
 
-    private void FillToPanel_KeThuoc(Prescribe prescribe) {
+    private void FillToPanel_KeThuoc(Receipt prescribe) {
         tf_tenThuoc.setText(prescribe.getTenThuoc());
         tf_donViTinh.setText(prescribe.getTenDonViTinh());
         tf_cachDung.setText(prescribe.getTenCachDung());
@@ -739,8 +754,8 @@ public  class ExaminationController implements Initializable {
         tf_toi.setText(String.valueOf(prescribe.getToi()));
     }
 
-    private boolean isProductExists(ObservableList<Prescribe> prescribes, Medicine medicine) {
-        for (Prescribe prescribe : prescribes) {
+    private boolean isProductExists(ObservableList<Receipt> prescribes, Medicine medicine) {
+        for (Receipt prescribe : prescribes) {
             // So sánh sản phẩm da chon với từng sản phẩm trong danh sách
             if (prescribe.getMaThuoc()==medicine.getMaThuoc()) {
                 return true; // Nếu sản phẩm đã tồn tại, trả về true
@@ -775,7 +790,7 @@ public  class ExaminationController implements Initializable {
         col_giaBanResult.setCellValueFactory(new PropertyValueFactory<>("giaBan"));
 
         //bang benh nhan
-        col_mabn.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        col_mabn.setCellValueFactory(new PropertyValueFactory<>("number"));
         col_tenbn.setCellValueFactory(new PropertyValueFactory<>("patientName"));
         col_sdt.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
 
@@ -783,14 +798,6 @@ public  class ExaminationController implements Initializable {
         col_maBenh.setCellValueFactory(new PropertyValueFactory<>("maBenh"));
         col_tenBenh.setCellValueFactory(new PropertyValueFactory<>("tenBenh"));
     }
-
-    private void updateIndexColumn(TableView<Prescribe> tableView) {
-            ObservableList<Prescribe> prescribes = tableView.getItems();
-            for (int i = 0; i < prescribes.size(); i++) {
-                prescribes.get(i).setSothuTu(i + 1);
-            }
-    }
-
     private boolean checkFillMedicine() {
         if(Integer.parseInt(lbl_soLuong.getText()) == 0)
         {
@@ -842,7 +849,7 @@ public  class ExaminationController implements Initializable {
     }
 
     private void addMedicineToMedicineTable(int maThuoc,double donGia,int position) {
-        Prescribe prescribe = new Prescribe(maThuoc,tf_tenThuoc.getText(),tf_donViTinh.getText(),tf_dangThuoc.getText(),
+        Receipt prescribe = new Receipt(maThuoc,tf_tenThuoc.getText(),tf_donViTinh.getText(),tf_dangThuoc.getText(),
                 tf_cachDung.getText(),donGia,
                 Integer.parseInt(tf_ngay.getText()),Integer.parseInt(tf_sang.getText()),
                 Integer.parseInt(tf_trua.getText()), Integer.parseInt(tf_chieu.getText()),
@@ -880,8 +887,8 @@ public  class ExaminationController implements Initializable {
     }
 
     private void LoadListPatients(Date date) {
-        listWaitingPatients=patientDAO.getPatientsFromReceptionByDate(Date.valueOf(dp_date.getValue()));
-        listDonePatients=patientDAO.getPatientsDoneByDate(date);
+        listWaitingPatients=examinationDAO.getPatientsFromReceptionByDate(Date.valueOf(dp_date.getValue()));
+        listDonePatients=examinationDAO.getPatientsDoneByDate(date);
     }
 
     private void showResultMedicineList(String search) {
@@ -971,12 +978,13 @@ public  class ExaminationController implements Initializable {
         JFrame frame = new JFrame("Table Example");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
-        return JOptionPane.showConfirmDialog(frame, "Có phải bạn muốn "+string+"?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        return JOptionPane.showConfirmDialog(null, "Có phải bạn muốn " + string + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
+        );
     }
     private void printToaThuoc() throws IOException {
         Document document = new Document();
 
-        String path = STR."\\Prescription\\\{removeAccentsAndSpaces(tf_tenbn.getText())}_toa.pdf";
+        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_toa.pdf";
         try {
             String maTenBenhPhu="";
             PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -1003,11 +1011,11 @@ public  class ExaminationController implements Initializable {
             }
             document.add(new Paragraph(STR."Mã BN:  \{tf_mabn.getText()} - Họ tên:  \{tf_tenbn.getText()} - Ngày sinh:  \{tf_ngaysinh.getText()} - Giới tính:  \{(gioitinh)}",regularFont));
             document.add(new Paragraph(STR."Triệu chứng:  \{tf_trieuChung.getText()}", regularFont));
-            if(!tf_maBenhPhu.getText().isEmpty()) maTenBenhPhu = STR."; (\{tf_maBenhPhu.getText()}) \{tf_maBenhChinh.getText()} ";
-            document.add(new Paragraph(STR."Chẩn đoán:     \{tf_maBenhPhu.getText()}  -  \{tf_tenBenhChinh.getText()}"+maTenBenhPhu, regularFont));
+            if(!tf_maBenhPhu.getText().isEmpty()) maTenBenhPhu = STR."; (\{tf_maBenhPhu.getText()}) \{tf_tenBenhPhu.getText()} ";
+            document.add(new Paragraph(STR."Chẩn đoán:     \{tf_maBenhChinh.getText()}  -  \{tf_tenBenhChinh.getText()}"+maTenBenhPhu, regularFont));
             document.add(new Paragraph("\n                                              THUỐC ĐIỀU TRỊ", titleBoldFont));
             int index=0;
-            for(Prescribe prescribe:tbl_chosenMedicine.getItems()){
+            for(Receipt prescribe:tbl_chosenMedicine.getItems()){
                 index++;
                 document.add(new Paragraph(prescribe.getSothuTu() + ") " + STR."\{prescribe.getTenThuoc()}                                                                                         SL: " +prescribe.getSoLuong() , boldFont));
                 String sang="",trua="",chieu="",toi="";
@@ -1022,7 +1030,7 @@ public  class ExaminationController implements Initializable {
             document.add(new Paragraph(STR."Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
                 document.add(new Paragraph(STR."Toa uống:       " + tf_ngay.getText() +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
             document.add(new Paragraph(STR."\n\nKhám lại mang theo đơn này." , footerbold));
-            document.add(new Paragraph(STR."Ngày giờ in: " +LocalDate.now() +"                                                                         BS." +user.getEmployName(), footerbold));
+            document.add(new Paragraph(STR."Ngày giờ in: " +LocalDate.now() +"                                                                         BS." +tf_tenbs.getText(), footerbold));
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
@@ -1098,18 +1106,12 @@ public  class ExaminationController implements Initializable {
             cell = new PdfPCell(new Paragraph("Thành tiền", boldFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-            int examfree = 35000;
-            int totalexamfree = 35000;
-            int prescibefree=0;
-            for (Prescribe prescribe : tbl_chosenMedicine.getItems()) {
-                prescibefree += prescribe.getThanhTien();
-            }
 
             table.addCell(new Paragraph("1. Khám bệnh:", boldFont));
             table.addCell(new Paragraph("", regularFont));
             table.addCell(new Paragraph("", regularFont));
             table.addCell(new Paragraph("", regularFont));
-            table.addCell(new Paragraph(String.valueOf(totalexamfree), boldFont));
+            table.addCell(new Paragraph(String.valueOf(examfree), boldFont));
 
             table.addCell(new Paragraph("   1. Công khám", regularFont));
             table.addCell(new Paragraph("Lần", regularFont));
@@ -1122,7 +1124,7 @@ public  class ExaminationController implements Initializable {
             table.addCell(new Paragraph("", boldFont));
             table.addCell(new Paragraph("", boldFont));
             table.addCell(new Paragraph(String.valueOf(prescibefree), boldFont));
-            for (Prescribe prescribe : tbl_chosenMedicine.getItems()) {
+            for (Receipt prescribe : tbl_chosenMedicine.getItems()) {
                 table.addCell(new Paragraph("   "+prescribe.getSothuTu()+STR.". \{prescribe.getTenThuoc()}", regularFont));
                 table.addCell(new Paragraph(String.valueOf(prescribe.getTenDonViTinh()), regularFont));
                 table.addCell(new Paragraph(String.valueOf(prescribe.getSoLuong()), regularFont));

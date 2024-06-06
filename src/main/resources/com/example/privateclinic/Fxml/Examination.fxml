@@ -112,7 +112,7 @@
                      <Insets left="8.0" />
                   </HBox.margin>
                </Button>
-               <Button id="add" fx:id="btnLuu" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Lưu">
+               <Button id="add" fx:id="btnLuu" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" style="-fx-pref-width: 120;" text="Khám xong">
                   <HBox.margin>
                      <Insets left="19.0" />
                   </HBox.margin>
@@ -155,7 +155,7 @@
       </Pane>
       <Pane layoutX="1162.0" onMouseClicked="#minimizeExam" prefHeight="35.0" prefWidth="43.0" styleClass="minimize">
          <children>
-            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0"  pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Images/minimize-sign.png" />
                </image>
@@ -165,6 +165,36 @@
             </ImageView>
          </children>
       </Pane>
+      <TextField fx:id="tf_tenbs" editable="false" layoutX="436.0" layoutY="17.0" prefHeight="37.0" prefWidth="247.0" promptText="Default" styleClass="input-field">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </TextField>
+      <HBox layoutX="801.0" layoutY="20.0" prefHeight="37.0" prefWidth="200.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chi phí khám:">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="examfee" fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="0 ">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Text>
+            <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="vnd">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Text>
+         </children>
+      </HBox>
    </AnchorPane>
    <Group layoutX="453.0" layoutY="150.0" />
    <TitledPane fx:id="tp_thongTin" animated="false" collapsible="false" layoutX="368.0" layoutY="68.0" prefHeight="207.0" prefWidth="479.0" text="Thông tin bệnh nhân">

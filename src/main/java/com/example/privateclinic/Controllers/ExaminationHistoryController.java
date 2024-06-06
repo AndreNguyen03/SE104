@@ -17,10 +17,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.ResourceBundle;
@@ -32,20 +28,20 @@ public class ExaminationHistoryController implements Initializable {
     public TableColumn<Examination,String> col_ngayvaoHistory;
     public Button btnReuse;
     public ComboBox<Integer> cbYear;
-    public TableView<Prescribe> tbl_kethuocHistory;
-    public TableColumn<Prescribe,Integer> col_stt;
-    public TableColumn<Prescribe,String> col_tenThuoc;
-    public TableColumn<Prescribe,String> col_donVi;
-    public TableColumn<Prescribe,String> col_dangThuoc;
-    public TableColumn<Prescribe,String> col_cachDung;
-    public TableColumn<Prescribe,String> col_Ngay;
-    public TableColumn<Prescribe,String> col_Sang;
-    public TableColumn<Prescribe,String> col_Trua;
-    public TableColumn<Prescribe,String> col_Chieu;
-    public TableColumn<Prescribe,String> col_Toi;
-    public TableColumn<Prescribe,String> col_soLuong;
-    public TableColumn<Prescribe,String> col_donGia;
-    public TableColumn<Prescribe,String> col_thanhTien;
+    public TableView<Receipt> tbl_kethuocHistory;
+    public TableColumn<Receipt,Integer> col_stt;
+    public TableColumn<Receipt,String> col_tenThuoc;
+    public TableColumn<Receipt,String> col_donVi;
+    public TableColumn<Receipt,String> col_dangThuoc;
+    public TableColumn<Receipt,String> col_cachDung;
+    public TableColumn<Receipt,String> col_Ngay;
+    public TableColumn<Receipt,String> col_Sang;
+    public TableColumn<Receipt,String> col_Trua;
+    public TableColumn<Receipt,String> col_Chieu;
+    public TableColumn<Receipt,String> col_Toi;
+    public TableColumn<Receipt,String> col_soLuong;
+    public TableColumn<Receipt,String> col_donGia;
+    public TableColumn<Receipt,String> col_thanhTien;
     public TextField tf_maBenhNhanHistory;
     public TextField tf_tenBenhNhanHistory;
     public JFXRadioButton rad_menHistory;
@@ -57,6 +53,7 @@ public class ExaminationHistoryController implements Initializable {
     public TextField tf_luuYHistory;
     public TextField tf_maBenhPhuHistory;
     public TextField tf_tenBenhPhuHistory;
+    public TextField tf_tenbs;
     private Patient patient;
     int currentYear;
      PatientDAO patientDAO;
@@ -135,12 +132,13 @@ public class ExaminationHistoryController implements Initializable {
 
     private void FillDataAfter2Clicked() {
         Examination examination = examHistoryBeforeClicked.getExamination();
-        ObservableList<Prescribe> prescribes = examHistoryBeforeClicked.getPrescribe();
+        ObservableList<Receipt> prescribes = examHistoryBeforeClicked.getPrescribe();
         tf_trieuChungHistory.setText(examination.getTrieuChung());
         tf_maBenhChinhHistory.setText(String.valueOf(examination.getMaBenhChinh()));
         tf_tenBenhChinhHistory.setText(examination.getTenBenhChinh());
         tf_maBenhPhuHistory.setText(String.valueOf(examination.getMaBenhPhu()));
         tf_tenBenhPhuHistory.setText(examination.getTenBenhPhu());
+        tf_tenbs.setText("BS."+examination.getTenNhanVien());
         tf_luuYHistory.setText(examination.getLuuy());
         tbl_kethuocHistory.setItems(prescribes);
     }
@@ -184,7 +182,7 @@ public class ExaminationHistoryController implements Initializable {
     private ExaminationHistory FindExamHistoryByExamination(Examination examination)
     {
         for(ExaminationHistory examinationHistory : listExaminationsHistory_detail) {
-            if(examinationHistory.getExamination().getMabn()==examination.getMabn()
+            if(examinationHistory.getExamination().getMatn()==examination.getMatn()
                     &&examinationHistory.getExamination().getNgay().equals(examination.getNgay())) return examinationHistory;
         }
         return null;

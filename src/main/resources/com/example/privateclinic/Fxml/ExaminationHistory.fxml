@@ -79,37 +79,47 @@
             </ImageView>
          </children>
       </Pane>
+      <TextField fx:id="tf_tenbs" layoutX="133.0" layoutY="16.0" prefHeight="37.0" prefWidth="247.0" promptText="Default" styleClass="input-field">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </TextField>
+      <Text layoutX="24.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Người khám">
+         <font>
+            <Font name="Segoe UI" size="16.0" />
+         </font>
+      </Text>
    </AnchorPane>
    <Group layoutX="453.0" layoutY="150.0" />
    <TitledPane animated="false" collapsible="false" layoutX="228.0" layoutY="69.0" prefHeight="206.0" prefWidth="495.0" text="Thông tin bệnh nhân">
       <content>
          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="485.0" style="-fx-background-color: ffffff;" styleClass="anchor">
-            <Text layoutX="15.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân:">
+            <Text layoutX="10.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã tiếp nhận:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_maBenhNhanHistory" editable="false" layoutX="127.0" layoutY="13.0" prefHeight="27.0" prefWidth="81.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_maBenhNhanHistory" editable="false" layoutX="120.0" layoutY="6.0" prefHeight="27.0" prefWidth="81.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="14.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh nhân:">
+            <Text layoutX="9.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên bệnh nhân:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_tenBenhNhanHistory" editable="false" layoutX="123.0" layoutY="54.0" prefHeight="37.0" prefWidth="235.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_tenBenhNhanHistory" editable="false" layoutX="119.0" layoutY="84.0" prefHeight="37.0" prefWidth="235.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="224.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
+            <Text layoutX="260.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <JFXRadioButton fx:id="rad_menHistory" disable="true" graphicTextGap="1.0" layoutX="284.0" layoutY="16.0" text="Nam">
+            <JFXRadioButton fx:id="rad_menHistory" disable="true" graphicTextGap="1.0" layoutX="320.0" layoutY="50.0" text="Nam">
                <font>
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
@@ -117,17 +127,37 @@
                   <ToggleGroup fx:id="sex" />
                </toggleGroup>
             </JFXRadioButton>
-            <JFXRadioButton fx:id="rad_womenHistory" disable="true" layoutX="361.0" layoutY="16.0" text="Nữ" toggleGroup="$sex">
+            <JFXRadioButton fx:id="rad_womenHistory" disable="true" layoutX="397.0" layoutY="50.0" text="Nữ" toggleGroup="$sex">
                <font>
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
             </JFXRadioButton>
-            <Text layoutX="15.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh:">
+            <Text layoutX="11.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_ngaysinhHistory" editable="false" layoutX="123.0" layoutY="104.0" prefHeight="37.0" prefWidth="237.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_ngaysinhHistory" editable="false" layoutX="119.0" layoutY="128.0" prefHeight="37.0" prefWidth="237.0" promptText="Default" styleClass="input-field">
+               <font>
+                  <Font name="Segoe UI" size="14.0" />
+               </font>
+            </TextField>
+            <Text layoutX="10.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại:">
+               <font>
+                  <Font name="Segoe UI" size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="tf_maBenhNhanHistory1" editable="false" layoutX="119.0" layoutY="45.0" prefHeight="32.0" prefWidth="122.0" promptText="Default" styleClass="input-field">
+               <font>
+                  <Font name="Segoe UI" size="14.0" />
+               </font>
+            </TextField>
+            <Text layoutX="223.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân:">
+               <font>
+                  <Font name="Segoe UI" size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="tf_maBenhNhanHistory11" editable="false" layoutX="335.0" layoutY="6.0" prefHeight="32.0" prefWidth="102.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -199,8 +229,8 @@
    </TitledPane>
    <TitledPane animated="false" collapsible="false" layoutX="224.0" layoutY="278.0" prefHeight="461.0" prefWidth="1202.0" text="Kê thuốc">
       <content>
-         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="1217.0" stylesheets="@../Styles/Examination.css">
-            <TableView id="tableview-main" fx:id="tbl_kethuocHistory" prefHeight="517.0" prefWidth="1196.0">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="1217.0" styleClass="anchor" stylesheets="@../Styles/Examination.css">
+            <TableView id="tableview-main" fx:id="tbl_kethuocHistory" prefHeight="291.0" prefWidth="1196.0">
                <columns>
                   <TableColumn fx:id="col_stt" prefWidth="49.99999809265137" text="STT" />
                   <TableColumn fx:id="col_tenThuoc" prefWidth="212.66663360595703" text="Tên thuốc" />
@@ -217,6 +247,88 @@
                   <TableColumn fx:id="col_thanhTien" prefWidth="117.33345540364576" text="Thành tiền" />
                </columns>
             </TableView>
+            <VBox layoutX="907.0" layoutY="305.0" prefHeight="89.0" prefWidth="276.0">
+               <children>
+                  <HBox prefHeight="45.0" prefWidth="276.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thuốc:">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="45.0" prefWidth="276.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền khám:">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="45.0" prefWidth="276.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thanh toán:">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </AnchorPane>
       </content>
    </TitledPane>
