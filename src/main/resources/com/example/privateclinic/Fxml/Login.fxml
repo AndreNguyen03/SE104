@@ -57,7 +57,7 @@
                         </Pane>
                      </children>
                   </HBox>
-                  <Text fill="#0488da" layoutX="64.0" layoutY="282.0" onMouseClicked="#backToLogin" strokeType="OUTSIDE" strokeWidth="0.0" text="Quay lại" textAlignment="CENTER" wrappingWidth="76.0">
+                  <Text fill="#0488da" layoutX="64.0" layoutY="282.0" onMouseClicked="#backToLogin" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl" text="Quay lại" textAlignment="CENTER" wrappingWidth="76.0">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
@@ -142,7 +142,7 @@
                         <TextField fx:id="tf_username_forgot" prefHeight="33.0" prefWidth="223.0" promptText="Username" style="-fx-font-size: 16; -fx-background-color: FFFFFF;" />
                      </children>
                   </HBox>
-                  <Text id="lbl" fill="#0488da" layoutX="41.0" layoutY="247.0" onMouseClicked="#backToLogin" strokeType="OUTSIDE" strokeWidth="0.0" text="Quay lại " textAlignment="CENTER">
+                  <Text fill="#0488da" layoutX="41.0" layoutY="247.0" onMouseClicked="#backToLogin" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl" text="Quay lại " textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
@@ -176,7 +176,7 @@
             </Pane>
             <Pane fx:id="loginPane" layoutX="56.0" layoutY="69.0" prefHeight="340.0" prefWidth="332.0" style="-fx-background-color: E9E9E9;">
                <children>
-                  <Text fill="#0488da" layoutX="43.0" layoutY="297.0" onMouseClicked="#forgotPasswordOnclick" strokeType="OUTSIDE" strokeWidth="0.0" text="Quên mật khẩu?" textAlignment="CENTER">
+                  <Text fill="#0488da" layoutX="43.0" layoutY="297.0" onMouseClicked="#forgotPasswordOnclick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl" text="Quên mật khẩu?" textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>

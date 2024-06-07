@@ -11,13 +11,15 @@ public class Examination {
     LocalDateTime ngay;
     int maBenhChinh;
     int maBenhPhu;
-    String trieuchung;
     String luuy;
 
     String tenBenhChinh;
     String tenBenhPhu;
     String trieuChung;
     String tenNhanVien;
+    int mahd;
+    int tienkham;
+    int tienthuoc;
     public Examination() {
     }
 
@@ -27,22 +29,10 @@ public class Examination {
         this.mabn = mabn;
         this.maBenhChinh = maBenhChinh;
         this.maBenhPhu = maBenhPhu;
-        this.trieuchung = trieuchung;
+        this.trieuChung = trieuchung;
         this.luuy = luuy;
     }
 
-    public Examination(int makb, int manv, int mabn, int maBenhChinh, int maBenhPhu, String trieuchung, String _luuy, String tenBenhChinh, String tenBenhPhu, String trieuChung, String luuY) {
-        this.makb = makb;
-        this.manv = manv;
-        this.mabn = mabn;
-        this.maBenhChinh = maBenhChinh;
-        this.maBenhPhu = maBenhPhu;
-        this.trieuchung = trieuchung;
-        this.tenBenhChinh = tenBenhChinh;
-        this.tenBenhPhu = tenBenhPhu;
-        this.trieuChung = trieuChung;
-        this.luuy = luuY;
-    }
 
     public int getMakb() {
         return makb;
@@ -83,15 +73,6 @@ public class Examination {
     public void setMaBenhPhu(int maBenhPhu) {
         this.maBenhPhu = maBenhPhu;
     }
-
-    public String getTrieuchung() {
-        return trieuchung;
-    }
-
-    public void setTrieuchung(String trieuchung) {
-        this.trieuchung = trieuchung;
-    }
-
     public String getLuuy() {
         return luuy;
     }
@@ -145,5 +126,29 @@ public class Examination {
 
     public void setTenNhanVien(String tenNhanVien) {
         this.tenNhanVien = tenNhanVien;
+    }
+
+    public int getMahd() {
+        return mahd;
+    }
+
+    public void setMahd(int mahd) {
+        this.mahd = mahd;
+    }
+
+    public int getTienkham() {
+        return tienkham;
+    }
+
+    public void setTienkham(int tienkham) {
+        this.tienkham = tienkham;
+    }
+
+    public int getTienthuoc() {
+        return tienthuoc;
+    }
+
+    public void setTienthuoc(int tienthuoc) {
+        this.tienthuoc = tienthuoc;
     }
 }

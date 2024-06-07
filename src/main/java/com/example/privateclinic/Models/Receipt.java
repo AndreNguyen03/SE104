@@ -34,7 +34,7 @@ public class Receipt {
     }
 
     public Receipt(int maThuoc, String tenThuoc, String tenDonViTinh, String tenDangThuoc, String tenCachDung, double donGia,
-                   int ngay, int sang, int trua, int chieu, int toi, int soLuong) {
+                   int ngay, int sang, int trua, int chieu, int toi, int soLuong,String _note) {
         this.maThuoc = maThuoc;
         //this.maKeThuoc = maKeThuoc;
         this.ngay = ngay;
@@ -45,6 +45,7 @@ public class Receipt {
         this.soLuong = soLuong;
         this.donGia = donGia;
         this.thanhTien = soLuong*donGia;
+        this.note = _note;
 
         this.tenThuoc = tenThuoc;
         this.tenCachDung = tenCachDung;

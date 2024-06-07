@@ -12,16 +12,16 @@ import java.time.format.DateTimeFormatter;
 
 public class ExaminationHistoryDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public  ObservableList<ExaminationHistory> getPatientsByDate(int id, int year)
+    public  ObservableList<ExaminationHistory> getHistoryExaminationByDate(int id, int year)
     {
         ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
-        String query = "SELECT DISTINCT kb.*,bn.*,tn.*, b1.tenbenh as tenBenhChinh, b2.tenbenh as tenBenhPhu " +
-                "FROM khambenh kb, kethuoc kt,benh b1,benh b2, benhnhan bn,tiepnhan tn WHERE EXTRACT(YEAR FROM kb.ngay) <= ? and bn.mabn= ?  AND bn.mabn = kb.mabn AND kt.makhambenh = kb.makb AND b1.mabenh=kb.benhchinh AND b2.mabenh=kb.benhphu AND bn.mabn = tn.mabn";
+        String query = "SELECT DISTINCT hd.*, kb.*, bn.*, tn.*, b1.tenbenh AS tenBenhChinh, b2.tenbenh AS tenBenhPhu, nv.hoten as tenbs " +
+                "FROM khambenh kb JOIN benh b1 ON b1.mabenh = kb.benhchinh LEFT JOIN benh b2 ON b2.mabenh = kb.benhphu JOIN benhnhan bn ON bn.mabn = ? JOIN tiepnhan tn ON tn.matn = kb.matn AND bn.mabn = tn.mabn JOIN hoadon hd ON hd.makb = kb.makb JOIN nhanvien nv ON nv.manv = kb.manv WHERE EXTRACT(YEAR FROM kb.ngay) <= ?";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
-            statement.setInt(1, year);
-            statement.setInt(2, id);
+            statement.setInt(1, id);
+            statement.setInt(2, year);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Patient patient = new Patient();
@@ -32,6 +32,7 @@ public class ExaminationHistoryDAO {
                     patient.setPatientAddress(resultSet.getString("diachi"));
                     patient.setArrivalDate(resultSet.getDate("ngayvao"));
                     patient.setPatientBirth(resultSet.getDate("ngaysinh"));
+                    patient.setNumber(resultSet.getInt("stt"));
 
                     Examination examination = new Examination();
                     examination.setMatn(resultSet.getInt("matn"));
@@ -40,15 +41,18 @@ public class ExaminationHistoryDAO {
                     examination.setTenNhanVien(getEmployee(examination.getManv()));
                     examination.setTenBenhChinh(resultSet.getString("tenBenhChinh"));
                     examination.setTenBenhPhu(resultSet.getString("tenBenhPhu"));
-                    examination.setNgay(LocalDateTime.parse(resultSet.getObject("ngay").toString(),formatter));
+                    examination.setNgay(LocalDateTime.parse(resultSet.getString("ngay"),formatter));
                     examination.setTrieuChung(resultSet.getString("trieuchung"));
                     examination.setLuuy(resultSet.getString("luuy"));
                     examination.setMaBenhChinh(resultSet.getInt("benhchinh"));
                     examination.setMaBenhPhu(resultSet.getInt("benhphu"));
+                    examination.setTienkham(resultSet.getInt("tienkham"));
+                    examination.setTienthuoc(resultSet.getInt("tienthuoc"));
+                    examination.setMahd(resultSet.getInt("mahd"));
+                    examination.setTenNhanVien(resultSet.getString("tenbs"));
+                    ObservableList<Receipt> receipt = getDetailReceipt(examination.getMakb());
 
-                    ObservableList<Receipt> prescribes = GetPrescribes(examination.getMakb());
-
-                    ExaminationHistory examinationHistory = new ExaminationHistory(patient,examination,prescribes);
+                    ExaminationHistory examinationHistory = new ExaminationHistory(patient,examination,receipt);
                     examinations.add(examinationHistory);
                 }
             }
@@ -57,38 +61,39 @@ public class ExaminationHistoryDAO {
         }
         return examinations;
     }
-    private ObservableList<Receipt> GetPrescribes(int exam_id) {
-        ObservableList<Receipt> prescribes = FXCollections.observableArrayList();
-        String query ="SELECT kt.*, t.*, cd.tencd,dvt.tendvt,dt.tendt FROM kethuoc kt,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t WHERE makhambenh = ? AND kt.mathuoc = t.mathuoc"+
+    private ObservableList<Receipt> getDetailReceipt(int exam_id) {
+        ObservableList<Receipt> detailReceipts = FXCollections.observableArrayList();
+        String query ="SELECT hd.*, t.*,ct.*, cd.tencd,dvt.tendvt,dt.tendt FROM hoadon hd,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t,cthd ct WHERE hd.makb = ? AND ct.mathuoc = t.mathuoc AND ct.mahd = hd.mahd"+
                 " AND t.macd = cd.macd AND t.madt = dt.madt AND t.madvt = dvt.madvt";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1,exam_id);
             try(ResultSet resultSet = statement.executeQuery()) {
                 if(resultSet==null) return null;
                 while (resultSet.next()) {
-                    Receipt prescribe = new Receipt();
-                    prescribe.setMakhambenh(exam_id);
-                    prescribe.setSothuTu(resultSet.getInt("sothutu"));
-                    prescribe.setMaThuoc(resultSet.getInt("mathuoc"));
-                    prescribe.setTenThuoc(resultSet.getString("tenthuoc"));
-                    prescribe.setTenCachDung(resultSet.getString("tencd"));
-                    prescribe.setTenDangThuoc(resultSet.getString("tendt"));
-                    prescribe.setTenDonViTinh(resultSet.getString("tendvt"));
-                    prescribe.setNgay(resultSet.getInt("ngay"));
-                    prescribe.setSang(resultSet.getInt("sang"));
-                    prescribe.setTrua(resultSet.getInt("trua"));
-                    prescribe.setChieu(resultSet.getInt("chieu"));
-                    prescribe.setToi(resultSet.getInt("toi"));
-                    prescribe.setSoLuong(resultSet.getInt("soluong"));
-                    prescribe.setDonGia(resultSet.getInt("giaban"));
-                    prescribe.setThanhTien(resultSet.getInt("thanhtien"));
-                    prescribes.add(prescribe);
+                    Receipt rowDetailreceipt = new Receipt();
+                    rowDetailreceipt.setMakhambenh(exam_id);
+                    rowDetailreceipt.setSothuTu(resultSet.getInt("stt"));
+                    rowDetailreceipt.setMaThuoc(resultSet.getInt("mathuoc"));
+                    rowDetailreceipt.setTenThuoc(resultSet.getString("tenthuoc"));
+                    rowDetailreceipt.setTenCachDung(resultSet.getString("tencd"));
+                    rowDetailreceipt.setTenDangThuoc(resultSet.getString("tendt"));
+                    rowDetailreceipt.setTenDonViTinh(resultSet.getString("tendvt"));
+                    rowDetailreceipt.setNgay(resultSet.getInt("ngay"));
+                    rowDetailreceipt.setSang(resultSet.getInt("sang"));
+                    rowDetailreceipt.setTrua(resultSet.getInt("trua"));
+                    rowDetailreceipt.setChieu(resultSet.getInt("chieu"));
+                    rowDetailreceipt.setToi(resultSet.getInt("toi"));
+                    rowDetailreceipt.setSoLuong(resultSet.getInt("soluong"));
+                    rowDetailreceipt.setDonGia(resultSet.getInt("giaban"));
+                    rowDetailreceipt.setThanhTien(resultSet.getInt("thanhtien"));
+                    rowDetailreceipt.setNote(resultSet.getString("note"));
+                    detailReceipts.add(rowDetailreceipt);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return prescribes;
+        return detailReceipts;
     }
     public String getEmployee(int id) throws SQLException {
         String query ="SELECT hoten FROM nhanvien WHERE manv = "+id+"";

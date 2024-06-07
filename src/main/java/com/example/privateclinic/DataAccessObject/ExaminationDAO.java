@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ExaminationDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public int addExamination(Examination examination)
     {
         LocalDateTime localDateTime = LocalDateTime.parse(LocalDateTime.now().format(formatter),formatter);
@@ -21,12 +21,14 @@ public class ExaminationDAO {
         int examId = -1;
         try (PreparedStatement statement =connectDB.databaseLink.prepareStatement(query)){
 
+            int maBp = examination.getMaBenhPhu();
             statement.setInt(1,examination.getManv());
             statement.setInt(2,examination.getMatn());
             statement.setObject(3,localDateTime);
             statement.setInt(4,examination.getMaBenhChinh());
-            statement.setInt(5,examination.getMaBenhPhu());
-            statement.setString(6,examination.getTrieuchung());
+            if(maBp==0) statement.setNull(5, java.sql.Types.INTEGER);
+            else statement.setInt(5,examination.getMaBenhPhu());
+            statement.setString(6,examination.getTrieuChung());
             statement.setString(7,examination.getLuuy());
             return connectDB.getId(statement);
         }
@@ -35,25 +37,6 @@ public class ExaminationDAO {
             e.printStackTrace();
         }
         return examId;
-    }
-    public  ObservableList<Examination> getPatientsByDate(int id, int year)
-    {
-        ObservableList<Examination> examinations = FXCollections.observableArrayList();
-        String query = "SELECT ngay FROM khambenh WHERE EXTRACT(YEAR FROM ngay) = ? and mabn= ? ";
-        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
-            statement.setInt(1, year);
-            statement.setInt(2, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Examination examination = new Examination();
-                    examination.setNgay(LocalDateTime.parse(resultSet.getObject( "ngay").toString(),formatter));
-                    examinations.add(examination);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return examinations;
     }
     public boolean UpdateReception(int matn,int makb)
     {
@@ -70,7 +53,7 @@ public class ExaminationDAO {
     }
     public ObservableList<Patient> getPatientsFromReceptionByDate(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT tn.stt, bn.hoten, bn.sdt ,bn.gioitinh, bn.ngaysinh, bn.diachi, tn.ngayvao, bn.mabn, tn.matn FROM benhnhan bn, tiepnhan tn WHERE bn.mabn = tn.mabn AND tn.ngayvao::date = ? AND tn.manv IS NULL";
+        String query = "SELECT tn.stt, bn.hoten, bn.sdt ,bn.gioitinh, bn.ngaysinh, bn.diachi, tn.ngayvao, bn.mabn, tn.matn FROM benhnhan bn, tiepnhan tn WHERE bn.mabn = tn.mabn AND tn.ngayvao::date = ? AND tn.manv IS NULL ORDER BY tn.stt ASC";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {

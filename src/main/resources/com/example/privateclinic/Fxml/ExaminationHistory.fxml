@@ -53,6 +53,11 @@
             <VBox layoutY="1.0" prefHeight="185.0" prefWidth="222.0" style="-fx-alignment: center;">
                <children>
                   <Button id="add" fx:id="btnReuse" mnemonicParsing="false" prefHeight="65.0" prefWidth="179.0" text="Sử dụng lại nội dung bảng kê này" />
+                  <Button id="add" fx:id="btnPrint" mnemonicParsing="false" prefHeight="65.0" prefWidth="179.0" text="In">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
          </AnchorPane>
@@ -99,7 +104,7 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_maBenhNhanHistory" editable="false" layoutX="120.0" layoutY="6.0" prefHeight="27.0" prefWidth="81.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_maTiepNhan" editable="false" layoutX="120.0" layoutY="6.0" prefHeight="32.0" prefWidth="71.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -147,17 +152,27 @@
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_maBenhNhanHistory1" editable="false" layoutX="119.0" layoutY="45.0" prefHeight="32.0" prefWidth="122.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_phoneNumber" editable="false" layoutX="119.0" layoutY="45.0" prefHeight="32.0" prefWidth="122.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="223.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân:">
+            <Text layoutX="304.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân:">
                <font>
                   <Font name="Segoe UI" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="tf_maBenhNhanHistory11" editable="false" layoutX="335.0" layoutY="6.0" prefHeight="32.0" prefWidth="102.0" promptText="Default" styleClass="input-field">
+            <TextField fx:id="tf_maBenhNhanHistory" editable="false" layoutX="407.0" layoutY="6.0" prefHeight="32.0" prefWidth="67.0" promptText="Default" styleClass="input-field">
+               <font>
+                  <Font name="Segoe UI" size="14.0" />
+               </font>
+            </TextField>
+            <Text layoutX="198.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STT:">
+               <font>
+                  <Font name="Segoe UI" size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="tf_soThuTu" editable="false" layoutX="229.0" layoutY="6.0" prefHeight="32.0" prefWidth="67.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
                </font>
@@ -245,10 +260,28 @@
                   <TableColumn fx:id="col_soLuong" prefWidth="90.6666259765625" text="Số lượng" />
                   <TableColumn fx:id="col_donGia" prefWidth="76.6666259765625" text="Đơn giá" />
                   <TableColumn fx:id="col_thanhTien" prefWidth="117.33345540364576" text="Thành tiền" />
+                  <TableColumn fx:id="col_note" prefWidth="250.0" text="Ghi chú" />
                </columns>
             </TableView>
-            <VBox layoutX="907.0" layoutY="305.0" prefHeight="89.0" prefWidth="276.0">
+            <VBox layoutX="907.0" layoutY="305.0" prefHeight="111.0" prefWidth="276.0">
                <children>
+                  <HBox prefHeight="45.0" prefWidth="276.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã hoá đơn:">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="txtReceiptId" fill="#656565" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
+                  </HBox>
                   <HBox prefHeight="45.0" prefWidth="276.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thuốc:">
@@ -256,12 +289,12 @@
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                         </Text>
-                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="txtPrescribeFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="5.0" />
                            </HBox.margin>
                         </Text>
                         <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
@@ -269,7 +302,7 @@
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="2.0" />
                            </HBox.margin>
                         </Text>
                      </children>
@@ -281,12 +314,12 @@
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                         </Text>
-                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="txtExamFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="5.0" />
                            </HBox.margin>
                         </Text>
                         <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
@@ -294,7 +327,7 @@
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="2.0" />
                            </HBox.margin>
                         </Text>
                      </children>
@@ -309,12 +342,12 @@
                               <Insets left="40.0" />
                            </HBox.margin>
                         </Text>
-                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="txtTotalFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="5.0" />
                            </HBox.margin>
                         </Text>
                         <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
@@ -322,7 +355,7 @@
                               <Font name="Segoe UI" size="16.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="2.0" />
                            </HBox.margin>
                         </Text>
                      </children>

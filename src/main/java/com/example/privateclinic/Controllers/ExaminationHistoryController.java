@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -26,7 +27,7 @@ public class ExaminationHistoryController implements Initializable {
     public Pane btnClose;
     public TableView<Examination> tbl_examHistory;
     public TableColumn<Examination,String> col_ngayvaoHistory;
-    public Button btnReuse;
+    public Button btnReuse,btnPrint;
     public ComboBox<Integer> cbYear;
     public TableView<Receipt> tbl_kethuocHistory;
     public TableColumn<Receipt,Integer> col_stt;
@@ -42,6 +43,7 @@ public class ExaminationHistoryController implements Initializable {
     public TableColumn<Receipt,String> col_soLuong;
     public TableColumn<Receipt,String> col_donGia;
     public TableColumn<Receipt,String> col_thanhTien;
+    public TableColumn<Receipt,String> col_note;
     public TextField tf_maBenhNhanHistory;
     public TextField tf_tenBenhNhanHistory;
     public JFXRadioButton rad_menHistory;
@@ -53,8 +55,15 @@ public class ExaminationHistoryController implements Initializable {
     public TextField tf_luuYHistory;
     public TextField tf_maBenhPhuHistory;
     public TextField tf_tenBenhPhuHistory;
+    public TextField tf_maTiepNhan;
+    public TextField tf_phoneNumber;
     public TextField tf_tenbs;
+    public Text txtReceiptId;
+    public TextField tf_soThuTu;
     private Patient patient;
+    public Text txtPrescribeFee;
+    public Text txtExamFee;
+    public Text txtTotalFee;
     int currentYear;
      PatientDAO patientDAO;
      ExaminationHistoryDAO examinationHistoryDAO;
@@ -63,12 +72,16 @@ public class ExaminationHistoryController implements Initializable {
      ExaminationHistory examHistoryBeforeClicked;
     ExaminationController examinationController ;
     boolean firstAccess =true;
-    public void initData(Patient _patient, ExaminationController _examinationController)
+    public void initData(Patient _patient, ExaminationController _examinationController,boolean fromWaitingList)
     {
+        if(fromWaitingList) btnReuse.setVisible(true); else btnReuse.setVisible(false);
         this.patient = _patient;
         tf_maBenhNhanHistory.setText(String.valueOf(patient.getPatientId()));
         tf_tenBenhNhanHistory.setText(patient.getPatientName());
         tf_ngaysinhHistory.setText(String.valueOf(patient.getPatientBirth()));
+        tf_phoneNumber.setText(patient.getPatientPhoneNumber());
+        tf_maTiepNhan.setText(String.valueOf(patient.getReceptionId()));
+        tf_soThuTu.setText(String.valueOf(patient.getNumber()));
         if(patient.getPatientGender().equals("Nam"))
             rad_menHistory.setSelected(true);
         else rad_womenHistory.setSelected(true);
@@ -108,8 +121,10 @@ public class ExaminationHistoryController implements Initializable {
     private void setAction() {
         cbYear.valueProperty().addListener(new ChangeListener<Integer>() {
             @Override
-            public void changed(ObservableValue<? extends Integer> observableValue, Integer integer, Integer t1) {
-                LoadHistory_Date(cbYear.getValue());
+            public void changed(ObservableValue<? extends Integer> observableValue, Integer oldValue, Integer newValue) {
+                if(!LoadHistory_Date(newValue)) {
+                    cbYear.setValue(oldValue);
+                }
             }
         });
         tbl_examHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -124,15 +139,26 @@ public class ExaminationHistoryController implements Initializable {
         btnReuse.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                examinationController.initFromHistory(examHistoryBeforeClicked);
-                Model.getInstance().getViewFactory().closeStage((Stage) btnClose.getScene().getWindow());
+                if(examHistoryBeforeClicked!=null) {
+                    examinationController.initFromHistory(examHistoryBeforeClicked,false);
+                    Model.getInstance().getViewFactory().closeStage((Stage) btnClose.getScene().getWindow());
+                }
+            }
+        });
+        btnPrint.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (examHistoryBeforeClicked != null) {
+                    examinationController.initFromHistory(examHistoryBeforeClicked, true);
+                    Model.getInstance().getViewFactory().closeStage((Stage) btnClose.getScene().getWindow());
+                }
             }
         });
     }
 
     private void FillDataAfter2Clicked() {
         Examination examination = examHistoryBeforeClicked.getExamination();
-        ObservableList<Receipt> prescribes = examHistoryBeforeClicked.getPrescribe();
+        ObservableList<Receipt> detailReceipts = examHistoryBeforeClicked.getPrescribe();
         tf_trieuChungHistory.setText(examination.getTrieuChung());
         tf_maBenhChinhHistory.setText(String.valueOf(examination.getMaBenhChinh()));
         tf_tenBenhChinhHistory.setText(examination.getTenBenhChinh());
@@ -140,7 +166,12 @@ public class ExaminationHistoryController implements Initializable {
         tf_tenBenhPhuHistory.setText(examination.getTenBenhPhu());
         tf_tenbs.setText("BS."+examination.getTenNhanVien());
         tf_luuYHistory.setText(examination.getLuuy());
-        tbl_kethuocHistory.setItems(prescribes);
+        txtReceiptId.setText(String.valueOf(examination.getMahd()));
+        tbl_kethuocHistory.setItems(detailReceipts);
+        txtExamFee.setText(String.valueOf(examination.getTienkham()));
+        txtPrescribeFee.setText(String.valueOf(examination.getTienthuoc()));
+        txtTotalFee.setText(String.valueOf(examination.getTienkham()+examination.getTienthuoc()));
+
     }
 
     private void setUpTableView() {
@@ -159,11 +190,12 @@ public class ExaminationHistoryController implements Initializable {
         col_soLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
         col_donGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
         col_thanhTien.setCellValueFactory(new PropertyValueFactory<>("thanhTien"));
+        col_note.setCellValueFactory(new PropertyValueFactory<>("note"));
     }
 
-    private void LoadHistory_Date(int year) {
+    private boolean LoadHistory_Date(int year) {
         listExaminationsHistory.clear();
-        listExaminationsHistory_detail=examinationHistoryDAO.getPatientsByDate(patient.getPatientId(), year);
+        listExaminationsHistory_detail=examinationHistoryDAO.getHistoryExaminationByDate(patient.getPatientId(), year);
         for(ExaminationHistory examinationHistory : listExaminationsHistory_detail) {
             listExaminationsHistory.add(examinationHistory.getExamination());
         }
@@ -174,10 +206,13 @@ public class ExaminationHistoryController implements Initializable {
                 showAlert("Warning",patient.getPatientName() +" không có trong dữ liệu đã khám!");
                 Model.getInstance().getViewFactory().closeStage((Stage) btnReuse.getScene().getWindow());
             } else {
-                showAlert("Warning", String.format("Từ năm %d về trước không ghi nhận bệnh nhân %s đến khám", cbYear.getValue(), patient.getPatientName()));            }
+                showAlert("Warning", String.format("Từ năm %d về trước không ghi nhận bệnh nhân %s đến khám", cbYear.getValue(), patient.getPatientName()));
+                return false;
+            }
 
         }
         firstAccess=false;
+        return true;
     }
     private ExaminationHistory FindExamHistoryByExamination(Examination examination)
     {

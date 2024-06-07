@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,12 +48,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public  class ExaminationController implements Initializable {
-    public Pane btnClose;
+    public Pane btnClose,paneTopSub;
     public DatePicker dp_date;
     public TableView<Medicine>  tbl_resultSearchMedicine;
     public TableView<Receipt> tbl_chosenMedicine;
     public TableColumn<Receipt,Integer> col_stt,
-            col_ngay, col_sang, col_trua,col_chieu, col_toi,col_soLuongChosen;
+            col_ngay, col_sang, col_trua,col_chieu, col_toi,col_soLuongChosen,col_note;
     public TableColumn<Receipt,String> col_tenthuocChosen,col_donViChosen,col_dangThuocChosen,
             col_cachDungChosen,col_maThuocChosen;
     public TableColumn<Receipt,Double> col_donGiaChosen,col_thanhTienChosen;
@@ -61,7 +62,12 @@ public  class ExaminationController implements Initializable {
             col_cachDungResult;
     public TableColumn<Medicine,Integer> col_maThuocResult,col_soLuongResult;
     public TableColumn<Medicine,Double> col_giaBanResult;
-    public Pane panel_MedicineResultSearch,panel_diseasesResultSearch;
+    public Pane panel_MedicineResultSearch,panel_diseasesResultSearch,panelCurrentFree;
+    public Pane panelFee,panelLeft,panelRight,panelExam;
+    public  Text receptionId,examID,dotorName,examDate;
+    public  Text patientId,patientName,patientBirthDay,patientGender,number;
+    public  Text receiptId,txtPrescribeFee,txtExamFee,txtTotalFee;
+    public  Text txtTrieuChung,txtBenhChinh,txtBenhPhu;
     public Label lbl_searchMedicineString,lbl_searchDiseaseString;
     public Button btnKham;
     public Button btnThem;
@@ -77,9 +83,8 @@ public  class ExaminationController implements Initializable {
     public TextField tf_luuY;
     public TextField tf_tenbs;
     public TitledPane tpkeThuoc;
-
     public HBox pane_optionPatient;
-
+    public TextField tf_stt,tf_receptionID;
     public Label lbl_noMedicineResult;
     public Label lbl_noPatientResult;
     public Label lbl_noPickMedicine;
@@ -100,7 +105,8 @@ public  class ExaminationController implements Initializable {
     @FXML
     RadioButton rad_patientWaiting,rad_patientDone;
     public Label  lbl_soLuong;
-    public Text examfee;
+    public Text examfee,timeUpdate;
+    public Pane paneBlock;
     @FXML
     Button btnLamMoi;
     @FXML
@@ -108,7 +114,7 @@ public  class ExaminationController implements Initializable {
     @FXML
     TextField tf_mabn,tf_tenbn,tf_ngaysinh;
     @FXML
-    TextField tf_ngay,tf_sang,tf_trua,tf_chieu,tf_toi;
+    TextField tf_ngay,tf_sang,tf_trua,tf_chieu,tf_toi,tf_note;
     @FXML
     TextField tf_tenThuoc;
     @FXML
@@ -138,7 +144,7 @@ public  class ExaminationController implements Initializable {
     Receipt prescribeChosenBefore;
     ExaminationHistory examinationHistorySent;
     Disease disease_main,disease_sub;
-    boolean isChanged;
+    boolean isChanged,wantPrint;
     User user;
     public AnchorPane lbl_header,lbl_header2;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -149,26 +155,85 @@ public  class ExaminationController implements Initializable {
     public void initData(User _user)
     {
         this.user=_user;
-        /*tf_tenbs.setText("BS."+user.getEmployName());*/
+        tf_tenbs.setText("BS."+user.getEmployName());
     }
-    public void initFromHistory(ExaminationHistory _examinationHistory) {
+    public void initFromHistory(ExaminationHistory _examinationHistory,boolean boolPrint) {
         examinationHistorySent = _examinationHistory;
-        FillDataFromHistory();
+        wantPrint=boolPrint;
+        SetUpToPrint(boolPrint);
+        FillDataFromHistoryToPrint(boolPrint);
         lbl_noPickMedicine.setVisible(false);
     }
-
-    private void FillDataFromHistory() {
+    private void FillDataFromHistoryToPrint( boolean bool) { // fillReuseOrPrint
+        Stage stage = (Stage) btnThem.getScene().getWindow();
+        stage.toFront();
         Examination examination = examinationHistorySent.getExamination();
         ObservableList<Receipt> prescribes = examinationHistorySent.getPrescribe();
-        tf_trieuChung.setText(examination.getTrieuChung());
-        tf_maBenhChinh.setText(String.valueOf(examination.getMaBenhChinh()));
-        tf_tenBenhChinh.setText(examination.getTenBenhChinh());
-        tf_maBenhPhu.setText(String.valueOf(examination.getMaBenhPhu()));
-        tf_tenBenhPhu.setText(examination.getTenBenhPhu());
-      /*  tf_tenbs.setText("BS."+examination.getTenNhanVien());*/
-        tf_luuY.setText(examination.getLuuy());
+        Patient patient = examinationHistorySent.getCustomer();
         tbl_chosenMedicine.setItems(prescribes);
-        panel_diseasesResultSearch.setVisible(false);
+        if(bool) {
+            tp_thongTin.setVisible(false);
+            tp_khamBenh.setVisible(false);
+
+            receptionId.setText(String.valueOf(examination.getMatn()));
+            examID.setText(String.valueOf(examination.getMakb()));
+            dotorName.setText(examination.getTenNhanVien());
+            examDate.setText(examination.getNgay().toString().replace("T", " "));
+
+            receiptId.setText(String.valueOf(examination.getMahd()));
+            txtPrescribeFee.setText(String.valueOf(examination.getTienthuoc()));
+            txtExamFee.setText(String.valueOf(examination.getTienkham()));
+            txtExamFee.setText(String.valueOf(examination.getTienthuoc()+examination.getTienkham()));
+
+            patientId.setText(String.valueOf(patient.getPatientId()));
+            patientName.setText(patient.getPatientName());
+            patientBirthDay.setText(patient.getPatientBirth().toString());
+            patientGender.setText(patient.getPatientGender());
+            number.setText(String.valueOf(patient.getNumber()));
+
+            txtTrieuChung.setText(examination.getTrieuChung());
+            txtBenhChinh.setText(examination.getTenBenhChinh());
+            txtBenhPhu.setText(examination.getTenBenhPhu());
+        } else {
+            tp_thongTin.setVisible(true);
+            tp_khamBenh.setVisible(true);
+            tf_trieuChung.setText(examination.getTrieuChung());
+            tf_maBenhChinh.setText(String.valueOf(examination.getMaBenhChinh()));
+            tf_tenBenhChinh.setText(examination.getTenBenhChinh());
+            tf_maBenhPhu.setText(String.valueOf(examination.getMaBenhPhu()));
+            tf_tenBenhPhu.setText(examination.getTenBenhPhu());
+            tf_luuY.setText(examination.getLuuy());
+            tbl_chosenMedicine.setItems(prescribes);
+            panel_diseasesResultSearch.setVisible(false);
+        }
+
+    }
+
+    private void SetUpToPrint(boolean bool) {
+        paneTopSub.setVisible(!bool);
+        examDate.setVisible(bool);
+        panelCurrentFree.setVisible(!bool);
+        panelFee.setVisible(bool);
+        panelExam.setVisible(bool);
+        panelLeft.setVisible(bool);
+        panelRight.setVisible(bool);
+        tpkeThuoc.setDisable(!bool);
+        tp_thongTin.setVisible(!bool);
+        tp_khamBenh.setVisible(!bool);
+        paneBlock.setVisible(bool);
+        if(bool) {
+            tpkeThuoc.setText("Chi tiết hoá đơn");
+            tpkeThuoc.setLayoutX(369);
+            tpkeThuoc.setLayoutY(298);
+            tpkeThuoc.setPrefHeight(572);
+            tpkeThuoc.setPrefWidth(1215);
+        } else{
+            tpkeThuoc.setText("Kê thuốc");
+            tpkeThuoc.setLayoutX(366);
+            tpkeThuoc.setLayoutY(300);
+            tpkeThuoc.setPrefHeight(579);
+            tpkeThuoc.setPrefWidth(1223);
+        }
     }
 
     @Override
@@ -199,10 +264,10 @@ public  class ExaminationController implements Initializable {
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
                 tbl_customer.setItems(listWaitingPatients);
                 tbl_customer.getSelectionModel().clearSelection();
-                rad_patientWaiting.setSelected(true);
-                showDataPatients_waiting();
+                if(rad_patientWaiting.isSelected()) showDataPatients_waiting(); else showDataPatients_done();
                 try {
                     examfee.setText(examinationDAO.getValueRole(2));
+                    timeUpdate.setText(LocalDateTime.now().format(formatter).split(" ")[1]);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -218,8 +283,9 @@ public  class ExaminationController implements Initializable {
                         /* existFilled();*/
                         SetDisable();
                         ResetAllTextField();
+                        SetUpToPrint(false);
                         tbl_chosenMedicine.getItems().clear();
-                       /* tf_tenbs.setText("BS."+user.getEmployName());*/
+                        tf_tenbs.setText("BS."+user.getEmployName());
                         ResetTF(tf_maBenhChinh, tf_tenBenhChinh, tf_tenBenhPhu, tf_tenBenhPhu);
                         fillDataPatient_exam();
                         lbl_noPatientResult.setVisible(false);
@@ -227,7 +293,7 @@ public  class ExaminationController implements Initializable {
                 } else {
                         SetDisable();
                         ResetAllTextField();
-                      /*  tf_tenbs.setText("BS."+user.getEmployName());*/
+                        tf_tenbs.setText("BS."+user.getEmployName());
                         tbl_chosenMedicine.getItems().clear();
                         ResetTF(tf_maBenhChinh, tf_tenBenhChinh, tf_tenBenhPhu, tf_tenBenhPhu);
                         fillDataPatient_exam();
@@ -238,9 +304,10 @@ public  class ExaminationController implements Initializable {
         tf_tenThuoc.textProperty().addListener((observable,oldValue,newValue) -> {
             //show
             //hiển thi ket qua tim kiem
-            if(!newValue.trim().equals(""))
+            newValue.replaceAll("\\s+", " ");
+            if(!newValue.isEmpty())
             {
-                showResultMedicineList(tf_tenThuoc.getText());
+                showResultMedicineList(tf_tenThuoc.getText().trim());
                 if(panel_diseasesResultSearch.isVisible()) panel_diseasesResultSearch.setVisible(false); // hide disease to open medicine
                 panel_MedicineResultSearch.setVisible(true);
                 medicineChosenBefore=null;
@@ -288,8 +355,7 @@ public  class ExaminationController implements Initializable {
                 LoadListPatients(Date.valueOf(dp_date.getValue()));
                 tbl_customer.setItems(listWaitingPatients);
                 tbl_customer.getSelectionModel().clearSelection();
-                rad_patientWaiting.setSelected(true);
-                showDataPatients_waiting();
+                if(rad_patientWaiting.isSelected()) showDataPatients_waiting(); else showDataPatients_done();
                 ResetAllTextField();
                 patientChosenBefore=null;
                 pane_optionPatient.setDisable(true);
@@ -307,6 +373,7 @@ public  class ExaminationController implements Initializable {
                         tf_cachDung.setText(medicine.getTenCachDung());
                         tf_dangThuoc.setText(medicine.getTenDangThuoc());
                         tf_donViTinh.setText(medicine.getTenDonViTinh());
+                        tf_note.promptTextProperty().setValue("Thêm ghi chú cho thuốc "+tf_tenThuoc.getText());
                         medicineChosenBefore=medicine;
                         btnThem.setDisable(false);
                         panel_MedicineResultSearch.setVisible(false);
@@ -333,6 +400,7 @@ public  class ExaminationController implements Initializable {
                         tf_trua.setDisable(false);
                         tf_chieu.setDisable(false);
                         tf_toi.setDisable(false);
+                        tf_note.setDisable(false);
                         FillToPanel_KeThuoc(prescribeChosenBefore);
                         panel_MedicineResultSearch.setVisible(false);
                         btnThem.setText("Lưu");
@@ -377,7 +445,7 @@ public  class ExaminationController implements Initializable {
         btnKham.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(rad_patientWaiting.isSelected()) {
+                if(rad_patientWaiting.isSelected()&&CheckPatientInWaitingList(patientChosenBefore)) {
                     if(!tbl_customer.getSelectionModel().isEmpty())
                     {
                         SetUnDisable();
@@ -415,7 +483,7 @@ public  class ExaminationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 Receipt prescribe = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
-                if(!tbl_chosenMedicine.getItems().isEmpty()||prescribe==null)
+                if(!tbl_chosenMedicine.getItems().isEmpty()||prescribe!=null)
                 {
                     if (ShowYesNoAlert("xoá") == JOptionPane.YES_OPTION) {
                         DeleteRowInChosenTable(tbl_chosenMedicine.getItems(),prescribe,true);
@@ -431,30 +499,47 @@ public  class ExaminationController implements Initializable {
         btnLichSuKham.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(patientChosenBefore!=null) Model.getInstance().getViewFactory().showHistoryExamination(patientChosenBefore,ExaminationController.this);
+                if(patientChosenBefore!=null) {
+                    boolean fromWaitingList = CheckPatientInWaitingList(patientChosenBefore);
+                    Model.getInstance().getViewFactory().showHistoryExamination(patientChosenBefore,ExaminationController.this,fromWaitingList);
+                }
             }
         });
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(tp_thongTin.isVisible()&& isFullFilled())
+                if(tp_thongTin.isVisible()&& CheckPatientInWaitingList(patientChosenBefore)&&isFullFilled())
                 {
+                    if(tbl_chosenMedicine.getItems().isEmpty()) {
+                        if(JOptionPane.showConfirmDialog(null, "Không dùng thuốc cho bệnh nhân?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) ==JOptionPane.NO_OPTION)
+                        {
+                            return;
+                        }
+                    }
                     if(ShowYesNoAlert("lưu và kết thúc khám bệnh") == JOptionPane.YES_OPTION)
                     {
+                        int maBP = 0;
+                        try {
+                            maBP = Integer.parseInt(tf_maBenhPhu.getText());
+                        } catch (NumberFormatException e){
+
+                        }
                         Examination examination = new Examination(patientChosenBefore.getReceptionId(),user.getEmployee_id(), Integer.parseInt(tf_mabn.getText()),
-                                 Integer.parseInt(tf_maBenhChinh.getText()), Integer.parseInt(tf_maBenhPhu.getText()),
+                                 Integer.parseInt(tf_maBenhChinh.getText()), maBP,
                                 tf_trieuChung.getText(), tf_luuY.getText());
                         examfree = Integer.parseInt(examfee.getText());
                         prescibefree=0;
                         for (Receipt prescribe : tbl_chosenMedicine.getItems()) {
                             prescibefree += (int) prescribe.getThanhTien();
                         }
+                        PrepareToPrint(examination,patientChosenBefore,tbl_chosenMedicine.getItems());
                         if(saveExaminationInformationToDabase(examination,examfree,prescibefree))  {
                             showAlert("Notification","Lưu dữ liệu khám bệnh thành công!");
                             SetDisable();
                             LoadListPatients(Date.valueOf(dp_date.getValue()));
                             try {
                                 examfee.setText(examinationDAO.getValueRole(2)); // cap nhat gia kham
+                                timeUpdate.setText(LocalDateTime.now().format(formatter).split(" ")[1]);
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
@@ -486,8 +571,10 @@ public  class ExaminationController implements Initializable {
                         lbl_noPatientResult.setVisible(false);
                     }
                     examinationHistorySent=null;
-                    ResetTF(tf_mabn,tf_tenbn,tf_ngaysinh);
+                    patientChosenBefore=null;
+                    ResetTF(tf_mabn,tf_tenbn,tf_ngaysinh,tf_stt,tf_receptionID);
                     tbl_customer.getSelectionModel().clearSelection();
+                    SetUpToPrint(false);
                 }
             }
         });
@@ -510,32 +597,58 @@ public  class ExaminationController implements Initializable {
         btnInToaThuoc.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                try {
-                    if(IsBlank()) {
-                        if(ShowYesNoAlert("in toa thuốc")==JOptionPane.YES_OPTION) printToaThuoc();
+                if(wantPrint && examinationHistorySent!=null) {
+                    try {
+                        if (ShowYesNoAlert("in toa thuốc") == JOptionPane.YES_OPTION) printToaThuoc();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });
         btnInBangKe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(IsBlank()) {
-                    if(patientChosenBefore!=null||examinationHistorySent!=null) {
-                        try {
-                            if(ShowYesNoAlert("xuất bảng kê")==JOptionPane.YES_OPTION)  printBangke();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                if(wantPrint &&examinationHistorySent!=null) {
+                    try {
+                        if(ShowYesNoAlert("xuất bảng kê")==JOptionPane.YES_OPTION)  printBangke();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
         });
-
+        tf_tenThuoc.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                panel_MedicineResultSearch.setVisible(true);
+                tf_tenThuoc.setText("   ");
+            }
+        });
     }
+
+    private void PrepareToPrint(Examination examination, Patient patientChosenBefore, ObservableList<Receipt> items) {
+        if(examinationHistorySent== null) examinationHistorySent = new ExaminationHistory();
+        examinationHistorySent.setExamination(examination);
+        examinationHistorySent.setCustomer(patientChosenBefore);
+        examinationHistorySent.setPrescribe(items);
+        wantPrint = true;
+    }
+
+    private boolean CheckPatientInWaitingList(Patient choosen_patient) {
+        boolean fromWaitingList = false;
+        for(Patient patient : listWaitingPatients) {
+            if(patient.getReceptionId()== choosen_patient.getReceptionId()) {
+                fromWaitingList=true;
+                break;
+            }
+        }
+        return fromWaitingList;
+    }
+
     private void SetUp() {
+        SetUpToPrint(false);
+        paneTopSub.setVisible(true);
         patientDAO = new PatientDAO();
         medicineDAO= new MedicineDAO();
         diseaseDAO = new DiseaseDAO();
@@ -549,6 +662,7 @@ public  class ExaminationController implements Initializable {
         isChanged=false;
         try {
             examfee.setText(examinationDAO.getValueRole(2));
+            timeUpdate.setText(LocalDateTime.now().format(formatter).split(" ")[1]);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -574,6 +688,24 @@ public  class ExaminationController implements Initializable {
             stage.setX(mouseEvent.getScreenX()-xOffset);
             stage.setY(mouseEvent.getScreenY()-yOffset);
         });
+        panel_diseasesResultSearch.visibleProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean old, Boolean t1) {
+                if(!t1){
+                    if(panel_diseasesResultSearch.getLayoutY()==191){
+                        if(tf_maBenhChinh.getText().isEmpty()||tf_tenBenhChinh.getText().isEmpty()) {
+                            tf_tenBenhChinh.clear();
+                            tf_maBenhChinh.clear();
+                        }
+                    } else {
+                        if(tf_maBenhPhu.getText().isEmpty()||tf_tenBenhPhu.getText().isEmpty()) {
+                            tf_tenBenhPhu.clear();
+                            tf_maBenhPhu.clear();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void SetDisableKeThuoc(boolean bool) {
@@ -582,31 +714,35 @@ public  class ExaminationController implements Initializable {
         tf_chieu.setDisable(bool);
         tf_toi.setDisable(bool);
         tf_ngay.setDisable(bool);
+        tf_note.setDisable(bool);
     }
 
-    private boolean IsBlank() { // tồn tại một tf đã điền thì trả về false
+    private boolean IsBlank() { // tồn tại một tf chua điền thì trả về false
         return !tbl_chosenMedicine.getItems().isEmpty() && !tf_trieuChung.getText().isEmpty() && !tf_luuY.getText().isEmpty() && !tf_maBenhPhu.getText().isEmpty() && !tf_maBenhChinh.getText().isEmpty();
     }
-
 
     private boolean saveExaminationInformationToDabase(Examination examination,int examfee,int prescribefee ) {
         int examId = examinationDAO.addExamination(examination);
         if(examId>0) {
             System.out.println("saved Examination!");
             ObservableList<Receipt> listChosenPrescribe = tbl_chosenMedicine.getItems();
-            for(Receipt receipt: listChosenPrescribe){
-                receipt.setTienkham(examfee);
-                receipt.setTienthuoc(prescribefee);
-                if(receiptDAO.addReceiptAndDetailReceipt(examId,receipt)) {
-                    System.out.println("Created and saved Receipt and Detail receipt");
-                    if (medicineDAO.UpdateMedicineAfterExam(receipt.getMaThuoc(),receipt.getSoLuong())){
-                        System.out.println("updateAmount");
-                        if(examinationDAO.UpdateReception(examination.getMatn(), examination.getManv())) {
-                            System.out.println("Update reception");
-                            History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{examId}");
-                            return historyDAO.addHistory(history);
+            int receipt_id = receiptDAO.addReceipt(examId,examfee,prescribefee);
+            if(receipt_id>0) {
+                System.out.println("Created RECEIPT");
+                if(prescibefree!=0) {
+                    for (Receipt prescribe : listChosenPrescribe) {
+                        if (receiptDAO.AddDetailReceipt(receipt_id, prescribe)) {
+                            System.out.println("Created and saved Receipt and Detail receipt");
+                            if (medicineDAO.UpdateMedicineAfterExam(prescribe.getMaThuoc(), prescribe.getSoLuong())) {
+                                System.out.println("updateAmount");
+                            }
                         }
                     }
+                }
+                if (examinationDAO.UpdateReception(examination.getMatn(), examination.getManv())) {
+                    System.out.println("Update reception");
+                    History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{examId}");
+                    return historyDAO.addHistory(history);
                 }
             }
         }
@@ -620,10 +756,6 @@ public  class ExaminationController implements Initializable {
         if(tf_trieuChung.getText().isEmpty()||tf_maBenhChinh.getText().isEmpty()
                 ||tf_luuY.getText().isEmpty()) {
             showAlert("Warning","Thiếu thông tin khám bệnh!");
-            return false;
-        }
-        if(tbl_chosenMedicine.getItems().isEmpty()) {
-            showAlert("Warning","Chưa kê thuốc cho bệnh nhân");
             return false;
         }
         return true;
@@ -752,6 +884,7 @@ public  class ExaminationController implements Initializable {
         tf_trua.setText(String.valueOf(prescribe.getTrua()));
         tf_chieu.setText(String.valueOf(prescribe.getChieu()));
         tf_toi.setText(String.valueOf(prescribe.getToi()));
+        tf_note.setText(prescribe.getNote());
     }
 
     private boolean isProductExists(ObservableList<Receipt> prescribes, Medicine medicine) {
@@ -779,7 +912,7 @@ public  class ExaminationController implements Initializable {
         col_soLuongChosen.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
         col_donGiaChosen.setCellValueFactory(new PropertyValueFactory<>("donGia"));
         col_thanhTienChosen.setCellValueFactory(new PropertyValueFactory<>("thanhTien"));
-
+        col_note.setCellValueFactory(new PropertyValueFactory<>("note"));
         //bang tim kiem thuoc
         col_maThuocResult.setCellValueFactory(new PropertyValueFactory<>("maThuoc"));
         col_tenThuocResult.setCellValueFactory(new PropertyValueFactory<>("tenThuoc"));
@@ -839,6 +972,10 @@ public  class ExaminationController implements Initializable {
         tf_toi.setText("0");
         tf_ngay.setText("1");
         lbl_soLuong.setText("0");
+        tf_donViTinh.clear();
+        tf_dangThuoc.clear();
+        tf_cachDung.clear();
+        tf_note.clear();
     }
 
     private void ResetTF(TextField...tfs) {
@@ -853,7 +990,7 @@ public  class ExaminationController implements Initializable {
                 tf_cachDung.getText(),donGia,
                 Integer.parseInt(tf_ngay.getText()),Integer.parseInt(tf_sang.getText()),
                 Integer.parseInt(tf_trua.getText()), Integer.parseInt(tf_chieu.getText()),
-                Integer.parseInt(tf_toi.getText()), Integer.parseInt(lbl_soLuong.getText()));
+                Integer.parseInt(tf_toi.getText()), Integer.parseInt(lbl_soLuong.getText()),tf_note.getText());
         if(position==-1) // thêm vào cuoi nhu binh thuong
         {
             int stt = tbl_chosenMedicine.getItems().size();
@@ -880,10 +1017,14 @@ public  class ExaminationController implements Initializable {
         tp_khamBenh.setDisable(true);
         tp_thongTin.setDisable(true);
         lbl_noMedicineResult.setVisible(true);
-        lbl_noPatientResult.setVisible(true);
-        lbl_noPickMedicine.setVisible(true);
+        if(tbl_customer.getItems().isEmpty()) lbl_noPatientResult.setVisible(true); else lbl_noPatientResult.setVisible(false);
+        if(tbl_chosenMedicine.getItems().isEmpty()) lbl_noPickMedicine.setVisible(true); else lbl_noPickMedicine.setVisible(false);
         panel_MedicineResultSearch.setVisible(false);
         panel_diseasesResultSearch.setVisible(false);
+        paneBlock.setVisible(false);
+        examinationHistorySent=null;
+        wantPrint = false;
+        paneTopSub.setVisible(true);
     }
 
     private void LoadListPatients(Date date) {
@@ -959,6 +1100,8 @@ public  class ExaminationController implements Initializable {
         tf_mabn.setText(String.valueOf(patientChosenBefore.getPatientId()));
         tf_ngaysinh.setText(String.valueOf(patientChosenBefore.getPatientBirth()));
         tf_tenbn.setText(patientChosenBefore.getPatientName());
+        tf_receptionID.setText(String.valueOf(patientChosenBefore.getReceptionId()));
+        tf_stt.setText(String.valueOf(patientChosenBefore.getNumber()));
         if(patientChosenBefore.getPatientGender().equals("Nam"))
             rad_men.setSelected(true);
         else rad_women.setSelected(true);
@@ -975,16 +1118,22 @@ public  class ExaminationController implements Initializable {
         alert.showAndWait();
     }
     private int ShowYesNoAlert(String string) {
-        JFrame frame = new JFrame("Table Example");
+/*        JFrame frame = new JFrame("Table Example");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(400, 300);*/
         return JOptionPane.showConfirmDialog(null, "Có phải bạn muốn " + string + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
         );
     }
     private void printToaThuoc() throws IOException {
         Document document = new Document();
-
-        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_toa.pdf";
+        Patient patient = examinationHistorySent.getCustomer();
+        ObservableList<Receipt> detailReceipt = examinationHistorySent.getPrescribe();
+        Examination examination = examinationHistorySent.getExamination();
+        if(detailReceipt.isEmpty()) {
+            showAlert("Warning","Bệnh nhân " + patient.getPatientName() +" với mã TN: " +examination.getMatn()+" không mua thuốc tại phòng khám");
+            return;
+        }
+        String path = STR."\{removeAccentsAndSpaces(patient.getPatientName())}_toa.pdf";
         try {
             String maTenBenhPhu="";
             PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -1004,18 +1153,13 @@ public  class ExaminationController implements Initializable {
             document.add(new Paragraph("Số điện thoại: 1900 1555", footerbold));
             document.add(new Paragraph("Địa chỉ:  136, Linh Trung, Thủ Đức, TP Thủ Đức", regularFont));
             document.add(new Paragraph("                                                ĐƠN THUỐC", titleBoldFont));
-            String gioitinh ;
-            if(rad_men.isSelected()) gioitinh = "Name";
-            else {
-                gioitinh = "Nữ";
-            }
-            document.add(new Paragraph(STR."Mã BN:  \{tf_mabn.getText()} - Họ tên:  \{tf_tenbn.getText()} - Ngày sinh:  \{tf_ngaysinh.getText()} - Giới tính:  \{(gioitinh)}",regularFont));
-            document.add(new Paragraph(STR."Triệu chứng:  \{tf_trieuChung.getText()}", regularFont));
-            if(!tf_maBenhPhu.getText().isEmpty()) maTenBenhPhu = STR."; (\{tf_maBenhPhu.getText()}) \{tf_tenBenhPhu.getText()} ";
-            document.add(new Paragraph(STR."Chẩn đoán:     \{tf_maBenhChinh.getText()}  -  \{tf_tenBenhChinh.getText()}"+maTenBenhPhu, regularFont));
+            document.add(new Paragraph(STR."Mã BN:  \{patient.getPatientId()} - Họ tên:  \{patient.getPatientName()} - Ngày sinh:  \{patient.getPatientBirth()} - Giới tính:  \{(patient.getPatientGender())}",regularFont));
+            document.add(new Paragraph(STR."Triệu chứng:  \{examination.getTrieuChung()}", regularFont));
+            if(examination.getMaBenhPhu()>=0) maTenBenhPhu = STR."; (\{examination.getMaBenhPhu()}) \{examination.getTenBenhPhu()} ";
+            document.add(new Paragraph(STR."Chẩn đoán:     \{examination.getMaBenhChinh()}  -  \{examination.getTenBenhChinh()} "+maTenBenhPhu, regularFont));
             document.add(new Paragraph("\n                                              THUỐC ĐIỀU TRỊ", titleBoldFont));
-            int index=0;
-            for(Receipt prescribe:tbl_chosenMedicine.getItems()){
+            int index=0,maxDay=0;
+            for(Receipt prescribe:detailReceipt){
                 index++;
                 document.add(new Paragraph(prescribe.getSothuTu() + ") " + STR."\{prescribe.getTenThuoc()}                                                                                         SL: " +prescribe.getSoLuong() , boldFont));
                 String sang="",trua="",chieu="",toi="";
@@ -1024,13 +1168,16 @@ public  class ExaminationController implements Initializable {
                 if(prescribe.getChieu()>0) chieu =STR."Chiều: \{prescribe.getChieu()} viên";
                 if(prescribe.getToi()>0) toi =STR."Tối: \{prescribe.getToi()} viên";
                 document.add(new Paragraph("        Uống:    "+sang+"          "+trua+"          "+chieu+"             "+toi+"" , regularFont));
+                if(!prescribe.getNote().isEmpty())
+                    document.add(new Paragraph("     Nhắc:"+prescribe.getNote()+"" , regularFont));
+                if(prescribe.getNgay()>maxDay) maxDay = prescribe.getNgay();
             }
             LocalDate date = LocalDate.now();
-            document.add(new Paragraph(STR."\nLời dặn: \{tf_luuY.getText()}                                                              Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
+            document.add(new Paragraph(STR."\nLời dặn: \{examination.getLuuy()}                                                              Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
             document.add(new Paragraph(STR."Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
-                document.add(new Paragraph(STR."Toa uống:       " + tf_ngay.getText() +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
+                document.add(new Paragraph(STR."Toa uống:       " + maxDay +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
             document.add(new Paragraph(STR."\n\nKhám lại mang theo đơn này." , footerbold));
-            document.add(new Paragraph(STR."Ngày giờ in: " +LocalDate.now() +"                                                                         BS." +tf_tenbs.getText(), footerbold));
+            document.add(new Paragraph(STR."Ngày giờ in: " +LocalDateTime.parse(LocalDateTime.now().format(formatter)) +"                                                                         BS." +examination.getTenNhanVien(), footerbold));
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
@@ -1044,8 +1191,12 @@ public  class ExaminationController implements Initializable {
     }
     private void printBangke() throws IOException {
         Document document = new Document();
-
-        String path = STR."\\Prescription\\\{removeAccentsAndSpaces(tf_tenbn.getText())}_bangke.pdf";
+        Patient patient = examinationHistorySent.getCustomer();
+        ObservableList<Receipt> detailReceipt = examinationHistorySent.getPrescribe();
+        Examination examination = examinationHistorySent.getExamination();
+        examfree = examination.getTienkham();
+        prescibefree = examination.getTienthuoc();
+        String path = STR."\{removeAccentsAndSpaces(tf_tenbn.getText())}_bangke.pdf";
         try {
             PdfWriter.getInstance(document, new FileOutputStream(path));
             document.open();
@@ -1056,6 +1207,7 @@ public  class ExaminationController implements Initializable {
             Font boldFont = new Font(baseFont, 13, Font.BOLD);
             Font titleBoldFont = new Font(baseFont, 17, Font.BOLD);
             Font regularFont = new Font(baseFont, 14);
+            Font smallFont = new Font(baseFont, 12);
             Font footerbold = new Font(baseFont, 13, Font.BOLD);
 
             document.add(new Paragraph("PHÒNG MẠCH TƯ", boldFont));
@@ -1065,17 +1217,12 @@ public  class ExaminationController implements Initializable {
             document.add(new Paragraph("Địa chỉ:  136, Linh Trung, Thủ Đức, TP Thủ Đức", regularFont));
             document.add(new Paragraph("                                    BẢNG KÊ CHI PHÍ KHÁM BỆNH", titleBoldFont));
             document.add(new Paragraph("I. Phần hành chính:", boldFont));
-            String gioitinh;
-            if (rad_men.isSelected()) gioitinh = "Nam";
-            else {
-                gioitinh = "Nữ";
-            }
-            document.add(new Paragraph(STR."Mã BN:  \{tf_mabn.getText()} - Họ tên:  \{tf_tenbn.getText()} - Ngày sinh:  \{tf_ngaysinh.getText()} - Giới tính:  \{(gioitinh)}", regularFont));
-            document.add(new Paragraph(STR."Triệu chứng:  \{tf_trieuChung.getText()}", regularFont));
+            document.add(new Paragraph(STR."Mã BN:  \{patient.getPatientId()} - Họ tên:  \{patient.getPatientName()} - Ngày sinh:  \{patient.getPatientBirth()} - Giới tính:  \{patient.getPatientGender()}", regularFont));
+            document.add(new Paragraph(STR."Triệu chứng:  \{examination.getTrieuChung()}", regularFont));
             String maTenBenhPhu = "";
-            if (!tf_maBenhPhu.getText().isEmpty())
-                maTenBenhPhu = STR.";   Bệnh phụ: (\{tf_maBenhPhu.getText()}) - \{tf_tenBenhPhu.getText()} ";
-            document.add(new Paragraph(STR."Chẩn đoán:   Bệnh chính: \{tf_maBenhChinh.getText()} - \{tf_tenBenhChinh.getText()}" + maTenBenhPhu, regularFont));
+            if (examination.getMaBenhPhu()>0)
+                maTenBenhPhu = STR.";   Bệnh phụ: (\{examination.getMaBenhPhu()}) - \{examination.getTenBenhPhu()} ";
+            document.add(new Paragraph(STR."Chẩn đoán:   Bệnh chính: \{examination.getMaBenhChinh()} - \{examination.getTenBenhChinh()}" + maTenBenhPhu, regularFont));
             document.add(new Paragraph("\nII. Phần chi phí khám bệnh: ", boldFont));
 
             PdfPTable table = new PdfPTable(5);
@@ -1124,12 +1271,20 @@ public  class ExaminationController implements Initializable {
             table.addCell(new Paragraph("", boldFont));
             table.addCell(new Paragraph("", boldFont));
             table.addCell(new Paragraph(String.valueOf(prescibefree), boldFont));
-            for (Receipt prescribe : tbl_chosenMedicine.getItems()) {
-                table.addCell(new Paragraph("   "+prescribe.getSothuTu()+STR.". \{prescribe.getTenThuoc()}", regularFont));
-                table.addCell(new Paragraph(String.valueOf(prescribe.getTenDonViTinh()), regularFont));
-                table.addCell(new Paragraph(String.valueOf(prescribe.getSoLuong()), regularFont));
-                table.addCell(new Paragraph(String.valueOf((int)prescribe.getDonGia()), regularFont));
-                table.addCell(new Paragraph(String.valueOf((int)prescribe.getThanhTien()), regularFont));
+            if(prescibefree!=0) {
+                for (Receipt prescribe : detailReceipt) {
+                    table.addCell(new Paragraph("   "+prescribe.getSothuTu()+STR.". \{prescribe.getTenThuoc()}", regularFont));
+                    table.addCell(new Paragraph(String.valueOf(prescribe.getTenDonViTinh()), regularFont));
+                    table.addCell(new Paragraph(String.valueOf(prescribe.getSoLuong()), regularFont));
+                    table.addCell(new Paragraph(String.valueOf((int)prescribe.getDonGia()), regularFont));
+                    table.addCell(new Paragraph(String.valueOf((int)prescribe.getThanhTien()), regularFont));
+                }
+            } else {
+                table.addCell(new Paragraph("Bệnh nhân không không mua thuốc từ phòng khám", smallFont));
+                table.addCell(new Paragraph("", regularFont));
+                table.addCell(new Paragraph("", regularFont));
+                table.addCell(new Paragraph("", regularFont));
+                table.addCell(new Paragraph("", regularFont));
             }
             table.addCell(new Paragraph("Cộng", boldFont));
             table.addCell(new Paragraph("", boldFont));
@@ -1179,10 +1334,14 @@ public  class ExaminationController implements Initializable {
             tf_maBenhPhu.clear();
             tf_tenBenhPhu.clear();
         }
-        tbl_resultSearchDisease.setVisible(false);
+        panel_diseasesResultSearch.setVisible(false);
     }
 
     public void minimizeExam(MouseEvent mouseEvent) {
         Model.getInstance().getViewFactory().minimizeStage((Stage) btnClose.getScene().getWindow());
+    }
+
+    public void closeResultMedicine(MouseEvent mouseEvent) {
+        tf_tenThuoc.clear();
     }
 }
