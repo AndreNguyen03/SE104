@@ -34,12 +34,13 @@ public class ReceiptDAO {
         }
     }
     public int addReceipt(int examinationID, int tienkham, int tienthuoc) {
-        String query = "INSERT INTO hoadon (makb,tienkham,tienthuoc) " +
-                " VALUES(?,?,?) RETURNING mahd";
+        String query = "INSERT INTO hoadon (makb,tienkham,tienthuoc,tongtien) " +
+                " VALUES(?,?,?,?) RETURNING mahd";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, examinationID);
             statement.setInt(2, tienkham);
             statement.setInt(3,tienthuoc);
+            statement.setInt(4,tienkham + tienthuoc );
             return connectDB.getId(statement);
         } catch (SQLException e) {
             e.printStackTrace();
