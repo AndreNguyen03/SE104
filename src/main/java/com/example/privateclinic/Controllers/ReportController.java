@@ -10,6 +10,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -62,32 +63,38 @@ public class ReportController {
 
     @FXML
     private TableColumn<DrugUsageReport, Integer> usageCountColumn;
+    ReportDAO reportDAO = new ReportDAO();
 
     @FXML
     public void initialize() {
+        SetUpTable();
         loadMonthlyReportData();
         loadDrugUsageReportData();
         initializeChart();
     }
 
+    private void SetUpTable() {
+        sttColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        patientCountColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        revenueColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        rateColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        drugSttColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        unitColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        drugNameColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        usageCountColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+    }
+
     private void loadMonthlyReportData() {
-        try (Connection conn = ConnectDB.getInstance().databaseLink) {
-            ReportDAO dao = new ReportDAO();
-            List<MonthlyReport> reports = dao.getMonthlyReports(conn);
-            monthlyReportTable.getItems().setAll(reports);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ReportDAO dao = new ReportDAO();
+        List<MonthlyReport> reports = dao.getMonthlyReports();
+        monthlyReportTable.getItems().setAll(reports);
     }
 
     private void loadDrugUsageReportData() {
-        try (Connection conn = ConnectDB.getInstance().databaseLink) {
-            ReportDAO dao = new ReportDAO();
-            List<DrugUsageReport> reports = dao.getDrugUsageReports(conn);
+            List<DrugUsageReport> reports = reportDAO.getDrugUsageReports();
             drugUsageReportTable.getItems().setAll(reports);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initializeChart() {
