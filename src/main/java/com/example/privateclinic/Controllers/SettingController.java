@@ -4,12 +4,14 @@ import com.example.privateclinic.DataAccessObject.RegulationDAO;
 import com.example.privateclinic.Models.Regulation;
 import com.example.privateclinic.Models.Model;
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -32,9 +34,10 @@ public class SettingController implements Initializable {
 
     @FXML
     private TextField tf_MaxMoney;
-
+    public TitledPane tltSetting;
     private final RegulationDAO regulationDAO = new RegulationDAO();
-
+    private double xOffset = 0;
+    private double yOffset =0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSettings();
@@ -42,6 +45,27 @@ public class SettingController implements Initializable {
         saveButton.setOnAction(event -> saveSettings());
         cancelButton.setOnAction(event -> resetSettings());
         closeButton.setOnAction(event -> closeStage());
+        tf_MaxPatient.textProperty().addListener((observableValue, oldvalue,newvalue) -> {
+            if (!newvalue.matches("\\d*")) {
+                tf_MaxPatient.setText(newvalue.replaceAll("[^\\d]", ""));
+                showErrorMessage("Chỉ nhập số");
+            }
+        });
+        tf_MaxPatient.textProperty().addListener((observableValue, oldvalue,newvalue) -> {
+            if (!newvalue.matches("\\d*")) {
+                tf_MaxPatient.setText(newvalue.replaceAll("[^\\d]", ""));
+                showErrorMessage("Chỉ nhập số");
+            }
+        });
+        tltSetting.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getScreenY();
+        });
+        tltSetting.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void loadSettings() {
@@ -105,4 +129,5 @@ public class SettingController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }
