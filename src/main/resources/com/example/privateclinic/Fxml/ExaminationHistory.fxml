@@ -26,7 +26,7 @@
          <HBox.margin>
             <Insets top="2.0" />
          </HBox.margin>
-         <AnchorPane centerShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="211.0" scaleShape="false" styleClass="header-logo">
+         <AnchorPane centerShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="222.0" scaleShape="false" styleClass="header-logo">
             <ImageView fitHeight="65.0" fitWidth="61.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Images/ClinicUIT.png" />
@@ -63,7 +63,7 @@
          </AnchorPane>
       </VBox>
    </HBox>
-   <AnchorPane layoutX="225.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1202.0" styleClass="header-top">
+   <AnchorPane fx:id="paneHeader" layoutX="225.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="1202.0" styleClass="header-top">
       <Pane fx:id="btnClose" layoutX="1159.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
          <children>
             <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" styleClass="image_hover">
@@ -244,7 +244,7 @@
    </TitledPane>
    <TitledPane animated="false" collapsible="false" layoutX="224.0" layoutY="278.0" prefHeight="461.0" prefWidth="1202.0" text="Kê thuốc">
       <content>
-         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="1217.0" styleClass="anchor" stylesheets="@../Styles/Examination.css">
+         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="1217.0" styleClass="anchor" stylesheets="@../Styles/ExaminationHistory.css">
             <TableView id="tableview-main" fx:id="tbl_kethuocHistory" prefHeight="291.0" prefWidth="1196.0">
                <columns>
                   <TableColumn fx:id="col_stt" prefWidth="49.99999809265137" text="STT" />
@@ -263,105 +263,109 @@
                   <TableColumn fx:id="col_note" prefWidth="250.0" text="Ghi chú" />
                </columns>
             </TableView>
-            <VBox layoutX="907.0" layoutY="305.0" prefHeight="111.0" prefWidth="276.0">
+            <Pane id="revenue" layoutX="880.0" layoutY="298.0" prefHeight="125.0" prefWidth="310.0" styleClass="pnl">
                <children>
-                  <HBox prefHeight="45.0" prefWidth="276.0">
+                  <VBox layoutX="14.0" layoutY="7.0" prefHeight="111.0" prefWidth="276.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã hoá đơn:">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                        </Text>
-                        <Text fx:id="txtReceiptId" fill="#656565" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Text>
+                        <HBox prefHeight="45.0" prefWidth="276.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16px;" text="Mã hoá đơn:">
+                                 <font>
+                                    <Font name="Segoe UI" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="txtReceiptId" fill="#47ad9b" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="0">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="276.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16px;" text="Tổng tiền thuốc:">
+                                 <font>
+                                    <Font name="Segoe UI" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="txtPrescribeFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="0">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#47ad9b" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="VND">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="276.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16px;" text="Tổng tiền khám:">
+                                 <font>
+                                    <Font name="Segoe UI" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="txtExamFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="0">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="VND">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="276.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16px;" text="Tổng tiền thanh toán:">
+                                 <font>
+                                    <Font name="Segoe UI" size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fx:id="txtTotalFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="0">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px;" text="VND">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <HBox prefHeight="45.0" prefWidth="276.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thuốc:">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                        </Text>
-                        <Text fx:id="txtPrescribeFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Text>
-                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="2.0" />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="45.0" prefWidth="276.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền khám:">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                        </Text>
-                        <Text fx:id="txtExamFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Text>
-                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="2.0" />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="45.0" prefWidth="276.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thanh toán:">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </Text>
-                        <Text fx:id="txtTotalFee" fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Text>
-                        <Text fill="#46af9c" strokeType="OUTSIDE" strokeWidth="0.0" text="VND">
-                           <font>
-                              <Font name="Segoe UI" size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="2.0" />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
+                  </VBox>
                </children>
-            </VBox>
+            </Pane>
          </AnchorPane>
       </content>
    </TitledPane>

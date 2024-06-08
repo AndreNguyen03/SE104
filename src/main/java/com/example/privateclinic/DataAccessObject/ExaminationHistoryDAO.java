@@ -4,20 +4,23 @@ import com.example.privateclinic.Models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.swing.text.DateFormatter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class ExaminationHistoryDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
+    DiseaseDAO diseaseDAO = new DiseaseDAO();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public  ObservableList<ExaminationHistory> getHistoryExaminationByDate(int id, int year)
     {
         ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
-        String query = "SELECT DISTINCT hd.*, kb.*, bn.*, tn.*, b1.tenbenh AS tenBenhChinh, b2.tenbenh AS tenBenhPhu, nv.hoten as tenbs " +
+        String query = "SELECT DISTINCT hd.*, kb.*, bn.*, tn.*, b1.mabenh AS maBenhChinh, b2.mabenh AS maBenhPhu, nv.hoten as tenbs " +
                 "FROM khambenh kb JOIN benh b1 ON b1.mabenh = kb.benhchinh LEFT JOIN benh b2 ON b2.mabenh = kb.benhphu JOIN benhnhan bn ON bn.mabn = ? JOIN tiepnhan tn ON tn.matn = kb.matn AND bn.mabn = tn.mabn JOIN hoadon hd ON hd.makb = kb.makb JOIN nhanvien nv ON nv.manv = kb.manv WHERE EXTRACT(YEAR FROM kb.ngay) <= ?";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -39,13 +42,11 @@ public class ExaminationHistoryDAO {
                     examination.setManv(resultSet.getInt("manv"));
                     examination.setMakb(resultSet.getInt("makb"));
                     examination.setTenNhanVien(getEmployee(examination.getManv()));
-                    examination.setTenBenhChinh(resultSet.getString("tenBenhChinh"));
-                    examination.setTenBenhPhu(resultSet.getString("tenBenhPhu"));
+                    examination.setMainDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhChinh")));
+                    examination.setSubDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhPhu")));
                     examination.setNgay(LocalDateTime.parse(resultSet.getString("ngay"),formatter));
                     examination.setTrieuChung(resultSet.getString("trieuchung"));
                     examination.setLuuy(resultSet.getString("luuy"));
-                    examination.setMaBenhChinh(resultSet.getInt("benhchinh"));
-                    examination.setMaBenhPhu(resultSet.getInt("benhphu"));
                     examination.setTienkham(resultSet.getInt("tienkham"));
                     examination.setTienthuoc(resultSet.getInt("tienthuoc"));
                     examination.setMahd(resultSet.getInt("mahd"));

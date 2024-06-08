@@ -372,6 +372,7 @@
             <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" prefHeight="426.0" prefWidth="1197.0">
                <columns>
                   <TableColumn fx:id="col_stt" prefWidth="49.99999809265137" text="STT" />
+                  <TableColumn fx:id="col_stt1" prefWidth="49.99999809265137" text="ICD" />
                   <TableColumn fx:id="col_maThuocChosen" prefWidth="49.99999809265137" text="ID" visible="false" />
                   <TableColumn fx:id="col_tenthuocChosen" prefWidth="212.66663360595703" text="Tên thuốc" />
                   <TableColumn fx:id="col_donViChosen" prefWidth="93.3333740234375" text="Đơn vị" />
@@ -459,12 +460,12 @@
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </Text>
-               <TextField fx:id="tf_maBenhChinh" layoutX="166.0" layoutY="44.0" prefHeight="22.0" prefWidth="93.0" promptText="Mã bệnh" styleClass="input-field">
+               <TextField fx:id="tf_maBenhChinh" layoutX="166.0" layoutY="44.0" onMouseClicked="#handleShowResultMedicineMain" prefHeight="22.0" prefWidth="93.0" promptText="Mã bệnh" styleClass="input-field">
                   <font>
                      <Font name="Segoe UI" size="14.0" />
                   </font>
                </TextField>
-               <TextField fx:id="tf_tenBenhChinh" layoutX="281.0" layoutY="44.0" prefHeight="37.0" prefWidth="311.0" promptText="Tên bệnh" styleClass="input-field">
+               <TextField fx:id="tf_tenBenhChinh" layoutX="281.0" layoutY="44.0" onMouseClicked="#handleShowResultMedicineMain" prefHeight="37.0" prefWidth="311.0" promptText="Tên bệnh" styleClass="input-field">
                   <font>
                      <Font name="Segoe UI" size="14.0" />
                   </font>
@@ -484,16 +485,70 @@
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </Text>
-               <TextField fx:id="tf_maBenhPhu" layoutX="165.0" layoutY="86.0" prefHeight="22.0" prefWidth="93.0" promptText="Mã bệnh" styleClass="input-field">
+               <TextField fx:id="tf_maBenhPhu" layoutX="165.0" layoutY="86.0" onMouseClicked="#handleShowResultMedicineSub" prefHeight="22.0" prefWidth="93.0" promptText="Mã bệnh" styleClass="input-field">
                   <font>
                      <Font name="Segoe UI" size="14.0" />
                   </font>
                </TextField>
-               <TextField fx:id="tf_tenBenhPhu" layoutX="282.0" layoutY="87.0" prefHeight="37.0" prefWidth="309.0" promptText="Tên bệnh" styleClass="input-field">
+               <TextField fx:id="tf_tenBenhPhu" layoutX="282.0" layoutY="87.0" onMouseClicked="#handleShowResultMedicineSub" prefHeight="37.0" prefWidth="309.0" promptText="Tên bệnh" styleClass="input-field">
                   <font>
                      <Font name="Segoe UI" size="14.0" />
                   </font>
                </TextField>
+               <HBox layoutX="601.0" layoutY="55.0" prefHeight="25.0" prefWidth="49.0">
+                  <children>
+                     <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="(">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                     </Text>
+                     <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="ICD:">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                     </Text>
+                     <Text fx:id="txtICDMain" fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="null">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                        <HBox.margin>
+                           <Insets left="5.0" />
+                        </HBox.margin>
+                     </Text>
+                     <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text=")">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                     </Text>
+                  </children>
+               </HBox>
+               <HBox layoutX="601.0" layoutY="96.0" prefHeight="25.0" prefWidth="49.0">
+                  <children>
+                     <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="(">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                     </Text>
+                     <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="ICD:">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                     </Text>
+                     <Text fx:id="txtICDSub" fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text="null">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                        <HBox.margin>
+                           <Insets left="5.0" />
+                        </HBox.margin>
+                     </Text>
+                     <Text fill="#3fa88a" strokeType="OUTSIDE" strokeWidth="0.0" text=")">
+                        <font>
+                           <Font name="Segoe UI Semibold" size="12.0" />
+                        </font>
+                     </Text>
+                  </children>
+               </HBox>
             </children>
          </AnchorPane>
       </content>
@@ -507,7 +562,8 @@
             <columns>
                <TableColumn fx:id="colResult1" prefWidth="498.6666259765625" text="Kết quả tìm kiếm">
                   <columns>
-                     <TableColumn fx:id="col_maBenh" prefWidth="130.6666259765625" text="Mã bệnh" />
+                     <TableColumn fx:id="col_maBenh" prefWidth="74.6666259765625" text="Mã bệnh" />
+                     <TableColumn fx:id="col_icd" prefWidth="77.3333740234375" text="Mã ICD" />
                      <TableColumn fx:id="col_tenBenh" prefWidth="350.0" text="Tên bệnh" />
                   </columns>
                </TableColumn>

@@ -9,12 +9,11 @@ public class Examination {
     int matn;
     int mabn;
     LocalDateTime ngay;
-    int maBenhChinh;
-    int maBenhPhu;
+    /*int maBenhChinh;
+    int maBenhPhu;*/
+    Disease mainDisease;
+    Disease subDisease;
     String luuy;
-
-    String tenBenhChinh;
-    String tenBenhPhu;
     String trieuChung;
     String tenNhanVien;
     int mahd;
@@ -23,7 +22,7 @@ public class Examination {
     public Examination() {
     }
 
-    public Examination(int receptionId, int manv, int mabn, int maBenhChinh, int maBenhPhu, String trieuchung, String luuy) {
+   /* public Examination(int receptionId, int manv, int mabn, int maBenhChinh, int maBenhPhu, String trieuchung, String luuy) {
         this.matn = receptionId;
         this.manv = manv;
         this.mabn = mabn;
@@ -31,8 +30,17 @@ public class Examination {
         this.maBenhPhu = maBenhPhu;
         this.trieuChung = trieuchung;
         this.luuy = luuy;
-    }
-
+    }*/
+   public Examination(int receptionId, int manv,String employee_name, int mabn, Disease _mainDisease, Disease _subDisease, String trieuchung, String luuy) {
+       this.matn = receptionId;
+       this.manv = manv;
+       this.tenNhanVien = employee_name;
+       this.mabn = mabn;
+       this.mainDisease = _mainDisease;
+       this.subDisease = _subDisease;
+       this.trieuChung = trieuchung;
+       this.luuy = luuy;
+   }
 
     public int getMakb() {
         return makb;
@@ -58,7 +66,7 @@ public class Examination {
         this.ngay = ngay;
     }
 
-    public int getMaBenhChinh() {
+/*    public int getMaBenhChinh() {
         return maBenhChinh;
     }
 
@@ -72,28 +80,30 @@ public class Examination {
 
     public void setMaBenhPhu(int maBenhPhu) {
         this.maBenhPhu = maBenhPhu;
+    }*/
+
+    public Disease getMainDisease() {
+        return mainDisease;
     }
+
+    public void setMainDisease(Disease mainDisease) {
+        this.mainDisease = mainDisease;
+    }
+
+    public Disease getSubDisease() {
+        return subDisease;
+    }
+
+    public void setSubDisease(Disease subDisease) {
+        this.subDisease = subDisease;
+    }
+
     public String getLuuy() {
         return luuy;
     }
 
     public void setLuuy(String luuy) {
         this.luuy = luuy;
-    }
-    public String getTenBenhChinh() {
-        return tenBenhChinh;
-    }
-
-    public void setTenBenhChinh(String tenBenhChinh) {
-        this.tenBenhChinh = tenBenhChinh;
-    }
-
-    public String getTenBenhPhu() {
-        return tenBenhPhu;
-    }
-
-    public void setTenBenhPhu(String tenBenhPhu) {
-        this.tenBenhPhu = tenBenhPhu;
     }
 
     public String getTrieuChung() {

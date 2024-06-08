@@ -71,6 +71,9 @@ public class ExaminationHistoryController implements Initializable {
      ObservableList<Examination> listExaminationsHistory;
      ExaminationHistory examHistoryBeforeClicked;
     ExaminationController examinationController ;
+    public Pane paneHeader;
+    private double xOffset = 0;
+    private double yOffset =0;
     boolean firstAccess =true;
     public void initData(Patient _patient, ExaminationController _examinationController,boolean fromWaitingList)
     {
@@ -116,6 +119,15 @@ public class ExaminationHistoryController implements Initializable {
         }
         years.sort(Comparator.reverseOrder());
         cbYear.setItems(years);
+        paneHeader.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        paneHeader.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) paneHeader.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void setAction() {
@@ -160,10 +172,10 @@ public class ExaminationHistoryController implements Initializable {
         Examination examination = examHistoryBeforeClicked.getExamination();
         ObservableList<Receipt> detailReceipts = examHistoryBeforeClicked.getPrescribe();
         tf_trieuChungHistory.setText(examination.getTrieuChung());
-        tf_maBenhChinhHistory.setText(String.valueOf(examination.getMaBenhChinh()));
-        tf_tenBenhChinhHistory.setText(examination.getTenBenhChinh());
-        tf_maBenhPhuHistory.setText(String.valueOf(examination.getMaBenhPhu()));
-        tf_tenBenhPhuHistory.setText(examination.getTenBenhPhu());
+        tf_maBenhChinhHistory.setText(String.valueOf(examination.getMainDisease().getMaBenh()));
+        tf_tenBenhChinhHistory.setText(examination.getMainDisease().getTenBenh());
+        tf_maBenhPhuHistory.setText(String.valueOf(examination.getSubDisease().getMaBenh()));
+        tf_tenBenhPhuHistory.setText(examination.getSubDisease().getTenBenh());
         tf_tenbs.setText("BS."+examination.getTenNhanVien());
         tf_luuYHistory.setText(examination.getLuuy());
         txtReceiptId.setText(String.valueOf(examination.getMahd()));

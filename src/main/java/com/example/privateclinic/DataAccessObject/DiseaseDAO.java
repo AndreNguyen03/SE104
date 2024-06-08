@@ -23,25 +23,30 @@ public class DiseaseDAO {
     public ObservableList<Disease> searchDiseaseByIDorName(String idOrName)
     {
         ObservableList<Disease> diseases = FXCollections.observableArrayList();
-        String query = "SELECT * FROM benh WHERE unaccent(tenbenh) ILIKE unaccent(?) ";
+        String query = "SELECT * FROM benh ";
         boolean isInteger = false;
-        try {
-            int id = Integer.parseInt(idOrName);
-            query+="OR mabenh = ?";
-            isInteger = true;
-        } catch (NumberFormatException e )
-        {
+        if(!idOrName.trim().isEmpty()) {
+            query+="WHERE unaccent(tenbenh) ILIKE unaccent(?)";
+            try {
+                int id = Integer.parseInt(idOrName);
+                query += "OR mabenh = ?";
+                isInteger = true;
+            } catch (NumberFormatException e) {
+            }
         }
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
         {
-            statement.setString(1,"%"+idOrName + "%");
-            if(isInteger) statement.setInt(2,Integer.parseInt(idOrName));
+            if(!idOrName.trim().isEmpty()) {
+                statement.setString(1, "%" + idOrName.trim() + "%");
+                if (isInteger) statement.setInt(2, Integer.parseInt(idOrName));
+            }
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {
                 Disease disease = new Disease();
                 disease.setMaBenh(resultSet.getInt("mabenh"));
                 disease.setTenBenh(resultSet.getString("tenbenh"));
+                disease.setMaICD(resultSet.getString("maicd"));
                 diseases.add(disease);
             }
         }
@@ -232,5 +237,24 @@ public class DiseaseDAO {
             e.printStackTrace();
         }
         return maxId;
+    }
+    public Disease getDisease(int id ){
+        Disease disease = new Disease();
+        if(id ==0 ) return disease;
+        String query = "SELECT * FROM benh WHERE mabenh = "+id+"";
+        try (ResultSet resultSet = connectDB.getResultSet(query))
+        {
+            if(resultSet.next()) {
+                disease = new Disease(
+                        resultSet.getInt("mabenh"),
+                        resultSet.getString("tenbenh"),
+                        resultSet.getString("maicd")
+                );
+            }
+            return disease;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

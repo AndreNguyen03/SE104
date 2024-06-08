@@ -21,13 +21,13 @@ public class ExaminationDAO {
         int examId = -1;
         try (PreparedStatement statement =connectDB.databaseLink.prepareStatement(query)){
 
-            int maBp = examination.getMaBenhPhu();
+            int maBp = examination.getSubDisease().getMaBenh();
             statement.setInt(1,examination.getManv());
             statement.setInt(2,examination.getMatn());
             statement.setObject(3,localDateTime);
-            statement.setInt(4,examination.getMaBenhChinh());
+            statement.setInt(4,examination.getMainDisease().getMaBenh());
             if(maBp==0) statement.setNull(5, java.sql.Types.INTEGER);
-            else statement.setInt(5,examination.getMaBenhPhu());
+            else statement.setInt(5,examination.getSubDisease().getMaBenh());
             statement.setString(6,examination.getTrieuChung());
             statement.setString(7,examination.getLuuy());
             return connectDB.getId(statement);
