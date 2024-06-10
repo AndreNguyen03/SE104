@@ -21,7 +21,6 @@ public class PatientDAO {
     public PatientDAO() {
 
     }
-
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public void addPatient(Patient patient) {

@@ -70,7 +70,7 @@
                 </AnchorPane>
             </content>
         </TitledPane>
-      <Pane fx:id="lbl_header" layoutX="5.0" layoutY="5.0" prefHeight="61.0" prefWidth="1123.0" styleClass="pane-top">
+      <Pane fx:id="lbl_header" layoutX="1.0" layoutY="2.0" prefHeight="61.0" prefWidth="1133.0" styleClass="pane-top">
          <children>
             <Pane fx:id="btnClose" layoutX="1079.0" layoutY="1.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
                <children>

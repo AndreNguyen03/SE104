@@ -166,6 +166,7 @@ public class ReceptionController implements Initializable {
     }
 
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    DateTimeFormatter formatterDatePicker = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     Stage stagePatientData;
@@ -211,7 +212,26 @@ public class ReceptionController implements Initializable {
         };
         // Đặt lịch để kiểm tra mỗi 30 giây
         timer.schedule(task, 0, 30000);
+        dpDate.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return formatterDatePicker.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, formatterDatePicker);
+                } else {
+                    return null;
+                }
+            }
+        });
 
+        dpDate.setPromptText(formatterDatePicker.format(LocalDate.now()));
     }
 
     private void setPatientsDetailsRowClicked() {
@@ -286,12 +306,10 @@ public class ReceptionController implements Initializable {
 
     private void setTableViewByDate() {
         dpDate.setOnAction(event -> {
-
-                    Date selectedDate = Date.valueOf(dpDate.getValue());
-                    setPatientList(selectedDate);
-                    setPatientDetailList(selectedDate);
-                    searchPatientByIdAndByName();
-
+            Date selectedDate = Date.valueOf(dpDate.getValue());
+            setPatientList(selectedDate);
+            setPatientDetailList(selectedDate);
+            searchPatientByIdAndByName();
         });
     }
 
