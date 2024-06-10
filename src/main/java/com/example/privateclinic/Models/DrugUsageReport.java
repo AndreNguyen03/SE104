@@ -6,7 +6,9 @@ public class DrugUsageReport {
     private int quantity;
     private int usageCount;
 
-    // Constructor chấp nhận tên thuốc, đơn vị tính, số lượng và số lần dùng
+    public DrugUsageReport() {
+    }
+
     public DrugUsageReport(String drugName, String unit, int quantity, int usageCount) {
         this.drugName = drugName;
         this.unit = unit;
@@ -14,11 +16,6 @@ public class DrugUsageReport {
         this.usageCount = usageCount;
     }
 
-    // Thêm constructor để chấp nhận tên thuốc và số lần dùng
-    public DrugUsageReport(String drugName, int quantity) {
-        this.drugName = drugName;
-        this.quantity = quantity;
-    }
     public String getDrugName() {
         return drugName;
     }

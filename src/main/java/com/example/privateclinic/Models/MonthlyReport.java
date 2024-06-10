@@ -1,47 +1,35 @@
 package com.example.privateclinic.Models;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class MonthlyReport {
-    private LocalDate date;
-    private int patientCount;
-    private double revenue;
-    private double rate;
-    private int month;
+    String date;
+    int patientCount;
+    int revenue;
+    double average;
+    double rate;
 
-    // Constructor chấp nhận ngày thay vì số nguyên biểu diễn tháng
-    public MonthlyReport(int month, int patientCount, double revenue) {
-        this.month = month;
+    public MonthlyReport() {
+    }
+
+    public MonthlyReport(String date, int patientCount, int revenue, double average, double rateColumn) {
+        this.date = date;
         this.patientCount = patientCount;
         this.revenue = revenue;
-        this.rate = calculateRate(revenue, patientCount); // Assuming you want to calculate rate based on revenue and patientCount
+        this.average = average;
+        this.rate = rateColumn;
     }
 
-//    // Thêm constructor để chấp nhận số nguyên biểu diễn tháng
-//    public MonthlyReport(int month, int patientCount, double revenue, double rate) {
-//        // Tính toán ngày đầu tiên của tháng từ số nguyên biểu diễn tháng
-//        this.date = LocalDate.of(LocalDate.now().getYear(), month, 1);
-//        this.patientCount = patientCount;
-//        this.revenue = revenue;
-//        this.rate = rate;
-//    }
-
-    public LocalDate getStartDateOfMonth() {
-        return LocalDate.of(LocalDate.now().getYear(), month, 1);
+    public String getDate() {
+        return date;
     }
 
-    public LocalDate getEndDateOfMonth() {
-        int lastDayOfMonth = LocalDate.of(LocalDate.now().getYear(), month, 1).lengthOfMonth();
-        return LocalDate.of(LocalDate.now().getYear(), month, lastDayOfMonth);
-    }
-
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public int getMonth() {
-        return month;
-    }
     public int getPatientCount() {
         return patientCount;
     }
@@ -50,12 +38,20 @@ public class MonthlyReport {
         this.patientCount = patientCount;
     }
 
-    public double getRevenue() {
+    public int getRevenue() {
         return revenue;
     }
 
-    public void setRevenue(double revenue) {
+    public void setRevenue(int revenue) {
         this.revenue = revenue;
+    }
+
+    public double getAverage() {
+        return average;
+    }
+
+    public void setAverage(double average) {
+        this.average = average;
     }
 
     public double getRate() {
@@ -64,10 +60,5 @@ public class MonthlyReport {
 
     public void setRate(double rate) {
         this.rate = rate;
-    }
-
-    private double calculateRate(double revenue, int patientCount) {
-        // Implement your rate calculation logic here
-        return revenue / patientCount;
     }
 }
