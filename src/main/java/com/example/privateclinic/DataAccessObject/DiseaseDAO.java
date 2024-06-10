@@ -25,7 +25,7 @@ public class DiseaseDAO {
         ObservableList<Disease> diseases = FXCollections.observableArrayList();
         String query = "SELECT * FROM benh ";
         boolean isInteger = false;
-        if(!idOrName.trim().isEmpty()) {
+        if(!idOrName.isEmpty()) {
             query+="WHERE unaccent(tenbenh) ILIKE unaccent(?)";
             try {
                 int id = Integer.parseInt(idOrName);
@@ -36,7 +36,7 @@ public class DiseaseDAO {
         }
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
         {
-            if(!idOrName.trim().isEmpty()) {
+            if(!idOrName.isEmpty()) {
                 statement.setString(1, "%" + idOrName.trim() + "%");
                 if (isInteger) statement.setInt(2, Integer.parseInt(idOrName));
             }

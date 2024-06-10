@@ -22,8 +22,8 @@ public class MedicineDAO {
         String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +
                 "WHERE dvt.madvt = t.madvt and dt.madt=t.madt and cd.macd=t.macd ";
         boolean isInteger = false;
-        if(!idOrName.trim().isEmpty()){
-            query+="and (t.tenthuoc ILIKE unaccent(?) ";
+        if(!idOrName.isEmpty()){
+            query+="and (unaccent(t.tenthuoc) ILIKE unaccent(?) ";
             try {
                 int id = Integer.parseInt(idOrName);
                 query += " OR t.mathuoc = ? ";
@@ -35,7 +35,7 @@ public class MedicineDAO {
         query+=" ORDER BY t.mathuoc ASC";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             if(!idOrName.trim().isEmpty()) {
-                statement.setString(1, "%" + idOrName.trim() + "%");
+                statement.setString(1, "%" + idOrName + "%");
                 if (isInteger) statement.setInt(2, Integer.parseInt(idOrName));
             }
             ResultSet resultSet = statement.executeQuery();

@@ -296,7 +296,7 @@
    <TitledPane fx:id="tpkeThuoc" animated="false" collapsible="false" layoutX="366.0" layoutY="300.0" prefHeight="579.0" prefWidth="1223.0" text="Kê thuốc">
       <content>
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="428.0" prefWidth="1217.0" styleClass="anchor" stylesheets="@../Styles/Examination.css">
-            <Pane layoutX="12.0" layoutY="3.0" prefHeight="101.0" prefWidth="1198.0" styleClass="container-pick">
+            <Pane fx:id="panelKethuoc" layoutX="12.0" layoutY="3.0" prefHeight="101.0" prefWidth="1198.0" styleClass="container-pick">
                <children>
                   <Button id="add" fx:id="btnThem" layoutX="1032.0" layoutY="9.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="74.0" text="Thêm" />
                   <Button id="delete" fx:id="btnXoa" layoutX="1110.0" layoutY="9.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="75.0" text="Xoá" />
@@ -372,7 +372,6 @@
             <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" prefHeight="426.0" prefWidth="1197.0">
                <columns>
                   <TableColumn fx:id="col_stt" prefWidth="49.99999809265137" text="STT" />
-                  <TableColumn fx:id="col_stt1" prefWidth="49.99999809265137" text="ICD" />
                   <TableColumn fx:id="col_maThuocChosen" prefWidth="49.99999809265137" text="ID" visible="false" />
                   <TableColumn fx:id="col_tenthuocChosen" prefWidth="212.66663360595703" text="Tên thuốc" />
                   <TableColumn fx:id="col_donViChosen" prefWidth="93.3333740234375" text="Đơn vị" />
@@ -475,7 +474,7 @@
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </Text>
-               <TextField fx:id="tf_luuY" layoutX="95.0" layoutY="127.0" prefHeight="37.0" prefWidth="496.0" promptText="Lưu ý" styleClass="input-field">
+               <TextField fx:id="tf_luuY" layoutX="95.0" layoutY="127.0" prefHeight="37.0" prefWidth="620.0" promptText="Lưu ý" styleClass="input-field">
                   <font>
                      <Font name="Segoe UI" size="14.0" />
                   </font>
