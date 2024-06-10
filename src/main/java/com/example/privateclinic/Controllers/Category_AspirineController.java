@@ -428,7 +428,6 @@ public class Category_AspirineController implements Initializable {
             if (newSelection != null) {
                 // Lấy thông tin của thuốc từ hàng được chọn
                 Medicine selectedMedicine = medicineTableView.getSelectionModel().getSelectedItem();
-
                 // Đặt thông tin của thuốc vào các trường TextField và ComboBox
                 medicineNameTextField_1.setText(selectedMedicine.getTenThuoc());
                 medicineNameTextField_2.setText(selectedMedicine.getTenThuoc());
