@@ -15,6 +15,8 @@ import java.sql.SQLException;
 public class UserDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
     User user = new User();
+    String defaultpassword;
+
 
     public User getEmployee() {
         return user;
@@ -87,10 +89,9 @@ public class UserDAO {
     }
     public String getEmail(String username) throws SQLException {
         String username_result =null;
-        ConnectDB connect = new ConnectDB();
         String query = "SELECT email FROM nhanvien WHERE username = '" + username +"'";
-        ResultSet resultSet = connect.getData(query);
-        if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
+        ResultSet resultSet = connectDB.getResultSet(query);
+        if(resultSet.next()) // kiểm tra xeem resultSet có dữ liệu hay không
         {
             username_result = resultSet.getString("email");
         }
@@ -101,7 +102,7 @@ public class UserDAO {
         newPassword = GetHash(newPassword);
         String querry;
         PreparedStatement preparedStatement = null;
-        if (index == 0)
+        if (index == 3)
         {
             querry = "UPDATE nhanvien SET password = ?, defaultpassword = NULL  WHERE username = ? ";
             preparedStatement = connectDB.databaseLink.prepareStatement(querry);
@@ -146,8 +147,7 @@ public class UserDAO {
     {
         String username =null;
         String query = "SELECT username FROM nhanvien WHERE username = '" + _username +"'";
-        ResultSet resultSet = connectDB.getData(query);
-        try
+        try(ResultSet resultSet = connectDB.getResultSet(query))
         {
             if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
             {
@@ -161,24 +161,6 @@ public class UserDAO {
         }
         return null;
     }
-    public boolean checkID(int id)
-    {
-        String query = "SELECT * FROM nhanvien WHERE cccd = '" + id +"'";
-        ResultSet resultSet = connectDB.getData(query);
-        try
-        {
-            if(resultSet.next()) // kiểm tra xem resultSet có dữ liệu hay không
-            {
-                return true;
-            }
-        }
-        catch (SQLException e )
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public boolean addEmployee(User employee) {
         String query = "INSERT INTO nhanvien (hoten, sdt, cccd, username, password, vitri, defaultpassword, diachi, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String defaultPassword = GeneratePassword(true,true,true,true,8);
@@ -291,4 +273,12 @@ public class UserDAO {
         }
         return employees;
     }
+    public String getDefaultpassword() {
+        return defaultpassword;
+    }
+
+    public void setDefaultpassword(String defaultpassword) {
+        this.defaultpassword = defaultpassword;
+    }
+
 }

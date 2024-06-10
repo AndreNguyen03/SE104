@@ -20,6 +20,7 @@ public class Patient {
         private Date patientBirth;
     private Object arrivalDate;
     private String patientAddress;
+    int number;
 
     private String doctor;
     private int receptionId;
@@ -54,6 +55,16 @@ public class Patient {
         this.patientAddress = patientAddress;
     }
 
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int number) {
+        this.patientId = patientId;
+        this.patientName = patientName;
+        this.patientGender = patientGender;
+        this.patientPhoneNumber = patientPhoneNumber;
+        this.patientBirth = patientBirth;
+        this.patientAddress = patientAddress;
+        this.arrivalDate = arrivalDate;
+        this.number = number;
+    }
 
     public Date getPatientBirth() {
         return patientBirth;
@@ -112,5 +123,13 @@ public class Patient {
 
     public void setArrivalDate(Object arrivalDate) {
         this.arrivalDate = arrivalDate;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

@@ -32,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -146,6 +147,9 @@ public class ReceptionController implements Initializable {
 
     private ObservableList<Patient> patientsDetails;
     private ObservableList<Patient> patients;
+    public AnchorPane lbl_header,lbl_header2;
+    private double xOffset = 0;
+    private double yOffset =0;
 
     public ObservableList<Patient> getPatientsDetails() {
         return patientsDetails;
@@ -173,6 +177,25 @@ public class ReceptionController implements Initializable {
         setPatientDetailList(Date.valueOf(dpDate.getValue()));
         setTableViewByDate();
         setOnOffAddDeleteBtn();
+        lbl_header.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        lbl_header.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) lbl_header.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
+        lbl_header2.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+
+        lbl_header2.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) lbl_header.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
         setTableRowFactory(tvPatientDetails,patientDAO);
     }
 
@@ -296,7 +319,7 @@ public class ReceptionController implements Initializable {
     }
 
     private void searchPatientByIdAndByName() {
-        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsByDateReception(Date.valueOf(dpDate.getValue())));
+        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsFromReceptionByDate(Date.valueOf(dpDate.getValue())));
         tfPatientById.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
                 tvPatient.setItems(patientList);
@@ -401,27 +424,34 @@ public class ReceptionController implements Initializable {
     }
 
     private boolean checkFillData() {
-        return !tfPatientName.getText().isEmpty() && !tfPatientPhoneNumber.getText().isEmpty()
-                && !tfPatientBirthDay.getText().isEmpty() && !taPatientAddress.getText().isEmpty()
-                && !cbPatientGender.getValue().isBlank();
+        if (tfPatientName.getText().isEmpty()  || tfPatientPhoneNumber.getText().isEmpty()
+                || tfPatientBirthDay.getText().isEmpty()|| taPatientAddress.getText().isEmpty()
+                || cbPatientGender.getValue().isBlank()) {
+            return false;
+        }
+        return true;
     }
 
     private void setPatientList(Date date) {
         tcNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatient.getItems().indexOf(cellData.getValue()) + 1).asObject());
         tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        patients = patientDAO.getPatientsByDateReception(date);
+        patients = patientDAO.getPatientsFromReceptionByDate(date);
         tvPatient.getItems().clear();
         tvPatient.setItems(patients);
     }
 
     private void setPatientDetailList(Date date) {
         tcNumberDetails.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatientDetails.getItems().indexOf(cellData.getValue()) + 1).asObject());
-        PatientCategoryController.bindPatientData(tcPatientIdDetail, tcPatientNameDetail, tcPatientGenderDetail, tcPatientBirthDetail, tcPatientPhoneNumberDetail, tcPatientAddressDetail);
-        tcDoctor.setCellValueFactory(new PropertyValueFactory<>("doctor"));
-        patientsDetails = patientDAO.getPatientsByDateReception(date);
+        tcPatientIdDetail.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        tcPatientNameDetail.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+        tcPatientGenderDetail.setCellValueFactory(new PropertyValueFactory<>("patientGender"));
+        tcPatientBirthDetail.setCellValueFactory(new PropertyValueFactory<>("patientBirth"));
+        tcPatientPhoneNumberDetail.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
+        tcPatientAddressDetail.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
+        patientsDetails = patientDAO.getPatientsFromReceptionByDate(date);
         tvPatientDetails.getItems().clear();
-        tvPatientDetails.setItems(patientsDetails);
+        tvPatientDetails.setItems(patients);
     }
 
     private void clearDataField() {
@@ -551,5 +581,9 @@ public class ReceptionController implements Initializable {
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
         return stage;
+    }
+
+    public void minimizeReception(MouseEvent mouseEvent) {
+        Model.getInstance().getViewFactory().minimizeStage((Stage) btnClose.getScene().getWindow());
     }
 }

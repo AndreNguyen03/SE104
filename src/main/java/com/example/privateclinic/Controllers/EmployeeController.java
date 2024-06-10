@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.UserDAO;
 import com.example.privateclinic.Models.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,9 +12,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import java.net.URL;
 import java.text.Normalizer;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -170,6 +175,7 @@ public class EmployeeController implements Initializable {
                 if(sequence==JOptionPane.YES_OPTION) {
                     User newEmployee = new User(name, citizenId, address, phoneNum, email, position, username);
                     if(userDAO.addEmployee(newEmployee)) {
+                        SendDefaultPassword(newEmployee.getEmployeeEmail());
                         loadEmployeeData();
                         clearAddEmployeeFields();
                         cb_position.setVisible(false);
@@ -277,6 +283,42 @@ public class EmployeeController implements Initializable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         return JOptionPane.showConfirmDialog(frame, "Có phải bạn muốn "+string+"?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    }
+    private void SendDefaultPassword(String email) {
+        String defaultpassword = userDAO.getDefaultpassword();
+        String fromEmail = "kiseryouta2003@gmail.com";
+        String password = "qcqa slmu vkbr edha";
+        String subject = "OTP code";
+        String body = "Your default password for Pharmacy account is " + defaultpassword;
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail, "Green UIT Clinic"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject(subject);
+            message.setText(body);
+
+            Transport.send(message);
+            Platform.runLater(() -> {
+                showAlert("Warning"," Mật khẩu mặc định là "+defaultpassword+", đã gửi về email: "+email+" !");
+                userDAO.setDefaultpassword(null);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Warning","Failed to send OTP: " + e.getMessage());
+        }
     }
 }
 

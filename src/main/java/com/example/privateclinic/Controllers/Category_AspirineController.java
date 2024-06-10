@@ -13,11 +13,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import javax.swing.plaf.synth.Region;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -87,12 +90,12 @@ public class Category_AspirineController implements Initializable {
     private final MedicineTypeDAO medicinetypeDAO = new MedicineTypeDAO();
     private final UseWayDAO usewayDAO = new UseWayDAO();
     private WarehouseDAO warehouseDAO = new WarehouseDAO();
-
-
+    public Pane lbl_header;
     private final ObservableList<Medicine> medicineData = FXCollections.observableArrayList();
 
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
+    private double xOffset = 0;
+    private double yOffset =0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -123,6 +126,15 @@ public class Category_AspirineController implements Initializable {
         editButton.setOnAction(this::handleEditMedicine);
         deleteButton.setOnAction(this::handleDeleteMedicine);
         importButton.setOnAction(this::handleImportButton);
+        lbl_header.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        lbl_header.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) addButton.getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX()-xOffset);
+            stage.setY(mouseEvent.getScreenY()-yOffset);
+        });
     }
 
     private void loadMedicineData() {
@@ -419,12 +431,14 @@ public class Category_AspirineController implements Initializable {
 
                 // Đặt thông tin của thuốc vào các trường TextField và ComboBox
                 medicineNameTextField_1.setText(selectedMedicine.getTenThuoc());
+                medicineNameTextField_2.setText(selectedMedicine.getTenThuoc());
                 unitComboBox.setValue(selectedMedicine.getTenDonViTinh());
                 formComboBox.setValue(selectedMedicine.getTenDangThuoc());
                 useComboBox.setValue(selectedMedicine.getTenCachDung());
             } else {
                 // Nếu không có hàng nào được chọn, xóa nội dung của các trường
                 medicineNameTextField_1.clear();
+                medicineNameTextField_2.clear();
                 unitComboBox.getSelectionModel().clearSelection();
                 formComboBox.getSelectionModel().clearSelection();
                 useComboBox.getSelectionModel().clearSelection();
@@ -476,4 +490,9 @@ public class Category_AspirineController implements Initializable {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(s);
     }
+
+    public void minimizeCategory(MouseEvent mouseEvent) {
+        Model.getInstance().getViewFactory().minimizeStage((Stage) importTimesTextField.getScene().getWindow());
+    }
+
 }
