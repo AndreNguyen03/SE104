@@ -7,12 +7,22 @@ public class Patient {
     private String patientName;
     private String patientGender;
     private String patientPhoneNumber;
-    private Date patientBirth;
-    private Date arrivalDate;
+        private Date patientBirth;
+    private Object arrivalDate;
     private String patientAddress;
+
+    private String doctor;
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
+    }
+
+    private int receptionId;
     int number;
-
-
     @Override
     public String toString() {
         return "Patient{" +
@@ -25,7 +35,7 @@ public class Patient {
                 '}';
     }
 
-    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate) {
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientGender = patientGender;
@@ -35,7 +45,7 @@ public class Patient {
         this.arrivalDate = arrivalDate;
     }
 
-    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int number) {
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int receptionId,int number) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientGender = patientGender;
@@ -43,6 +53,7 @@ public class Patient {
         this.patientBirth = patientBirth;
         this.patientAddress = patientAddress;
         this.arrivalDate = arrivalDate;
+        this.receptionId = receptionId;
         this.number = number;
     }
 
@@ -97,11 +108,11 @@ public class Patient {
         this.patientPhoneNumber = patientPhoneNumber;
     }
 
-    public Date getArrivalDate() {
+    public Object getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(Date arrivalDate) {
+    public void setArrivalDate(Object arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 
@@ -112,4 +123,13 @@ public class Patient {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public int getReceptionId() {
+        return receptionId;
+    }
+
+    public void setReceptionId(int receptionId) {
+        this.receptionId = receptionId;
+    }
+
 }

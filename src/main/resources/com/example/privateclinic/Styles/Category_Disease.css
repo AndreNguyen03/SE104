@@ -1,5 +1,8 @@
 .container {
     -fx-background-color: #f6ffec;
+    -fx-border-width: 1;
+    -fx-border-color: #4a7612;
+    -fx-border-radius: 15px;
 }
 .image_logo{
     -fx-scale-x: 5.5;

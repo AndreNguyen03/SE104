@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -29,9 +30,10 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="568.0" styleClass="anchor-pane">
                            <children>
-                              <JFXButton id="add" fx:id="addExcelFileBtn" layoutX="58.0" layoutY="6.0" onAction="#handleAddExcelFile" prefHeight="45.0" prefWidth="141.0" style="-fx-pref-width: 150px;" text="Thêm từ excel" />
-                              <JFXButton id="add" fx:id="sampleExcelFileBtn" layoutX="228.0" layoutY="6.0" onAction="#handleDownloadSampleExcelFile" prefHeight="43.0" prefWidth="155.0" style="-fx-pref-width: 150;" text="File excel mẫu" />
-                              <JFXButton id="cancel" fx:id="saveExcelFileBtn" layoutX="407.0" layoutY="6.0" onAction="#handleSaveExcelFile" prefHeight="25.0" prefWidth="99.0" text="Lưu" />
+                              <JFXButton id="add" fx:id="addExcelFileBtn" layoutX="18.0" layoutY="6.0" onAction="#handleAddExcelFile" prefHeight="45.0" prefWidth="141.0" style="-fx-pref-width: 150px;" text="Thêm từ excel" />
+                              <JFXButton id="add" fx:id="sampleExcelFileBtn" layoutX="178.0" layoutY="6.0" onAction="#handleDownloadSampleExcelFile" prefHeight="43.0" prefWidth="155.0" style="-fx-pref-width: 150;" text="File excel mẫu" />
+                              <JFXButton id="cancel" fx:id="saveExcelFileBtn" disable="true" layoutX="338.0" layoutY="6.0" onAction="#handleSaveExcelFile" prefHeight="25.0" prefWidth="99.0" text="Lưu" />
+                              <JFXButton id="delete" fx:id="cancelExcelFileBtn" disable="true" layoutX="448.0" layoutY="6.0" onAction="#handleCancelExcelFile" prefHeight="25.0" prefWidth="99.0" text="Hủy" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -62,7 +64,7 @@
           <TableColumn fx:id="nameColumn" prefWidth="524.0" text="Tên bệnh" />
         </columns>
       </TableView>
-      <Pane fx:id="lbl_header" prefHeight="61.0" prefWidth="683.0" styleClass="pane-top">
+      <Pane fx:id="lbl_header" layoutX="2.0" layoutY="2.0" prefHeight="61.0" prefWidth="680.0" styleClass="pane-top">
          <children>
             <Pane fx:id="btnClose" layoutX="639.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
                <children>
@@ -109,4 +111,7 @@
          </children>
       </Pane>
    </children>
+   <effect>
+      <Blend />
+   </effect>
 </AnchorPane>

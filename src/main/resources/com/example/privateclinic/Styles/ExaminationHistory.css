@@ -442,7 +442,7 @@
 }
 #tableview-main .column-header-background .label
 {
-    -fx-font-size: 13px;
+    -fx-font-size: 15px;
 }
 #tableview-main
 {
@@ -517,4 +517,13 @@
 {
     -fx-font-family: "Segoe UI Black";
     -fx-font-size: 12px;
+}
+.pnl {
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+#revenue
+{
+    -fx-background-color: linear-gradient(to right,#D8EABEFF,#ffffff);
+    -fx-effect: dropshadow(three-pass-box, rgb(57, 100, 5), 5, 0.2, 0, 2);
 }

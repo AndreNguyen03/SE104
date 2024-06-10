@@ -1,6 +1,11 @@
 package com.example.privateclinic.Models;
 
-public class Prescribe {
+public class Receipt {
+    int mahd;
+    int tienkham;
+    int tienthuoc;
+
+
     int makhambenh;
     int sothuTu;
     int maThuoc;
@@ -22,13 +27,14 @@ public class Prescribe {
     String tenCachDung;
     String tenDangThuoc;
 
-    public Prescribe()
+    String note;
+    public Receipt()
     {
 
     }
 
-    public Prescribe(int maThuoc,String tenThuoc,String tenDonViTinh,String tenDangThuoc,String tenCachDung,double donGia,
-                     int ngay, int sang, int trua, int chieu, int toi, int soLuong) {
+    public Receipt(int maThuoc, String tenThuoc, String tenDonViTinh, String tenDangThuoc, String tenCachDung, double donGia,
+                   int ngay, int sang, int trua, int chieu, int toi, int soLuong,String _note) {
         this.maThuoc = maThuoc;
         //this.maKeThuoc = maKeThuoc;
         this.ngay = ngay;
@@ -39,6 +45,7 @@ public class Prescribe {
         this.soLuong = soLuong;
         this.donGia = donGia;
         this.thanhTien = soLuong*donGia;
+        this.note = _note;
 
         this.tenThuoc = tenThuoc;
         this.tenCachDung = tenCachDung;
@@ -168,5 +175,37 @@ public class Prescribe {
 
     public void setSothuTu(int sothuTu) {
         this.sothuTu = sothuTu;
+    }
+
+    public int getMahd() {
+        return mahd;
+    }
+
+    public void setMahd(int mahd) {
+        this.mahd = mahd;
+    }
+
+    public int getTienkham() {
+        return tienkham;
+    }
+
+    public void setTienkham(int tienkham) {
+        this.tienkham = tienkham;
+    }
+
+    public int getTienthuoc() {
+        return tienthuoc;
+    }
+
+    public void setTienthuoc(int tienthuoc) {
+        this.tienthuoc = tienthuoc;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
