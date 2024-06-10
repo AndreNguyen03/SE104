@@ -1069,7 +1069,6 @@ public  class ExaminationController implements Initializable {
                 maTenBenhPhu = STR.";   Bệnh phụ: (\{tf_maBenhPhu.getText()}) - \{tf_tenBenhPhu.getText()} ";
             document.add(new Paragraph(STR."Chẩn đoán:   Bệnh chính: \{tf_maBenhChinh.getText()} - \{tf_tenBenhChinh.getText()}" + maTenBenhPhu, regularFont));
             document.add(new Paragraph("\nII. Phần chi phí khám bệnh: ", boldFont));
-
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
             table.setSpacingBefore(10f);
