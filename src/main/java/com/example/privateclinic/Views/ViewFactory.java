@@ -12,10 +12,16 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.awt.*;
+import java.io.IOException;
 
 public class ViewFactory {
     Stage stageExamination = null;
@@ -26,6 +32,7 @@ public class ViewFactory {
     Stage stageExaminationHistory = null;
     Stage stageCategoryAspirine= null;
     Stage stageCategoryDisease = null;
+    FXMLLoader receptionLoader;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -33,11 +40,25 @@ public class ViewFactory {
 
     }
 
-    public void showMenuWindow(User user) {
+    public void showMenuWindow(User user) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Menu.fxml"));
-        stageMenu = createStage(loader);
+        Pane pane = loader.load();
+        VBox root = new VBox(pane);
+        Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = resolution.getWidth();
+        double height = resolution.getHeight();
+        double w = width/1600;  // your window width
+        double h = height/900;  // your window height
+        Scale scale = new Scale(w, h, 0, 0);
+        root.getTransforms().add(scale);
+        Scene scene = new Scene(root);
+        stageMenu = new Stage(StageStyle.UNDECORATED);
+        stageMenu.setScene(scene);
+        stageMenu.setMaximized(true);
         MenuController menuController = loader.getController();
         menuController.initData(user);
+        stageMenu.show();
+
     }
     public void showProfileWindow(String id,String name,String username,String pos)
     {
@@ -57,8 +78,8 @@ public class ViewFactory {
     public void showReceptionWindow() {
         if(stageReception==null)  //xử lí mở 2 lần scene
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
-            stageReception=createStage(loader);
+            receptionLoader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
+            stageReception=createStage(receptionLoader);
         }
         else
         {
@@ -109,7 +130,6 @@ public class ViewFactory {
         if(stageCategoryDisease==null){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Disease.fxml"));
             stageCategoryDisease=createStage(loader);
-
         } else {
             stageCategoryDisease.toFront();
         }
@@ -159,6 +179,7 @@ public class ViewFactory {
         if(stageExaminationHistory!=null && !stageExaminationHistory.isShowing()) stageExaminationHistory=null;
         if(stageCategoryAspirine!=null && !stageCategoryAspirine.isShowing()) stageCategoryAspirine=null;
         if(stageCategoryDisease!=null && !stageCategoryDisease.isShowing()) stageCategoryDisease=null;
+
     }
     public void minimizeStage(Stage stage)
     {

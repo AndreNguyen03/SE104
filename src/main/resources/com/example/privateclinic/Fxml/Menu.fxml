@@ -133,6 +133,6 @@
             </cursor>
          </Button>
       </AnchorPane>
-      <Pane fx:id="mainPane" prefHeight="791.0" prefWidth="1350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="0.0" />
+      <Pane fx:id="mainPane" prefHeight="880.0" prefWidth="1350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>

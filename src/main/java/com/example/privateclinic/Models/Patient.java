@@ -3,14 +3,23 @@ package com.example.privateclinic.Models;
 import java.sql.Date;
 
 public class Patient {
-
     private int patientId;
     private String patientName;
     private String patientGender;
     private String patientPhoneNumber;
-    private Date patientBirth;
-    private Date arrivalDate;
+        private Date patientBirth;
+    private Object arrivalDate;
     private String patientAddress;
+
+    private String doctor;
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
+    }
 
     private int receptionId;
     int number;
@@ -26,7 +35,7 @@ public class Patient {
                 '}';
     }
 
-    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate) {
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientGender = patientGender;
@@ -99,11 +108,11 @@ public class Patient {
         this.patientPhoneNumber = patientPhoneNumber;
     }
 
-    public Date getArrivalDate() {
+    public Object getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(Date arrivalDate) {
+    public void setArrivalDate(Object arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 

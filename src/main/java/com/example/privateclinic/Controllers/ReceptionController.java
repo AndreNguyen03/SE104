@@ -1,5 +1,6 @@
 package com.example.privateclinic.Controllers;
 
+import com.example.privateclinic.Models.Medicine;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -13,6 +14,7 @@ import com.example.privateclinic.DataAccessObject.PatientDAO;
 import com.example.privateclinic.Models.Model;
 import com.example.privateclinic.Models.Patient;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,16 +22,22 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.awt.*;
@@ -42,8 +50,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class ReceptionController implements Initializable {
     @FXML
@@ -72,7 +80,7 @@ public class ReceptionController implements Initializable {
     private DatePicker dpDate;
 
     @FXML
-    private TableColumn<?, ?> tcDoctor;
+    private TableColumn<Patient, String> tcDoctor;
 
     @FXML
     private TableColumn<Integer, Integer> tcNumber;
@@ -124,17 +132,44 @@ public class ReceptionController implements Initializable {
 
     @FXML
     private TableView<Patient> tvPatientDetails;
+
+    public TableView<Patient> getTvPatientDetails() {
+        return tvPatientDetails;
+    }
+
+    public void setTvPatientDetails(TableView<Patient> tvPatientDetails) {
+        this.tvPatientDetails = tvPatientDetails;
+    }
+
     @FXML
     private TextArea taPatientAddress;
 
-    private PatientDAO patientDAO = new PatientDAO();
+    private final PatientDAO patientDAO = new PatientDAO();
 
     private ObservableList<Patient> patientsDetails;
     private ObservableList<Patient> patients;
     public AnchorPane lbl_header,lbl_header2;
     private double xOffset = 0;
     private double yOffset =0;
+    Patient selectedPatient;
+
+    public ObservableList<Patient> getPatientsDetails() {
+        return patientsDetails;
+    }
+
+    public void setPatientsDetails(ObservableList<Patient> patientsDetails) {
+        this.patientsDetails = patientsDetails;
+    }
+
+    public ObservableList<Patient> getPatients() {
+        return patients;
+    }
+
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+
+    Stage stagePatientData;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setDatePickerToday();
@@ -163,6 +198,68 @@ public class ReceptionController implements Initializable {
             stage.setX(mouseEvent.getScreenX()-xOffset);
             stage.setY(mouseEvent.getScreenY()-yOffset);
         });
+        setTableRowFactory(tvPatientDetails,patientDAO);
+        setPatientsDetailsRowClicked();
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                patientDAO.checkForNewRecords(tvPatientDetails,dpDate.getValue());
+                System.out.println("check");
+            }
+        };
+        // Đặt lịch để kiểm tra mỗi 30 giây
+        timer.schedule(task, 0, 30000);
+
+    }
+
+    private void setPatientsDetailsRowClicked() {
+        tvPatientDetails.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Lấy phần tử được chọn
+                selectedPatient = newSelection;
+                // Thực hiện các thao tác với phần tử được chọn ở đây
+                // Ví dụ: Hiển thị thông tin của phần tử được chọn, xử lý các thao tác khác...
+            }
+        });
+    }
+
+
+    public void setTableRowFactory(TableView<Patient> tvPatientDetails, PatientDAO patientDAO) {
+        tvPatientDetails.setRowFactory(tv -> {
+            TableRow<Patient> row = new TableRow<Patient>() {
+                @Override
+                protected void updateItem(Patient patient, boolean empty) {
+                    super.updateItem(patient, empty);
+                    if (patient == null || empty) {
+                        setStyle("");
+                    } else {
+                        // Kiểm tra nếu bác sĩ đã được tải trước đó
+                        if (patient.getDoctor() != null) {
+                            setStyle("-fx-background-color: yellow;");
+                        } else {
+                            // Chạy việc lấy dữ liệu từ cơ sở dữ liệu trong một luồng riêng
+                            new Thread(() -> {
+                                String doctor = patient.getDoctor();
+                                // Cập nhật giao diện người dùng trong Platform.runLater
+                                Platform.runLater(() -> {
+                                    if (doctor != "") {
+                                        patient.setDoctor(doctor);
+                                        setStyle("-fx-background-color: yellow;");
+                                        // Thông báo thay đổi cho TableView
+                                        tvPatientDetails.refresh();
+                                    } else {
+                                        setStyle(""); // Reset style if no doctor is found
+                                    }
+                                });
+                            }).start();
+                        }
+                    }
+                }
+            };
+            return row;
+        });
     }
 
     private void setOnOffAddDeleteBtn() {
@@ -189,21 +286,12 @@ public class ReceptionController implements Initializable {
 
     private void setTableViewByDate() {
         dpDate.setOnAction(event -> {
-            // Khởi tạo task để thực hiện các công việc nền
-            Task<Void> backgroundTask = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    // Thực hiện công việc nền ở đây
+
                     Date selectedDate = Date.valueOf(dpDate.getValue());
                     setPatientList(selectedDate);
                     setPatientDetailList(selectedDate);
                     searchPatientByIdAndByName();
-                    return null;
-                }
-            };
 
-            // Khởi động task trong một luồng mới
-            new Thread(backgroundTask).start();
         });
     }
 
@@ -241,11 +329,12 @@ public class ReceptionController implements Initializable {
     }
 
     private void searchPatientByIdAndByName() {
-        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsFromReceptionByDate(Date.valueOf(dpDate.getValue())));
+        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsByDateReception(Date.valueOf(dpDate.getValue())));
         tfPatientById.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
                 tvPatient.setItems(patientList);
             } else {
+
                 ObservableList<Patient> filteredList = FXCollections.observableArrayList();
                 for (Patient patient : patientList) {
                     if (patient.getPatientId()==Integer.parseInt(newValue)) {
@@ -300,6 +389,16 @@ public class ReceptionController implements Initializable {
     }
 
     @FXML
+    void addPatientFromDB(MouseEvent event) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/PatientCategory.fxml"));
+            stagePatientData=createStage(loader);
+            PatientCategoryController patientCategoryController = loader.getController();
+            patientCategoryController.setController(this);
+
+    }
+
+    @FXML
     void addPatientToDatabase(ActionEvent event) throws ParseException {
         // Định dạng của chuỗi ngày
         if(checkFillData()){
@@ -310,13 +409,16 @@ public class ReceptionController implements Initializable {
             // Chuyển đổi LocalDate thành java.sql.Date
             Date patientBirthDay = Date.valueOf(localDate);
             String patientName = tfPatientName.getText();
-            String patientGender = cbPatientGender.getValue().toString();
+            String patientGender = cbPatientGender.getValue();
             String patientPhoneNumber = tfPatientPhoneNumber.getText();
             String patientAddress = taPatientAddress.getText();
-            Date patientArrival = Date.valueOf(LocalDate.now());
-            patientDAO.addPatient(new Patient(patientDAO.getNextPatientId(), patientName, patientGender
-                    , patientPhoneNumber, patientBirthDay, patientAddress,patientArrival));
-
+            Patient patient = new Patient(patientDAO.getNextPatientId(), patientName, patientGender
+                    , patientPhoneNumber, patientBirthDay, patientAddress);
+            patientDAO.addPatient(patient);
+            int index = patients.size()+1;
+            patientDAO.admitPatient(patient.getPatientId(),index);
+            patient.setReceptionId(patientDAO.getReceptionId(patient.getPatientId()));
+            patients.add(patient);
             clearDataField();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm thành công!");
             alert.showAndWait();
@@ -339,9 +441,15 @@ public class ReceptionController implements Initializable {
         tcNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatient.getItems().indexOf(cellData.getValue()) + 1).asObject());
         tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        patients = patientDAO.getPatientsFromReceptionByDate(date);
-        tvPatient.getItems().clear();
-        tvPatient.setItems(patients);
+        patients = patientDAO.getPatientsByDateReception(date);
+        if (patients != null && !patients.isEmpty()) {
+            Platform.runLater(() -> {
+                tvPatient.getItems().clear();
+                tvPatient.setItems(patients);
+            });
+        } else {
+            tvPatient.getItems().clear();
+        }
     }
 
     private void setPatientDetailList(Date date) {
@@ -352,9 +460,17 @@ public class ReceptionController implements Initializable {
         tcPatientBirthDetail.setCellValueFactory(new PropertyValueFactory<>("patientBirth"));
         tcPatientPhoneNumberDetail.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
         tcPatientAddressDetail.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
-        patientsDetails = patientDAO.getPatientsFromReceptionByDate(date);
-        tvPatientDetails.getItems().clear();
-        tvPatientDetails.setItems(patients);
+        tcDoctor.setCellValueFactory(new PropertyValueFactory<>("doctor"));
+        patientsDetails = patientDAO.getPatientsByDateReception(date);
+        if (patientsDetails != null && !patientsDetails.isEmpty()) {
+            Platform.runLater(() -> {
+                tvPatientDetails.getItems().clear();
+                tvPatientDetails.setItems(patientsDetails);
+            });
+        } else {
+            // Nếu danh sách dữ liệu rỗng, không cần cập nhật TableView
+            tvPatientDetails.getItems().clear();
+        }
     }
 
     private void clearDataField() {
@@ -371,15 +487,17 @@ public class ReceptionController implements Initializable {
     @FXML
     void addPatientToDetails(MouseEvent event) {
         Patient patientToAdd = tvPatient.getSelectionModel().getSelectedItem();
+        int index = tvPatient.getItems().indexOf(patientToAdd);
         if(checkExist(patientToAdd)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Bệnh nhân đã tồn tại");
-            alert.setContentText("Bệnh nhân với ID " + patientToAdd.getPatientId() + " đã tồn tại trong danh sách.");
+            alert.setContentText(STR."Bệnh nhân với ID \{patientToAdd.getPatientId()} đã tồn tại trong danh sách.");
             alert.showAndWait();
         }
         else if(patientToAdd!= null && !checkExist(patientToAdd)) {
             patientsDetails.add(patientToAdd);
+            patientDAO.admitPatient(patientToAdd.getPatientId(), index);
         }
         tvPatientDetails.setItems(patientsDetails);
     }
@@ -395,16 +513,11 @@ public class ReceptionController implements Initializable {
 
     @FXML
     void detelePatientFromDetails(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Xóa bệnh nhân");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Xóa bệnh nhân",ButtonType.OK,ButtonType.CANCEL);
         alert.setContentText("Bạn chắc chắn muốn xóa ?");
-
-        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            Patient patientToDelete = tvPatientDetails.getSelectionModel().getSelectedItem();
-            patientsDetails.remove(patientToDelete);
-            tvPatientDetails.setItems(patientsDetails);
-        } else {
-            // Không thực hiện việc xóa dòng
+        Optional<ButtonType> result = alert.showAndWait();
+        if ( result.get() == ButtonType.OK) {
+            tvPatientDetails.getItems().remove(selectedPatient);
         }
     }
 
@@ -463,6 +576,27 @@ public class ReceptionController implements Initializable {
             }
         }
 
+    }
+
+    public void addPatientToList(Patient selected) {
+        patients.add(selected);
+        tvPatient.refresh();
+    }
+
+    private Stage createStage(FXMLLoader loader ) {
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.load());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
+        return stage;
     }
 
     public void minimizeReception(MouseEvent mouseEvent) {

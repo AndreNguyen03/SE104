@@ -23,7 +23,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="header-top" stylesheets="@../Styles/Reception.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReceptionController">
    <children>
-      <AnchorPane fx:id="lbl_header2" layoutX="348.0" layoutY="-3.0" prefHeight="59.0" prefWidth="1252.0" />
+      <AnchorPane fx:id="lbl_header2" layoutX="348.0" layoutY="-3.0" prefHeight="59.0" prefWidth="1252.0">
+         <children>
+            <Pane layoutX="1027.0" layoutY="30.0" prefHeight="25.0" prefWidth="37.0" style="-fx-background-color: yellow;" />
+            <Text layoutX="1077.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text=": Đã khám" />
+         </children></AnchorPane>
       <VBox prefHeight="900.0" prefWidth="345.0" style="-fx-border-color: black;">
          <children>
             <AnchorPane fx:id="lbl_header" minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" styleClass="header-logo">
@@ -113,15 +117,15 @@
             <TableColumn fx:id="tcDoctor" prefWidth="169.666748046875" text="Bác sĩ khám" />
         </columns>
       </TableView>
-      <JFXButton fx:id="btnAddFromList" disable="true" layoutX="365.0" layoutY="156.0" onMouseClicked="#addPatientToDetails" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào DSKB" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true">
+      <JFXButton fx:id="btnAddFromList" disable="true" layoutX="365.0" layoutY="265.0" onMouseClicked="#addPatientToDetails" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm vào DSKB" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXButton>
-      <JFXButton fx:id="btnDeleteFromList" disable="true" layoutX="365.0" layoutY="314.0" onMouseClicked="#detelePatientFromDetails" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Xóa khỏi DSKB" textAlignment="CENTER" wrapText="true">
+      <JFXButton fx:id="btnDeleteFromList" disable="true" layoutX="365.0" layoutY="423.0" onMouseClicked="#detelePatientFromDetails" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Xóa khỏi DSKB" textAlignment="CENTER" wrapText="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXButton>
-      <JFXButton fx:id="btnPrintWaitingSlip" layoutX="365.0" layoutY="478.0" onMouseClicked="#printWaitingSlip" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="In phiếu TN" textAlignment="CENTER" wrapText="true">
+      <JFXButton fx:id="btnPrintWaitingSlip" layoutX="365.0" layoutY="587.0" onMouseClicked="#printWaitingSlip" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="In phiếu TN" textAlignment="CENTER" wrapText="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXButton>
@@ -157,5 +161,10 @@
             </ImageView>
          </children>
       </Pane>
+      <JFXButton fx:id="btnAddFromList1" layoutX="365.0" layoutY="115.0" onMouseClicked="#addPatientFromDB" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm bệnh nhân cũ" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
    </children>
 </AnchorPane>
