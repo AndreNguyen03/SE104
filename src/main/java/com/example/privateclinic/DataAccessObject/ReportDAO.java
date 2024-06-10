@@ -4,11 +4,9 @@ import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.DrugUsageReport;
 import com.example.privateclinic.Models.MonthlyReport;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +26,13 @@ public class ReportDAO {
                 MonthlyReport monthlyReport = new MonthlyReport(month, patientCount, revenue);
                 monthlyReports.add(monthlyReport);
             }
-        } catch (SQLException e ){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return monthlyReports;
     }
 
-    public List<DrugUsageReport> getDrugUsageReports()  {
+    public List<DrugUsageReport> getDrugUsageReports() {
         List<DrugUsageReport> drugUsageReports = new ArrayList<>();
         String query = "SELECT thuoc.tenthuoc, SUM(cthd.soluong) AS tong_so_luong FROM cthd JOIN thuoc ON cthd.mathuoc = thuoc.mathuoc GROUP BY thuoc.tenthuoc";
 
@@ -46,10 +44,9 @@ public class ReportDAO {
                 DrugUsageReport drugUsageReport = new DrugUsageReport(drugName, quantity);
                 drugUsageReports.add(drugUsageReport);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return drugUsageReports;
     }
 }
-

@@ -15,9 +15,9 @@ public class DrugUsageReport {
     }
 
     // Thêm constructor để chấp nhận tên thuốc và số lần dùng
-    public DrugUsageReport(String drugName, int usageCount) {
+    public DrugUsageReport(String drugName, int quantity) {
         this.drugName = drugName;
-        this.usageCount = usageCount;
+        this.quantity = quantity;
     }
     public String getDrugName() {
         return drugName;

@@ -1,20 +1,19 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.ReportDAO;
-import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.DrugUsageReport;
 import com.example.privateclinic.Models.MonthlyReport;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class ReportController {
@@ -26,7 +25,7 @@ public class ReportController {
     private TableView<DrugUsageReport> drugUsageReportTable;
 
     @FXML
-    private StackedBarChart<String, Number> customerChart;
+    private BarChart<String, Number> customerChart;
 
     @FXML
     private CategoryAxis xAxis;
@@ -38,7 +37,7 @@ public class ReportController {
     private TableColumn<MonthlyReport, Integer> sttColumn;
 
     @FXML
-    private TableColumn<MonthlyReport, LocalDate> dateColumn;
+    private TableColumn<MonthlyReport, Integer> dateColumn;
 
     @FXML
     private TableColumn<MonthlyReport, Integer> patientCountColumn;
@@ -48,9 +47,6 @@ public class ReportController {
 
     @FXML
     private TableColumn<MonthlyReport, Double> rateColumn;
-
-    @FXML
-    private TableColumn<DrugUsageReport, Integer> drugSttColumn;
 
     @FXML
     private TableColumn<DrugUsageReport, String> drugNameColumn;
@@ -63,6 +59,7 @@ public class ReportController {
 
     @FXML
     private TableColumn<DrugUsageReport, Integer> usageCountColumn;
+
     ReportDAO reportDAO = new ReportDAO();
 
     @FXML
@@ -74,30 +71,41 @@ public class ReportController {
     }
 
     private void SetUpTable() {
-        sttColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        patientCountColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        revenueColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        rateColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        drugSttColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        unitColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        drugNameColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>(""));
-        usageCountColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
+        patientCountColumn.setCellValueFactory(new PropertyValueFactory<>("patientCount"));
+        revenueColumn.setCellValueFactory(new PropertyValueFactory<>("revenue"));
+        rateColumn.setCellValueFactory(new PropertyValueFactory<>("rate"));
+        drugNameColumn.setCellValueFactory(new PropertyValueFactory<>("drugName"));
+        unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        usageCountColumn.setCellValueFactory(new PropertyValueFactory<>("usageCount"));
     }
 
     private void loadMonthlyReportData() {
-        ReportDAO dao = new ReportDAO();
-        List<MonthlyReport> reports = dao.getMonthlyReports();
-        monthlyReportTable.getItems().setAll(reports);
+        List<MonthlyReport> reports = reportDAO.getMonthlyReports();
+        ObservableList<MonthlyReport> observableReports = FXCollections.observableArrayList(reports);
+        monthlyReportTable.setItems(observableReports);
     }
 
     private void loadDrugUsageReportData() {
-            List<DrugUsageReport> reports = reportDAO.getDrugUsageReports();
-            drugUsageReportTable.getItems().setAll(reports);
+        List<DrugUsageReport> reports = reportDAO.getDrugUsageReports();
+        ObservableList<DrugUsageReport> observableReports = FXCollections.observableArrayList(reports);
+        drugUsageReportTable.setItems(observableReports);
     }
 
     private void initializeChart() {
-        // Gán dữ liệu cho biểu đồ customerChart ở đây
+        xAxis.setLabel("Tháng");
+        yAxis.setLabel("Doanh thu");
+
+        List<MonthlyReport> reports = reportDAO.getMonthlyReports();
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Doanh thu theo tháng");
+
+        for (MonthlyReport report : reports) {
+            series.getData().add(new XYChart.Data<>(String.valueOf(report.getMonth()), report.getRevenue()));
+        }
+
+        customerChart.getData().add(series);
     }
 }

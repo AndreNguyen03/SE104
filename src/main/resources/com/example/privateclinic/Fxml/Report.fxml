@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.StackedBarChart?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -31,7 +30,7 @@
                                         <TableView fx:id="monthlyReportTable" layoutX="20.0" layoutY="50.0" prefHeight="470.0" prefWidth="689.0">
                                             <columns>
                                                 <TableColumn fx:id="sttColumn" prefWidth="50.0" text="STT" />
-                                                <TableColumn fx:id="dateColumn" prefWidth="150.0" text="Ngày" />
+                                                <TableColumn fx:id="dateColumn" prefWidth="150.0" text="Tháng" />
                                                 <TableColumn fx:id="patientCountColumn" prefWidth="150.0" text="Số bệnh nhân" />
                                                 <TableColumn fx:id="revenueColumn" prefWidth="150.0" text="Doanh thu" />
                                                 <TableColumn fx:id="rateColumn" prefWidth="150.0" text="Tỷ lệ" />
@@ -73,14 +72,14 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="725.0" prefWidth="764.0">
                             <children>
-                                <StackedBarChart fx:id="customerChart" layoutX="20.0" layoutY="50.0" prefHeight="470.0" prefWidth="689.0">
+                                <BarChart fx:id="customerChart" layoutX="20.0" layoutY="50.0" prefHeight="470.0" prefWidth="689.0">
                                     <xAxis>
-                                        <CategoryAxis fx:id="xAxis" label="Tháng" />
+                                        <CategoryAxis label="Tháng" fx:id="xAxis" />
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis fx:id="yAxis" label="Số lượng" />
+                                        <NumberAxis fx:id="yAxis" label="Doanh thu" />
                                     </yAxis>
-                                </StackedBarChart>
+                                </BarChart>
                             </children>
                         </AnchorPane>
                     </content>
