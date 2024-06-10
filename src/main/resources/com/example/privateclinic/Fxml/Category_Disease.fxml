@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -62,7 +63,7 @@
           <TableColumn fx:id="nameColumn" prefWidth="524.0" text="Tên bệnh" />
         </columns>
       </TableView>
-      <Pane fx:id="lbl_header" prefHeight="61.0" prefWidth="683.0" styleClass="pane-top">
+      <Pane fx:id="lbl_header" layoutX="2.0" layoutY="2.0" prefHeight="61.0" prefWidth="680.0" styleClass="pane-top">
          <children>
             <Pane fx:id="btnClose" layoutX="639.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
                <children>
@@ -109,4 +110,7 @@
          </children>
       </Pane>
    </children>
+   <effect>
+      <Blend />
+   </effect>
 </AnchorPane>

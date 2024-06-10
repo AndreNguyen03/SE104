@@ -62,13 +62,11 @@ public class ConnectDB {
     }
 
     public ResultSet getData(String sqlQuery) {
-        try (PreparedStatement preparedStatement = databaseLink.prepareStatement(sqlQuery);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet;
-            } else {
-                return null;
-            }
+        try {
+            PreparedStatement preparedStatement = databaseLink.prepareStatement(sqlQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
