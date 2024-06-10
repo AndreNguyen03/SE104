@@ -286,21 +286,12 @@ public class ReceptionController implements Initializable {
 
     private void setTableViewByDate() {
         dpDate.setOnAction(event -> {
-            // Khởi tạo task để thực hiện các công việc nền
-            Task<Void> backgroundTask = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    // Thực hiện công việc nền ở đây
+
                     Date selectedDate = Date.valueOf(dpDate.getValue());
                     setPatientList(selectedDate);
                     setPatientDetailList(selectedDate);
                     searchPatientByIdAndByName();
-                    return null;
-                }
-            };
 
-            // Khởi động task trong một luồng mới
-            new Thread(backgroundTask).start();
         });
     }
 
@@ -399,17 +390,12 @@ public class ReceptionController implements Initializable {
 
     @FXML
     void addPatientFromDB(MouseEvent event) {
-        if(stagePatientData==null)
-        {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/PatientCategory.fxml"));
             stagePatientData=createStage(loader);
             PatientCategoryController patientCategoryController = loader.getController();
             patientCategoryController.setController(this);
-        }
-        else
-        {
-            stagePatientData.toFront();
-        }
+
     }
 
     @FXML
@@ -456,8 +442,14 @@ public class ReceptionController implements Initializable {
         tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
         patients = patientDAO.getPatientsByDateReception(date);
-        tvPatient.getItems().clear();
-        tvPatient.setItems(patients);
+        if (patients != null && !patients.isEmpty()) {
+            Platform.runLater(() -> {
+                tvPatient.getItems().clear();
+                tvPatient.setItems(patients);
+            });
+        } else {
+            tvPatient.getItems().clear();
+        }
     }
 
     private void setPatientDetailList(Date date) {
@@ -470,8 +462,15 @@ public class ReceptionController implements Initializable {
         tcPatientAddressDetail.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
         tcDoctor.setCellValueFactory(new PropertyValueFactory<>("doctor"));
         patientsDetails = patientDAO.getPatientsByDateReception(date);
-        tvPatientDetails.getItems().clear();
-        tvPatientDetails.setItems(patients);
+        if (patientsDetails != null && !patientsDetails.isEmpty()) {
+            Platform.runLater(() -> {
+                tvPatientDetails.getItems().clear();
+                tvPatientDetails.setItems(patientsDetails);
+            });
+        } else {
+            // Nếu danh sách dữ liệu rỗng, không cần cập nhật TableView
+            tvPatientDetails.getItems().clear();
+        }
     }
 
     private void clearDataField() {

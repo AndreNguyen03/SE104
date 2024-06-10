@@ -359,7 +359,7 @@ public class PatientDAO {
                     try {
                         record.setDoctor(resultSet.getString(8));
                     } catch (SQLException e) {
-                        record.setDoctor("");
+                        record.setDoctor(" ");
                     }
                     patients.add(record);
                 }
