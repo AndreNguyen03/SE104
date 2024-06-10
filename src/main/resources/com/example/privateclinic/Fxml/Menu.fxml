@@ -17,7 +17,7 @@
    <children>
       <AnchorPane layoutX="249.3333282470703" prefHeight="119.0" prefWidth="1350.0" styleClass="top-container" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="titleTextField" layoutX="57.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home" AnchorPane.bottomAnchor="46.29427083333333" AnchorPane.leftAnchor="56.66666666666674" AnchorPane.rightAnchor="1215.09375" AnchorPane.topAnchor="43.87109375">
+            <Text fx:id="titleTextField" layoutX="57.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trang chủ" AnchorPane.bottomAnchor="46.29427083333333" AnchorPane.leftAnchor="56.66666666666674" AnchorPane.rightAnchor="1215.09375" AnchorPane.topAnchor="43.87109375">
                <font>
                   <Font name=".VnArial Bold" size="35.0" />
                </font>
@@ -69,13 +69,13 @@
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="910.0" prefWidth="249.0" styleClass="left-container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <ImageView fitHeight="264.0" fitWidth="249.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView id="imageViewHome" fx:id="imageViewHome" fitHeight="264.0" fitWidth="249.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../Images/ClinicUIT.png" />
             </image>
          </ImageView>
          <Line endX="144.29290771484375" endY="7.748603820800781E-7" startX="-100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="250.0" />
-         <Button id="menu_button" fx:id="btnAccountant" layoutX="2.0" layoutY="371.0" mnemonicParsing="false" onAction="#btnReceptionClicked" prefHeight="54.0" prefWidth="240.0" text="Tiếp nhận" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="371.0">
+         <Button id="menu_button" fx:id="btnReception" layoutX="2.0" layoutY="371.0" mnemonicParsing="false" onAction="#btnReceptionClicked" prefHeight="54.0" prefWidth="240.0" text="Tiếp nhận" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="371.0">
             <font>
                <Font size="19.0" />
             </font>
@@ -83,9 +83,9 @@
                <Cursor fx:constant="HAND" />
             </cursor>
          </Button>
-         <MenuButton alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="418.6666666666667" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" popupSide="RIGHT" prefHeight="61.0" prefWidth="243.0" text="Danh mục" textFill="#093246" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="430.0">
+         <MenuButton fx:id="btnCategory" alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="418.6666666666667" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" popupSide="RIGHT" prefHeight="61.0" prefWidth="243.0" text="Danh mục" textFill="#093246" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="430.0">
             <items>
-               <MenuItem fx:id="btnAspirine" mnemonicParsing="false" onAction="#btnAspirineClicked" text="Thuốc" />
+               <MenuItem fx:id="btnAspirin" mnemonicParsing="false" onAction="#btnAspirineClicked" text="Thuốc" />
                <MenuItem fx:id="btnDisease" mnemonicParsing="false" onAction="#btnDiseaseClicked" text="Bệnh" />
             </items>
          </MenuButton>
@@ -132,6 +132,7 @@
                <Cursor fx:constant="HAND" />
             </cursor>
          </Button>
+         <Pane id="panelHover" layoutY="1.0" onMouseClicked="#handleLogo" prefHeight="248.0" prefWidth="249.0" style="-fx-background-color: D8FDA47E;" />
       </AnchorPane>
       <Pane fx:id="mainPane" prefHeight="880.0" prefWidth="1350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="0.0" />
    </children>
