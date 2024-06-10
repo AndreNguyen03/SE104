@@ -64,7 +64,7 @@ public class EmployeeController implements Initializable {
     @FXML
     private TableColumn<User, String> usernameColumn;
 
-    private UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO = new UserDAO();
     private ObservableList<User> employees;
 
     @Override
@@ -129,7 +129,7 @@ public class EmployeeController implements Initializable {
     private void handleDeleteAction() {
         User selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
         if (selectedEmployee != null) {
-            int sequence = ShowYesNoAlert("xoá "+selectedEmployee.getEmployeeName()+"");
+            int sequence = ShowYesNoAlert("xoá "+selectedEmployee.getEmployeeName());
             if(sequence==JOptionPane.YES_OPTION) {
                 if (userDAO.deleteEmployee(selectedEmployee.getEmployeeId()))  {
                     employees.remove(selectedEmployee);
@@ -157,7 +157,7 @@ public class EmployeeController implements Initializable {
         if (!name.isEmpty() && !citizenId.isEmpty() && !address.isEmpty() && !phoneNum.isEmpty() && checkEmail() && !cb_position.getValue().isEmpty()) {
             if(btnAddEmployee.getText().equals("Lưu")) {
                 int id = Integer.parseInt(tf_maNV.getText());
-                int sequence = ShowYesNoAlert("lưu "+name+"");
+                int sequence = ShowYesNoAlert("lưu "+name);
                 if(sequence==JOptionPane.YES_OPTION) {
                     User employee = new User(id,name, citizenId, address, phoneNum, email, position, username);
                     if (userDAO.updateEmployee(employee)) {
@@ -171,7 +171,7 @@ public class EmployeeController implements Initializable {
                     }
                 } else {}
             } else {
-                int sequence = ShowYesNoAlert("thêm "+name+"");
+                int sequence = ShowYesNoAlert("thêm "+name);
                 if(sequence==JOptionPane.YES_OPTION) {
                     User newEmployee = new User(name, citizenId, address, phoneNum, email, position, username);
                     if(userDAO.addEmployee(newEmployee)) {
