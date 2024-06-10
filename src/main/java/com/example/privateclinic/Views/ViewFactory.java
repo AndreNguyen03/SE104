@@ -26,6 +26,7 @@ public class ViewFactory {
     Stage stageExaminationHistory = null;
     Stage stageCategoryAspirine= null;
     Stage stageCategoryDisease = null;
+    FXMLLoader receptionLoader;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -57,8 +58,8 @@ public class ViewFactory {
     public void showReceptionWindow() {
         if(stageReception==null)  //xử lí mở 2 lần scene
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
-            stageReception=createStage(loader);
+            receptionLoader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
+            stageReception=createStage(receptionLoader);
         }
         else
         {

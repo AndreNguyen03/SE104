@@ -1,10 +1,11 @@
 package com.example.privateclinic.DataAccessObject;
 
 import com.example.privateclinic.Models.ConnectDB;
-import com.example.privateclinic.Models.Customer;
 import com.example.privateclinic.Models.Patient;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -15,11 +16,14 @@ import java.util.List;
 
 public class PatientDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
+    private int lastMaxId = 0;
 
     public PatientDAO() {
 
     }
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public void addPatient(Patient patient) {
         LocalDate now = LocalDate.now();
 
@@ -112,6 +116,7 @@ public class PatientDAO {
         }
         return patient;
     }
+
     public Patient getPatientByName(String name) {
         Patient patient = null;
         String query = "SELECT * FROM benhnhan WHERE HoTen = ?";
@@ -133,6 +138,7 @@ public class PatientDAO {
         }
         return patient;
     }
+
     public int getNextPatientId() {
         String query = "SELECT MAX(mabn) FROM benhnhan";
 
@@ -148,34 +154,35 @@ public class PatientDAO {
         }
         return 1; // Trường hợp không có bệnh nhân nào trong cơ sở dữ liệu
     }
-/*    public ObservableList<Patient> getPatientsByDate(Date date) {
-        ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao FROM benhnhan bn,tiepnhan tn WHERE tn.ngayvao = ? " +
-                "AND tn.matn NOT IN (SELECT matn FROM khambenh)";
-        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
-            statement.setDate(1, date);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Patient patient = new Patient();
-                    patient.setPatientId(resultSet.getInt("mabn"));
-                    patient.setPatientName(resultSet.getString("hoten"));
-                    patient.setPatientGender(resultSet.getString("gioitinh"));
-                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
-                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
-                    patient.setPatientAddress(resultSet.getString("diachi"));
-                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
-                    patients.add(patient);
+
+    /*    public ObservableList<Patient> getPatientsByDate(Date date) {
+            ObservableList<Patient> patients = FXCollections.observableArrayList();
+            String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao FROM benhnhan bn,tiepnhan tn WHERE tn.ngayvao = ? " +
+                    "AND tn.matn NOT IN (SELECT matn FROM khambenh)";
+            try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+                statement.setDate(1, date);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Patient patient = new Patient();
+                        patient.setPatientId(resultSet.getInt("mabn"));
+                        patient.setPatientName(resultSet.getString("hoten"));
+                        patient.setPatientGender(resultSet.getString("gioitinh"));
+                        patient.setPatientBirth(resultSet.getDate("ngaysinh"));
+                        patient.setPatientPhoneNumber(resultSet.getString("sdt"));
+                        patient.setPatientAddress(resultSet.getString("diachi"));
+                        patient.setArrivalDate(resultSet.getDate("ngayvao"));
+                        patients.add(patient);
+                    }
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return patients*//**//*;
+            return patients*//**//*;
     }*/
     public ObservableList<Patient> getPatientsFromReceptionByDate(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
         String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao, tn.stt FROM benhnhan bn, tiepnhan tn WHERE bn.mabn = tn.mabn AND tn.ngayvao::date = ? " +
-                "AND tn.mabn NOT IN (SELECT mabn FROM khambenh)";
+                "AND tn.matn NOT IN (SELECT matn FROM khambenh)";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -189,7 +196,7 @@ public class PatientDAO {
                             resultSet.getString("diachi"),
                             resultSet.getDate("ngayvao"),
                             resultSet.getInt("stt")
-                            );
+                    );
                     patients.add(patient);
                 }
             }
@@ -198,6 +205,7 @@ public class PatientDAO {
         }
         return patients;
     }
+
     public ObservableList<Patient> getPatientsDoneByDate(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
         String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao " +
@@ -224,35 +232,35 @@ public class PatientDAO {
         return patients;
     }
 
-    public ObservableList<Patient> getPatientsByDateReception(Date date) {
-        ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao FROM benhnhan bn, tiepnhan tn WHERE DATE(ngayvao) = ? AND tn.mabn = bn.mabn";
-        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
-            statement.setDate(1, date);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Patient patient = new Patient();
-                    patient.setPatientId(resultSet.getInt("mabn"));
-                    patient.setPatientName(resultSet.getString("hoten"));
-                    patient.setPatientGender(resultSet.getString("gioitinh"));
-                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
-                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
-                    patient.setPatientAddress(resultSet.getString("diachi"));
-                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
-                    patients.add(patient);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return patients/**/;
-    }
+//    public ObservableList<Patient> getPatientsByDateReception(Date date) {
+//        ObservableList<Patient> patients = FXCollections.observableArrayList();
+//        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao FROM benhnhan bn, tiepnhan tn WHERE DATE(ngayvao) = ? AND tn.mabn = bn.mabn";
+//        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+//            statement.setDate(1, date);
+//            try (ResultSet resultSet = statement.executeQuery()) {
+//                while (resultSet.next()) {
+//                    Patient patient = new Patient();
+//                    patient.setPatientId(resultSet.getInt("mabn"));
+//                    patient.setPatientName(resultSet.getString("hoten"));
+//                    patient.setPatientGender(resultSet.getString("gioitinh"));
+//                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
+//                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
+//                    patient.setPatientAddress(resultSet.getString("diachi"));
+//                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
+//                    patients.add(patient);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return patients/**/;
+//    }
 
     public void admitPatient(int mabn, int stt) {
         String checkSql = "SELECT COUNT(*) AS so_lan_kham FROM tiepnhan WHERE mabn = ?";
         String insertSql = "INSERT INTO tiepnhan (mabn, stt,ngayvao , lankham) VALUES (?, ?, ?, ?)";
 
-        LocalDateTime dateTime = LocalDateTime.parse(LocalDateTime.now().format(formatter),formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
 
         try (PreparedStatement checkStmt = connectDB.databaseLink.prepareStatement(checkSql);
              PreparedStatement insertStmt = connectDB.databaseLink.prepareStatement(insertSql)) {
@@ -289,7 +297,7 @@ public class PatientDAO {
             statement.setInt(1, maTiepNhan);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                if(!resultSet.isBeforeFirst()) {
+                if (!resultSet.isBeforeFirst()) {
                     return null;
                 } else {
                     while (resultSet.next()) {
@@ -324,4 +332,71 @@ public class PatientDAO {
         return id;
     }
 
+
+    public ObservableList<Patient> getPatientsByDateReception(Date date) {
+        ObservableList<Patient> patients = FXCollections.observableArrayList();
+        String query = "SELECT DISTINCT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao, nv.hoten\n" +
+                "FROM benhnhan bn\n" +
+                "JOIN tiepnhan tn ON tn.mabn = bn.mabn\n" +
+                "LEFT JOIN khambenh kb ON tn.matn = kb.matn\n" +
+                "LEFT JOIN nhanvien nv ON kb.manv = nv.manv\n" +
+                "WHERE DATE(tn.ngayvao) = ?";
+
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setDate(1, date);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Patient record = new Patient();
+                    record.setPatientId(resultSet.getInt(1));
+                    record.setPatientName(resultSet.getString(2));
+                    record.setPatientGender(resultSet.getString(3));
+                    record.setPatientBirth(resultSet.getDate(4));
+                    record.setPatientPhoneNumber(resultSet.getString(5));
+                    record.setPatientAddress(resultSet.getString(6));
+                    record.setArrivalDate(resultSet.getObject(7));
+
+                    // Kiểm tra cột thứ 8 có tồn tại không trước khi truy cập
+                    try {
+                        record.setDoctor(resultSet.getString(8));
+                    } catch (SQLException e) {
+                        record.setDoctor("");
+                    }
+                    patients.add(record);
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return patients;
+    }
+
+    public void checkForNewRecords(TableView<Patient> tvPatientDetails, LocalDate value) {
+        String query = "SELECT makb FROM khambenh WHERE makb > " + lastMaxId + " ORDER BY makb ASC";
+        try (Statement statement = connectDB.databaseLink.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            boolean hasNewRecords = false;
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                lastMaxId = id; // Cập nhật ID cuối cùng đã kiểm tra
+                hasNewRecords = true;
+            }
+
+            if (hasNewRecords) {
+                Platform.runLater(() -> updateTableViewWithPatients(tvPatientDetails, value));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTableViewWithPatients(TableView<Patient> tableView, LocalDate value) {
+        ObservableList<Patient> patients = getPatientsByDateReception(Date.valueOf(value));
+        tableView.setItems(patients);
+    }
 }

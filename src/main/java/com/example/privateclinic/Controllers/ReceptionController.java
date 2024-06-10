@@ -31,6 +31,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -49,8 +50,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class ReceptionController implements Initializable {
     @FXML
@@ -150,6 +151,7 @@ public class ReceptionController implements Initializable {
     public AnchorPane lbl_header,lbl_header2;
     private double xOffset = 0;
     private double yOffset =0;
+    Patient selectedPatient;
 
     public ObservableList<Patient> getPatientsDetails() {
         return patientsDetails;
@@ -197,7 +199,32 @@ public class ReceptionController implements Initializable {
             stage.setY(mouseEvent.getScreenY()-yOffset);
         });
         setTableRowFactory(tvPatientDetails,patientDAO);
+        setPatientsDetailsRowClicked();
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                patientDAO.checkForNewRecords(tvPatientDetails,dpDate.getValue());
+                System.out.println("check");
+            }
+        };
+        // Đặt lịch để kiểm tra mỗi 30 giây
+        timer.schedule(task, 0, 30000);
+
     }
+
+    private void setPatientsDetailsRowClicked() {
+        tvPatientDetails.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Lấy phần tử được chọn
+                selectedPatient = newSelection;
+                // Thực hiện các thao tác với phần tử được chọn ở đây
+                // Ví dụ: Hiển thị thông tin của phần tử được chọn, xử lý các thao tác khác...
+            }
+        });
+    }
+
 
     public void setTableRowFactory(TableView<Patient> tvPatientDetails, PatientDAO patientDAO) {
         tvPatientDetails.setRowFactory(tv -> {
@@ -214,10 +241,10 @@ public class ReceptionController implements Initializable {
                         } else {
                             // Chạy việc lấy dữ liệu từ cơ sở dữ liệu trong một luồng riêng
                             new Thread(() -> {
-                                String doctor = patientDAO.getDoctor(patient.getReceptionId());
+                                String doctor = patient.getDoctor();
                                 // Cập nhật giao diện người dùng trong Platform.runLater
                                 Platform.runLater(() -> {
-                                    if (doctor != null) {
+                                    if (doctor != "") {
                                         patient.setDoctor(doctor);
                                         setStyle("-fx-background-color: yellow;");
                                         // Thông báo thay đổi cho TableView
@@ -231,14 +258,6 @@ public class ReceptionController implements Initializable {
                     }
                 }
             };
-
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty()) {
-                    Patient clickedPatient = row.getItem();
-                    // Xử lý khi click vào dòng (nếu cần)
-                }
-            });
-
             return row;
         });
     }
@@ -319,7 +338,7 @@ public class ReceptionController implements Initializable {
     }
 
     private void searchPatientByIdAndByName() {
-        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsFromReceptionByDate(Date.valueOf(dpDate.getValue())));
+        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsByDateReception(Date.valueOf(dpDate.getValue())));
         tfPatientById.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
                 tvPatient.setItems(patientList);
@@ -436,7 +455,7 @@ public class ReceptionController implements Initializable {
         tcNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatient.getItems().indexOf(cellData.getValue()) + 1).asObject());
         tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        patients = patientDAO.getPatientsFromReceptionByDate(date);
+        patients = patientDAO.getPatientsByDateReception(date);
         tvPatient.getItems().clear();
         tvPatient.setItems(patients);
     }
@@ -449,7 +468,8 @@ public class ReceptionController implements Initializable {
         tcPatientBirthDetail.setCellValueFactory(new PropertyValueFactory<>("patientBirth"));
         tcPatientPhoneNumberDetail.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
         tcPatientAddressDetail.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
-        patientsDetails = patientDAO.getPatientsFromReceptionByDate(date);
+        tcDoctor.setCellValueFactory(new PropertyValueFactory<>("doctor"));
+        patientsDetails = patientDAO.getPatientsByDateReception(date);
         tvPatientDetails.getItems().clear();
         tvPatientDetails.setItems(patients);
     }
@@ -494,14 +514,11 @@ public class ReceptionController implements Initializable {
 
     @FXML
     void detelePatientFromDetails(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Xóa bệnh nhân");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Xóa bệnh nhân",ButtonType.OK,ButtonType.CANCEL);
         alert.setContentText("Bạn chắc chắn muốn xóa ?");
-
-        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            Patient patientToDelete = tvPatientDetails.getSelectionModel().getSelectedItem();
-            patientsDetails.remove(patientToDelete);
-            tvPatientDetails.setItems(patientsDetails);
+        Optional<ButtonType> result = alert.showAndWait();
+        if ( result.get() == ButtonType.OK) {
+            tvPatientDetails.getItems().remove(selectedPatient);
         }
     }
 

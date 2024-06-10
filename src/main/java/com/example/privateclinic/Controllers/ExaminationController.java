@@ -151,6 +151,7 @@ public  class ExaminationController implements Initializable {
     {
         this.user=_user;
     }
+    ReceptionController receptionController;
     public void initFromHistory(ExaminationHistory _examinationHistory) {
         examinationHistorySent=_examinationHistory;
         FillDataFromHistory();
@@ -1183,4 +1184,6 @@ public  class ExaminationController implements Initializable {
     public void minimizeExam(MouseEvent mouseEvent) {
         Model.getInstance().getViewFactory().minimizeStage((Stage) btnClose.getScene().getWindow());
     }
+
+
 }
