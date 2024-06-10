@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -169,7 +170,7 @@ public class EmployeeController implements Initializable {
                     } else {
                         showAlert("Warning", "Error!");
                     }
-                } else {}
+                }
             } else {
                 int sequence = ShowYesNoAlert("thêm "+name);
                 if(sequence==JOptionPane.YES_OPTION) {
@@ -181,7 +182,7 @@ public class EmployeeController implements Initializable {
                         cb_position.setVisible(false);
                         tf_addPosition.setVisible(true);
                     }
-                } else {}
+                }
             }
         } else {
             showAlert("Warning","Kiểm tra lại thông tin!");
@@ -266,10 +267,6 @@ public class EmployeeController implements Initializable {
         tf_addEmail.clear();
         tf_addPosition.clear();
         tf_maNV.clear();
-    }
-    private static String normalizeString(String str) {
-        return Normalizer.normalize(str, Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
     private void showAlert(String tilte,String string) {
         Alert alert = new Alert(Alert.AlertType.WARNING);

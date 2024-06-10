@@ -26,7 +26,7 @@ public class DiseaseDAO {
         String query = "SELECT * FROM benh ";
         boolean isInteger = false;
         if(!idOrName.isEmpty()) {
-            query+="WHERE unaccent(tenbenh) ILIKE unaccent(?)";
+            query+="WHERE unaccent(tenbenh) ILIKE unaccent(?) ";
             try {
                 int id = Integer.parseInt(idOrName);
                 query += "OR mabenh = ?";

@@ -120,6 +120,7 @@ public class MenuController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == okButton) {
+            Model.getInstance().getViewFactory().showLoginWindow();
             Model.getInstance().getViewFactory().closeStage(s);
         }
     }

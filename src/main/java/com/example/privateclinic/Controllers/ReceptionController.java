@@ -593,7 +593,6 @@ public class ReceptionController implements Initializable {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void addPatientToList(Patient selected) {

@@ -66,24 +66,35 @@
 {
     -fx-background-color: #FFFFFF;
 }
-.menu-button .menu-item
-{
-    -fx-background-color: #afacac;
 
-}
-.menu-button .menu-item:hover
-{
-    -fx-background-color: #72b61c;
-
-}
-.menu-button .menu-item:focused
-{
-}
 .menu-button:focused .arrow
 {
     -fx-background-color: #FFFFFF;
 }
+/*comboBox*/
+.menu-button .text-field
+{
+    -fx-background-radius: 20px;
+}
 
+.menu-button .menu-item {
+
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-background-color: #b9d588;
+}
+.menu-button .menu-item:hover {
+
+    -fx-background-color: #93d94c;
+}
+.menu-button .menu-item:pressed {
+
+    -fx-background-color: #b7e87d;
+}
+.menu-button .menu-item:focused {
+
+    -fx-background-color: #6fa62f;
+}
 .top-container
 {
     -fx-background-color: linear-gradient(to right,#D2FD95,#F8FDEF);

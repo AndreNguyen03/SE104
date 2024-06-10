@@ -132,6 +132,14 @@
                <Cursor fx:constant="HAND" />
             </cursor>
          </Button>
+         <Button id="menu_button" fx:id="btnEmployee1" layoutX="3.0" layoutY="615.0" mnemonicParsing="false" onAction="#btnEmployeeClicked" prefHeight="54.0" prefWidth="243.0" text="Bệnh nhân">
+            <font>
+               <Font size="19.0" />
+            </font>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </Button>
       </AnchorPane>
       <Pane fx:id="mainPane" prefHeight="880.0" prefWidth="1350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="0.0" />
    </children>

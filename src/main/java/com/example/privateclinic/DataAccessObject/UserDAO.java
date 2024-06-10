@@ -247,7 +247,7 @@ public class UserDAO {
         boolean isInteger = false;
         try {
             int id = Integer.parseInt(searchString);
-            query+= "AND manv = ? ";
+            query+= "OR manv = ? ";
             isInteger = true;
         } catch (NumberFormatException e) {
         }
