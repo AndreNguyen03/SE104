@@ -91,14 +91,14 @@ public class ViewFactory {
             stageSetting.toFront();
         }
     }
-    public void showHistoryExamination(Patient patient, ExaminationController _examinationController)
+    public void showHistoryExamination(Patient patient, ExaminationController _examinationController,boolean fromWaitingList)
     {
         if(stageExaminationHistory==null) //xử lí mở 2 lần scene
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/ExaminationHistory.fxml"));
             stageExaminationHistory=createStage(loader);
             ExaminationHistoryController examHistoryController = loader.getController();
-            examHistoryController.initData(patient,_examinationController);
+            examHistoryController.initData(patient,_examinationController,fromWaitingList);
         }
         else
         {

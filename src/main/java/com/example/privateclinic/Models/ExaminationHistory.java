@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 
 public class ExaminationHistory {
     Patient patient;
-    ObservableList<Prescribe> prescribes;
+    ObservableList<Receipt> prescribes;
     Examination examination;
 
     public ExaminationHistory() {
@@ -12,7 +12,7 @@ public class ExaminationHistory {
         examination = new Examination();
     }
 
-    public ExaminationHistory(Patient patient, Examination examination,ObservableList<Prescribe>  prescribes) {
+    public ExaminationHistory(Patient patient, Examination examination,ObservableList<Receipt>  prescribes) {
         this.patient = patient;
         this.prescribes = prescribes;
         this.examination = examination;
@@ -26,11 +26,11 @@ public class ExaminationHistory {
         this.patient = patient;
     }
 
-    public ObservableList<Prescribe> getPrescribe() {
+    public ObservableList<Receipt> getPrescribe() {
         return prescribes;
     }
 
-    public void setPrescribe(ObservableList<Prescribe> prescribes) {
+    public void setPrescribe(ObservableList<Receipt> prescribes) {
         this.prescribes = prescribes;
     }
 

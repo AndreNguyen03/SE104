@@ -3,6 +3,7 @@ package com.example.privateclinic.Models;
 import java.sql.Date;
 
 public class Patient {
+
     private int patientId;
     private String patientName;
     private String patientGender;
@@ -10,9 +11,9 @@ public class Patient {
     private Date patientBirth;
     private Date arrivalDate;
     private String patientAddress;
+
+    private int receptionId;
     int number;
-
-
     @Override
     public String toString() {
         return "Patient{" +
@@ -35,7 +36,7 @@ public class Patient {
         this.arrivalDate = arrivalDate;
     }
 
-    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int number) {
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int receptionId,int number) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientGender = patientGender;
@@ -43,6 +44,7 @@ public class Patient {
         this.patientBirth = patientBirth;
         this.patientAddress = patientAddress;
         this.arrivalDate = arrivalDate;
+        this.receptionId = receptionId;
         this.number = number;
     }
 
@@ -112,4 +114,13 @@ public class Patient {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public int getReceptionId() {
+        return receptionId;
+    }
+
+    public void setReceptionId(int receptionId) {
+        this.receptionId = receptionId;
+    }
+
 }

@@ -7,19 +7,18 @@
     -fx-font-family: "Segoe UI Semibold";
 }
 .lbl:hover{
-    -fx-font-size: 17px;
+    -fx-font-size: 16.5px;
     -fx-text-fill: #4eb4f5;
 }
 .lbl:pressed{
-    -fx-font-size: 16px;
+    -fx-font-size: 16.2px;
 }
-.pá:hover
-{
-    -fx-border-color: transparent;
-}
+
 .login_container Text{
     -fx-background-color: #E9E9E9;
     -fx-font-size: 16;
+    -fx-border-width: 10;
+    -fx-border-color: #818181;
 }
 .Title {
     -fx-font-size: 35;

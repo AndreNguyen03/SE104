@@ -135,6 +135,7 @@ public class Category_AspirineController implements Initializable {
             stage.setX(mouseEvent.getScreenX()-xOffset);
             stage.setY(mouseEvent.getScreenY()-yOffset);
         });
+
     }
 
     private void loadMedicineData() {

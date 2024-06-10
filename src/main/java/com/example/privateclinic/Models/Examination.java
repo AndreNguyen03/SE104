@@ -1,48 +1,46 @@
 package com.example.privateclinic.Models;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Examination {
     int makb;
     int manv;
+    int matn;
     int mabn;
-    java.sql.Date ngay;
-    int maBenhChinh;
-    int maBenhPhu;
-    String trieuchung;
+    LocalDateTime ngay;
+    /*int maBenhChinh;
+    int maBenhPhu;*/
+    Disease mainDisease;
+    Disease subDisease;
     String luuy;
-
-    String tenBenhChinh;
-    String tenBenhPhu;
     String trieuChung;
-
+    String tenNhanVien;
+    int mahd;
+    int tienkham;
+    int tienthuoc;
     public Examination() {
     }
 
-    public Examination(int manv, int mabn, java.sql.Date ngay, int maBenhChinh, int maBenhPhu, String trieuchung, String luuy) {
+   /* public Examination(int receptionId, int manv, int mabn, int maBenhChinh, int maBenhPhu, String trieuchung, String luuy) {
+        this.matn = receptionId;
         this.manv = manv;
         this.mabn = mabn;
-        this.ngay = ngay;
         this.maBenhChinh = maBenhChinh;
         this.maBenhPhu = maBenhPhu;
-        this.trieuchung = trieuchung;
+        this.trieuChung = trieuchung;
         this.luuy = luuy;
-    }
-
-    public Examination(int makb, int manv, int mabn, java.sql.Date ngay, int maBenhChinh, int maBenhPhu, String trieuchung, String luuy, String tenBenhChinh, String tenBenhPhu, String trieuChung, String luuY) {
-        this.makb = makb;
-        this.manv = manv;
-        this.mabn = mabn;
-        this.ngay = ngay;
-        this.maBenhChinh = maBenhChinh;
-        this.maBenhPhu = maBenhPhu;
-        this.trieuchung = trieuchung;
-        this.luuy = luuy;
-        this.tenBenhChinh = tenBenhChinh;
-        this.tenBenhPhu = tenBenhPhu;
-        this.trieuChung = trieuChung;
-        this.luuy = luuY;
-    }
+    }*/
+   public Examination(int receptionId, int manv,String employee_name, int mabn, Disease _mainDisease, Disease _subDisease, String trieuchung, String luuy) {
+       this.matn = receptionId;
+       this.manv = manv;
+       this.tenNhanVien = employee_name;
+       this.mabn = mabn;
+       this.mainDisease = _mainDisease;
+       this.subDisease = _subDisease;
+       this.trieuChung = trieuchung;
+       this.luuy = luuy;
+   }
 
     public int getMakb() {
         return makb;
@@ -60,23 +58,15 @@ public class Examination {
         this.manv = manv;
     }
 
-    public int getMabn() {
-        return mabn;
-    }
-
-    public void setMabn(int mabn) {
-        this.mabn = mabn;
-    }
-
-    public java.sql.Date getNgay() {
+    public LocalDateTime getNgay() {
         return ngay;
     }
 
-    public void setNgay(java.sql.Date ngay) {
+    public void setNgay(LocalDateTime ngay) {
         this.ngay = ngay;
     }
 
-    public int getMaBenhChinh() {
+/*    public int getMaBenhChinh() {
         return maBenhChinh;
     }
 
@@ -90,14 +80,22 @@ public class Examination {
 
     public void setMaBenhPhu(int maBenhPhu) {
         this.maBenhPhu = maBenhPhu;
+    }*/
+
+    public Disease getMainDisease() {
+        return mainDisease;
     }
 
-    public String getTrieuchung() {
-        return trieuchung;
+    public void setMainDisease(Disease mainDisease) {
+        this.mainDisease = mainDisease;
     }
 
-    public void setTrieuchung(String trieuchung) {
-        this.trieuchung = trieuchung;
+    public Disease getSubDisease() {
+        return subDisease;
+    }
+
+    public void setSubDisease(Disease subDisease) {
+        this.subDisease = subDisease;
     }
 
     public String getLuuy() {
@@ -106,21 +104,6 @@ public class Examination {
 
     public void setLuuy(String luuy) {
         this.luuy = luuy;
-    }
-    public String getTenBenhChinh() {
-        return tenBenhChinh;
-    }
-
-    public void setTenBenhChinh(String tenBenhChinh) {
-        this.tenBenhChinh = tenBenhChinh;
-    }
-
-    public String getTenBenhPhu() {
-        return tenBenhPhu;
-    }
-
-    public void setTenBenhPhu(String tenBenhPhu) {
-        this.tenBenhPhu = tenBenhPhu;
     }
 
     public String getTrieuChung() {
@@ -131,4 +114,51 @@ public class Examination {
         this.trieuChung = trieuChung;
     }
 
+    public int getMatn() {
+        return matn;
+    }
+
+    public void setMatn(int matn) {
+        this.matn = matn;
+    }
+
+    public int getMabn() {
+        return mabn;
+    }
+
+    public void setMabn(int mabn) {
+        this.mabn = mabn;
+    }
+
+    public String getTenNhanVien() {
+        return tenNhanVien;
+    }
+
+    public void setTenNhanVien(String tenNhanVien) {
+        this.tenNhanVien = tenNhanVien;
+    }
+
+    public int getMahd() {
+        return mahd;
+    }
+
+    public void setMahd(int mahd) {
+        this.mahd = mahd;
+    }
+
+    public int getTienkham() {
+        return tienkham;
+    }
+
+    public void setTienkham(int tienkham) {
+        this.tienkham = tienkham;
+    }
+
+    public int getTienthuoc() {
+        return tienthuoc;
+    }
+
+    public void setTienthuoc(int tienthuoc) {
+        this.tienthuoc = tienthuoc;
+    }
 }

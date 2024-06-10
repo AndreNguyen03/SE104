@@ -1,13 +1,15 @@
 .container {
     -fx-background-color: #f6ffec;
-    -fx-effect: dropshadow(three-pass-box, rgb(57, 100, 5), 5, 0.5, 10, 10);
+    -fx-border-width: 1;
+    -fx-border-color: #4a7612;
+    -fx-border-radius: 15px;
 }
 
 .image_logo{
     -fx-scale-x: 5.5;
     -fx-scale-y: 5.5;
 }
-.lbl_tiltle{
+.lbl_title{
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 25px;
 }
