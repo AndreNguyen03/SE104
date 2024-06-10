@@ -3,16 +3,6 @@ package com.example.privateclinic.Models;
 import java.sql.Date;
 
 public class Patient {
-    private int patientSerialNumber;
-
-    public int getPatientSerialNumber() {
-        return patientSerialNumber;
-    }
-
-    public void setPatientSerialNumber(int patientSerialNumber) {
-        this.patientSerialNumber = patientSerialNumber;
-    }
-
     private int patientId;
     private String patientName;
     private String patientGender;
@@ -20,30 +10,19 @@ public class Patient {
         private Date patientBirth;
     private Object arrivalDate;
     private String patientAddress;
-    int number;
 
-    private String doctor;
     private int receptionId;
-
-    public int getReceptionId() {
-        return receptionId;
-    }
-
-    public void setReceptionId(int receptionId) {
-        this.receptionId = receptionId;
-    }
-
-    public String getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(String doctor) {
-        this.doctor = doctor;
-    }
-
+    int number;
     @Override
     public String toString() {
-        return STR."Patient{patientId=\{patientId}\{'\''}, patientName='\{patientName}\{'\''}, patientGender='\{patientGender}\{'\''}, patientPhoneNumber='\{patientPhoneNumber}\{'\''}, patientBirth=\{patientBirth}, patientAddress='\{patientAddress}\{'\''}\{'}'}";
+        return "Patient{" +
+                "patientId=" + patientId + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", patientGender='" + patientGender + '\'' +
+                ", patientPhoneNumber='" + patientPhoneNumber + '\'' +
+                ", patientBirth=" + patientBirth +
+                ", patientAddress='" + patientAddress + '\'' +
+                '}';
     }
 
     public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress) {
@@ -53,9 +32,10 @@ public class Patient {
         this.patientPhoneNumber = patientPhoneNumber;
         this.patientBirth = patientBirth;
         this.patientAddress = patientAddress;
+        this.arrivalDate = arrivalDate;
     }
 
-    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int number) {
+    public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int receptionId,int number) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientGender = patientGender;
@@ -63,6 +43,7 @@ public class Patient {
         this.patientBirth = patientBirth;
         this.patientAddress = patientAddress;
         this.arrivalDate = arrivalDate;
+        this.receptionId = receptionId;
         this.number = number;
     }
 
@@ -132,4 +113,13 @@ public class Patient {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public int getReceptionId() {
+        return receptionId;
+    }
+
+    public void setReceptionId(int receptionId) {
+        this.receptionId = receptionId;
+    }
+
 }

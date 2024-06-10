@@ -532,7 +532,25 @@
 {
     -fx-opacity: 0;
 }
+.close_mini
+{
+    -fx-background-color: transparent;
+}
+.close_mini:hover
+{
+    -fx-background-color: #FF0000;
+    -fx-border-radius: 0 10px 0 0;
+    -fx-background-radius: 0 10px 0 0;
+}
 
+.close_mini:hover .image_mini_hover
+{
+    -fx-opacity: 100;
+}
+.close_mini:hover .image_mini
+{
+    -fx-opacity: 0;
+}
 .lbl
 {
     -fx-font-family: "Segoe UI Black";
@@ -675,4 +693,29 @@ Customize left and right arrow
 .minimize:hover
 {
     -fx-background-color: #DFDFE2;
+}
+.pnl {
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+#revenue
+{
+    -fx-background-color: linear-gradient(to right,#6FA426, #b5dc7d);
+    -fx-effect: dropshadow(three-pass-box, rgb(57, 100, 5), 5, 0.2, 0, 2);
+}
+#left {
+    -fx-background-color: linear-gradient(to right,#0D2645, #507391);
+    -fx-effect: dropshadow(three-pass-box, rgb(38, 68, 93), 5, 0.2, 0, 2);
+}
+#right {
+    -fx-background-color: linear-gradient(to right,#8C60F6,#D099F4);
+    -fx-effect: dropshadow(three-pass-box, rgb(50, 11, 143), 5, 0.2, 0, 2);
+}
+.lbl_panel {
+    -fx-font-size: 18px;
+    -fx-font-family: "Segoe UI Semibold";
+}
+#exam {
+    -fx-background-color: linear-gradient(to right,#4EB69A,#A9DE5F);
+    -fx-effect: dropshadow(three-pass-box, rgb(31, 131, 104), 5, 0.2, 0, 2);
 }

@@ -7,6 +7,9 @@ public class Disease {
 
 
     public Disease() {
+        maBenh = 0;
+        tenBenh ="";
+        maICD ="";
     }
 
     public Disease(int maBenh, String tenBenh, String maICD ) {
