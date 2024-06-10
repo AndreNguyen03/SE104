@@ -393,8 +393,8 @@ public class LoginController implements Initializable {
 
     private boolean UpdatePassword(int index) throws SQLException,IOException {
         if(index ==0 )
-            return userDAO.UpdatePassword(tfUsername_Login.getText().toString(), pfPassword2_change.getText().toString(), index);
-        return  userDAO.UpdatePassword(tf_username_forgot.getText().toString(), pfPassword2_change.getText().toString(), index);
+            return userDAO.UpdatePassword(tfUsername_Login.getText(), pfPassword2_change.getText(), index);
+        return  userDAO.UpdatePassword(tf_username_forgot.getText(), pfPassword2_change.getText(), index);
     }
 
     @FXML

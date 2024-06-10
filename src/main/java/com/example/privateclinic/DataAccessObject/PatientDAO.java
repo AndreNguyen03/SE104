@@ -19,10 +19,11 @@ public class PatientDAO {
     public PatientDAO() {
 
     }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public void addPatient(Patient patient) {
         LocalDate now = LocalDate.now();
 
-        String query = "INSERT INTO benhnhan (MaBN, HoTen, GioiTinh, NgaySinh, SDT, DiaChi, ngayvao) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO benhnhan (MaBN, HoTen, GioiTinh, NgaySinh, SDT, DiaChi) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
 
@@ -32,7 +33,6 @@ public class PatientDAO {
             statement.setDate(4, patient.getPatientBirth());
             statement.setString(5, patient.getPatientPhoneNumber());
             statement.setString(6, patient.getPatientAddress());
-            statement.setDate(7, Date.valueOf(now));
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -156,8 +156,8 @@ public class PatientDAO {
 
     public ObservableList<Patient> getPatientsByDate(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, bn.ngayvao FROM benhnhan bn WHERE ngayvao = ? " +
-                "AND bn.mabn NOT IN (SELECT mabn FROM khambenh)";
+        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao FROM benhnhan bn,tiepnhan tn WHERE tn.ngayvao = ? " +
+                "AND tn.matn NOT IN (SELECT matn FROM khambenh)";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -180,9 +180,9 @@ public class PatientDAO {
     }
     public ObservableList<Patient> getPatientsDoneByDate(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, bn.ngayvao " +
-                "FROM benhnhan bn,khambenh kb " +
-                "WHERE bn.ngayvao = ? AND bn.mabn = kb.mabn";
+        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao " +
+                "FROM benhnhan bn,khambenh kb,tiepnhan tn " +
+                "WHERE tn.ngayvao = ? AND tn.matn = kb.matn";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -203,4 +203,105 @@ public class PatientDAO {
         }
         return patients;
     }
+
+    public ObservableList<Patient> getPatientsByDateReception(Date date) {
+        ObservableList<Patient> patients = FXCollections.observableArrayList();
+        String query = "SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao FROM benhnhan bn, tiepnhan tn WHERE DATE(ngayvao) = ? AND tn.mabn = bn.mabn";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setDate(1, date);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Patient patient = new Patient();
+                    patient.setPatientId(resultSet.getInt("mabn"));
+                    patient.setPatientName(resultSet.getString("hoten"));
+                    patient.setPatientGender(resultSet.getString("gioitinh"));
+                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
+                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
+                    patient.setPatientAddress(resultSet.getString("diachi"));
+                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
+                    patients.add(patient);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return patients/**/;
+    }
+
+    public void admitPatient(int mabn, int stt) {
+        String checkSql = "SELECT COUNT(*) AS so_lan_kham FROM tiepnhan WHERE mabn = ?";
+        String insertSql = "INSERT INTO tiepnhan (mabn, stt,ngayvao , lankham) VALUES (?, ?, ?, ?)";
+
+        LocalDateTime dateTime = LocalDateTime.parse(LocalDateTime.now().format(formatter),formatter);
+
+        try (PreparedStatement checkStmt = connectDB.databaseLink.prepareStatement(checkSql);
+             PreparedStatement insertStmt = connectDB.databaseLink.prepareStatement(insertSql)) {
+
+            // Check the current count of visits for the given patient
+            checkStmt.setInt(1, mabn);
+            ResultSet rs = checkStmt.executeQuery();
+            int soLanKham = 0;
+            if (rs.next()) {
+                soLanKham = rs.getInt("so_lan_kham");
+            }
+
+            // Prepare the insert statement
+            insertStmt.setInt(1, mabn);
+            insertStmt.setInt(2, stt);
+            insertStmt.setObject(3, dateTime);
+            insertStmt.setInt(4, soLanKham + 1);
+
+            // Execute the insert statement
+            insertStmt.executeUpdate();
+            System.out.println("Patient admitted successfully.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public String getDoctor(int maTiepNhan) {
+        String doctor = null;
+        String query = "SELECT hoten FROM khambenh, nhanvien WHERE matn = ? and khambenh.manv = nhanvien.manv";
+
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setInt(1, maTiepNhan);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if(!resultSet.isBeforeFirst()) {
+                    return null;
+                } else {
+                    while (resultSet.next()) {
+                        doctor = resultSet.getString(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return doctor;
+    }
+
+    public int getReceptionId(int mabn) {
+        int id = 0;
+
+        String query = "Select matn FROM tiepnhan WHERE tiepnhan.mabn = ?";
+
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setInt(1, mabn);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    id = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
 }

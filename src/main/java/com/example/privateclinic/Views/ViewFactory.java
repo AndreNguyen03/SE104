@@ -35,6 +35,7 @@ public class ViewFactory {
     public void showMenuWindow(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Menu.fxml"));
         createStage(loader);
+
         MenuController menuController = loader.getController();
         menuController.initData(user);
     }

@@ -115,12 +115,7 @@ public class UserDAO {
             preparedStatement.setString(1,newPassword);
             preparedStatement.setString(2,username);
         }
-        if (connectDB.handleData(preparedStatement))
-        {
-            return true;
-        }
-        else
-            return false;
+        return connectDB.handleData(preparedStatement);
     }
     final String LOWER_CASE = "abcdefghijklmnopqursuvwxyz";
     final String  UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -83,9 +83,9 @@ public class Category_AspirineController implements Initializable {
     private TableColumn<Medicine, Double> priceColumn;
 
     private MedicineDAO medicineDAO = new MedicineDAO();
-    private UnitDAO unitDAO = new UnitDAO();
-    private MedicineTypeDAO medicinetypeDAO = new MedicineTypeDAO();
-    private UseWayDAO usewayDAO = new UseWayDAO();
+    private final UnitDAO unitDAO = new UnitDAO();
+    private final MedicineTypeDAO medicinetypeDAO = new MedicineTypeDAO();
+    private final UseWayDAO usewayDAO = new UseWayDAO();
     private WarehouseDAO warehouseDAO = new WarehouseDAO();
 
 

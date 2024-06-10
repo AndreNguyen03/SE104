@@ -142,6 +142,8 @@ public  class ExaminationController implements Initializable {
     ExaminationHistory examinationHistorySent;
     Disease disease_main,disease_sub;
     boolean isChanged;
+
+    ReceptionController receptionController;
     User user;
     public void initData(User _user)
     {
@@ -416,6 +418,14 @@ public  class ExaminationController implements Initializable {
                     int requestResult = ShowYesNoAlert("lưu và kết thúc khám bệnh");
                     if(requestResult == JOptionPane.YES_OPTION)
                     {
+                        ObservableList<Patient> patientList = receptionController.getPatientsDetails();
+                        for (Patient patient : patientList) {
+                            if(patient.getReceptionId() == Integer.parseInt(tf_mabn.getText())) {
+                                patient.setDoctor(user.getEmployeeName());
+                                break;
+                            }
+                        }
+                        receptionController.getTvPatientDetails().refresh();
                         if(saveExaminationInformationToDabase())  {
                             showAlert("Notification","Lưu dữ liệu khám bệnh thành công!");
                             SetDisable();
@@ -483,6 +493,7 @@ public  class ExaminationController implements Initializable {
                     if(patientChosenBefore!=null||examinationHistorySent!=null) {
                         try {
                             printBangke();
+                            receptionController.getTvPatientDetails().refresh();
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -582,11 +593,7 @@ public  class ExaminationController implements Initializable {
                         .collect(Collectors.toList())
         );
         tbl_customer.setItems(listResult);
-        if (!listResult.isEmpty()) {
-            lbl_noPatientResult.setVisible(false);
-        } else {
-            lbl_noPatientResult.setVisible(true);
-        }
+        lbl_noPatientResult.setVisible(listResult.isEmpty());
     }
 
     private static String normalizeString(String str) {
@@ -652,17 +659,12 @@ public  class ExaminationController implements Initializable {
             });
         }
     }
-    private void showResultDiseasesSearch(String string) {;
+    private void showResultDiseasesSearch(String string) {
         listDisiseases = diseaseDAO.searchDiseaseByIDorName(string);
         tbl_resultSearchDisease.setItems(listDisiseases);
         tbl_resultSearchDisease.getSelectionModel().clearSelection();
         lbl_searchDiseaseString.setText(string);
-        if(!tbl_resultSearchDisease.getItems().isEmpty()){
-            lbl_noDiseaseResult.setVisible(false);
-        }
-        else {
-            lbl_noDiseaseResult.setVisible(true);
-        }
+        lbl_noDiseaseResult.setVisible(tbl_resultSearchDisease.getItems().isEmpty());
     }
     private int DeleteRowInChosenTable(ObservableList<Prescribe> prescribes,Prescribe deletePrescribe,boolean updateIndex) {
         int index =0,pos_delete=0;
@@ -973,14 +975,14 @@ public  class ExaminationController implements Initializable {
                 if(prescribe.getTrua()>0) trua =STR."Trưa: \{prescribe.getTrua()} viên";
                 if(prescribe.getChieu()>0) chieu =STR."Chiều: \{prescribe.getChieu()} viên";
                 if(prescribe.getToi()>0) toi =STR."Tối: \{prescribe.getToi()} viên";
-                document.add(new Paragraph("        Uống:    "+sang+"          "+trua+"          "+chieu+"             "+toi+"" , regularFont));
+                document.add(new Paragraph("        Uống:    "+sang+"          "+trua+"          "+chieu+"             "+toi , regularFont));
             }
             LocalDate date = LocalDate.now();
             document.add(new Paragraph(STR."\nLời dặn: \{tf_luuY.getText()}                                                              Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
-            document.add(new Paragraph(STR."Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
-                document.add(new Paragraph(STR."Toa uống:       " + tf_ngay.getText() +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
-            document.add(new Paragraph(STR."\n\nKhám lại mang theo đơn này." , footerbold));
-            document.add(new Paragraph(STR."Ngày giờ in: " +LocalDate.now() +"                                                                         BS." +user.getEmployName(), footerbold));
+            document.add(new Paragraph("Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
+                document.add(new Paragraph("Toa uống:       " + tf_ngay.getText() +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
+            document.add(new Paragraph("\n\nKhám lại mang theo đơn này.", footerbold));
+            document.add(new Paragraph("Ngày giờ in: " +LocalDate.now() +"                                                                         BS." +user.getEmployName(), footerbold));
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
@@ -1073,7 +1075,7 @@ public  class ExaminationController implements Initializable {
             table.addCell(new Paragraph("Lần", regularFont));
             table.addCell(new Paragraph("1", regularFont));
             table.addCell(new Paragraph("35000", regularFont));
-            table.addCell(new Paragraph(String.valueOf((int)examfree), regularFont));
+            table.addCell(new Paragraph(String.valueOf(examfree), regularFont));
 
             table.addCell(new Paragraph("2. Thuốc", boldFont));
             table.addCell(new Paragraph("", boldFont));
@@ -1091,7 +1093,7 @@ public  class ExaminationController implements Initializable {
             table.addCell(new Paragraph("", boldFont));
             table.addCell(new Paragraph("", boldFont));
             table.addCell(new Paragraph("", boldFont));
-            int total =(int)(examfree+prescibefree);
+            int total = examfree+prescibefree;
             table.addCell(new Paragraph(String.valueOf(total), boldFont));
             for (int i = 0; i < rowWidths.length; i++) {
                 table.getRow(i).setMaxHeights(rowWidths[i] * table.getTotalHeight());
@@ -1099,9 +1101,9 @@ public  class ExaminationController implements Initializable {
             document.add(table);
             document.add(new Paragraph("\nTổng chi phí lần khám bệnh (làm tròn đến đơn vị đồng):            "+total+" đ",boldFont));
             LocalDate date = LocalDate.now();
-            document.add(new Paragraph(STR."\n                                                                                       Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), regularFont));
-            document.add(new Paragraph(STR."                           NGƯỜI LẬP BẢNG KÊ                                    NGƯỜI THU TIỀN", boldFont));
-            document.add(new Paragraph(STR."                            (Ký, ghi rõ họ tên)                                 (Ký, ghi rõ họ tên) ", regularFont));
+            document.add(new Paragraph("\n                                                                                       Ngày " +date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), regularFont));
+            document.add(new Paragraph("                           NGƯỜI LẬP BẢNG KÊ                                    NGƯỜI THU TIỀN", boldFont));
+            document.add(new Paragraph("                            (Ký, ghi rõ họ tên)                                 (Ký, ghi rõ họ tên) ", regularFont));
 
 
 
