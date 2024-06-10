@@ -11,6 +11,16 @@ public class Patient {
     private Object arrivalDate;
     private String patientAddress;
 
+    private String doctor;
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
+    }
+
     private int receptionId;
     int number;
     @Override

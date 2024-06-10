@@ -23,7 +23,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="header-top" stylesheets="@../Styles/Reception.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReceptionController">
    <children>
-      <AnchorPane fx:id="lbl_header2" layoutX="348.0" layoutY="-3.0" prefHeight="59.0" prefWidth="1252.0" />
+      <AnchorPane fx:id="lbl_header2" layoutX="348.0" layoutY="-3.0" prefHeight="59.0" prefWidth="1252.0">
+         <children>
+            <Pane layoutX="1027.0" layoutY="30.0" prefHeight="25.0" prefWidth="37.0" style="-fx-background-color: yellow;" />
+            <Text layoutX="1077.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text=": Đã khám" />
+         </children></AnchorPane>
       <VBox prefHeight="900.0" prefWidth="345.0" style="-fx-border-color: black;">
          <children>
             <AnchorPane fx:id="lbl_header" minHeight="-Infinity" minWidth="-Infinity" prefHeight="105.0" prefWidth="345.0" styleClass="header-logo">
