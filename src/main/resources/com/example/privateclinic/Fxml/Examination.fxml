@@ -10,6 +10,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -44,8 +45,8 @@
             <padding>
                <Insets bottom="5.0" />
             </padding>
-            <Button id="btn" fx:id="btnLamMoi" layoutX="267.0" layoutY="59.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Làm mới" />
-            <Button id="btn" fx:id="btnCallPatient" layoutX="6.0" layoutY="97.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="169.0" text="Gọi bệnh nhân" AnchorPane.leftAnchor="8.0" />
+            <Button id="btn" fx:id="btnLamMoi" layoutX="267.0" layoutY="59.0" mnemonicParsing="false" onAction="#handlebtnLamMoi" prefHeight="35.0" prefWidth="75.0" text="Làm mới" />
+            <Button id="btn" fx:id="btnCallPatient" layoutX="6.0" layoutY="97.0" mnemonicParsing="false" onAction="#handlebtnCallPatient" prefHeight="33.0" prefWidth="169.0" text="Gọi bệnh nhân" AnchorPane.leftAnchor="8.0" />
             <RadioButton fx:id="rad_patientWaiting" layoutX="10.0" layoutY="2.0" mnemonicParsing="false" text="Danh sách bệnh nhân chờ" AnchorPane.leftAnchor="8.0">
                <toggleGroup>
                   <ToggleGroup fx:id="tg_listCustomer" />
@@ -73,7 +74,7 @@
             </HBox>
          </AnchorPane>
          <AnchorPane prefHeight="497.0" prefWidth="351.0">
-            <TableView fx:id="tbl_customer" layoutX="1.0" layoutY="1.0" prefHeight="522.0" prefWidth="345.0">
+            <TableView fx:id="tbl_customer" layoutX="1.0" layoutY="1.0" onMouseClicked="#handletblCustomerClicked" prefHeight="522.0" prefWidth="345.0">
                <columns>
                   <TableColumn fx:id="col_mabn" prefWidth="42.666685581207275" text="STT" />
                   <TableColumn fx:id="col_tenbn" prefWidth="190.66665267944336" text="Họ tên" />
@@ -89,17 +90,17 @@
          <AnchorPane fx:id="pane_footer" prefHeight="69.0" prefWidth="351.0" styleClass="container-footer">
             <VBox layoutY="62.0" prefHeight="44.0" prefWidth="345.0">
                <HBox fx:id="pane_optionPatient" prefHeight="44.0" prefWidth="345.0" style="-fx-alignment: center;">
-                  <Button id="btn" fx:id="btnLichSuKham" mnemonicParsing="false" prefHeight="33.0" prefWidth="107.0" text="Lịch sử khám">
+                  <Button id="btn" fx:id="btnLichSuKham" mnemonicParsing="false" onAction="#handlebtnLichSuKham" prefHeight="33.0" prefWidth="107.0" text="Lịch sử khám">
                      <HBox.margin>
                         <Insets left="8.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="btn" fx:id="btnInToaThuoc" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" text="In toa thuốc">
+                  <Button id="btn" fx:id="btnInToaThuoc" mnemonicParsing="false" onAction="#handlebtnInToaThuoc" prefHeight="33.0" prefWidth="99.0" text="In toa thuốc">
                      <HBox.margin>
                         <Insets left="16.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="btn" fx:id="btnInBangKe" mnemonicParsing="false" prefHeight="33.0" prefWidth="97.0" text="In bảng kê">
+                  <Button id="btn" fx:id="btnInBangKe" mnemonicParsing="false" onAction="#handlebtnInBangKe" prefHeight="33.0" prefWidth="97.0" text="In bảng kê">
                      <HBox.margin>
                         <Insets left="16.0" right="8.0" />
                      </HBox.margin>
@@ -107,17 +108,17 @@
                </HBox>
             </VBox>
             <HBox fx:id="pane" layoutY="11.0" prefHeight="44.0" prefWidth="345.0" style="-fx-alignment: center;">
-               <Button id="btn" fx:id="btnKham" mnemonicParsing="false" prefHeight="33.0" prefWidth="74.0" text="Khám">
+               <Button id="btn" fx:id="btnKham" mnemonicParsing="false" onAction="#handlebtnKham" prefHeight="33.0" prefWidth="74.0" text="Khám">
                   <HBox.margin>
                      <Insets left="8.0" />
                   </HBox.margin>
                </Button>
-               <Button id="add" fx:id="btnLuu" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" style="-fx-pref-width: 120;" text="Khám xong">
+               <Button id="add" fx:id="btnLuu" mnemonicParsing="false" onAction="#handlebtnDoneExamination" prefHeight="33.0" prefWidth="68.0" style="-fx-pref-width: 120;" text="Khám xong">
                   <HBox.margin>
                      <Insets left="19.0" />
                   </HBox.margin>
                </Button>
-               <Button id="delete" fx:id="btnCancel" mnemonicParsing="false" prefHeight="33.0" prefWidth="68.0" text="Huỷ">
+               <Button id="delete" fx:id="btnCancel" mnemonicParsing="false" onAction="#handlebtnCancel" prefHeight="33.0" prefWidth="68.0" text="Huỷ">
                   <HBox.margin>
                      <Insets left="15.0" right="8.0" />
                   </HBox.margin>
@@ -216,7 +217,7 @@
                   <Font name="Segoe UI Semibold" size="14.0" />
                </font>
             </Text>
-            <DatePicker fx:id="dp_date" editable="false" layoutX="319.0" layoutY="17.0" prefHeight="30.0" prefWidth="154.0" />
+            <DatePicker fx:id="dp_date" editable="false" layoutX="319.0" layoutY="17.0" onAction="#handleDp_dateChange" prefHeight="30.0" prefWidth="154.0" />
             <TextField fx:id="tf_tenbs" editable="false" layoutX="526.0" layoutY="15.0" prefHeight="37.0" prefWidth="227.0" promptText="Default" styleClass="input-field">
                <font>
                   <Font name="Segoe UI" size="14.0" />
@@ -226,9 +227,9 @@
       </Pane>
    </AnchorPane>
    <Group layoutX="453.0" layoutY="150.0" />
-   <TitledPane fx:id="tp_thongTin" animated="false" collapsible="false" layoutX="366.0" layoutY="86.0" prefHeight="207.0" prefWidth="479.0" text="Thông tin bệnh nhân">
+   <TitledPane fx:id="tp_thongTin" animated="false" collapsible="false" layoutX="366.0" layoutY="86.0" prefHeight="247.0" prefWidth="479.0" text="Thông tin bệnh nhân">
       <content>
-         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="577.0" styleClass="anchor">
+         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="214.0" prefWidth="475.0" styleClass="anchor">
             <Text layoutX="13.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã bệnh nhân">
                <font>
                   <Font name="Segoe UI" size="16.0" />
@@ -287,25 +288,35 @@
                   <Font name="Segoe UI" size="14.0" />
                </font>
             </TextField>
+            <Text layoutX="14.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Địa chỉ">
+               <font>
+                  <Font name="Segoe UI" size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="tf_address" editable="false" layoutX="122.0" layoutY="157.0" prefHeight="37.0" prefWidth="169.0" promptText="Default" styleClass="input-field">
+               <font>
+                  <Font name="Segoe UI" size="14.0" />
+               </font>
+            </TextField>
          </AnchorPane>
       </content>
       <font>
          <Font name="Segoe UI Semibold" size="16.0" />
       </font>
    </TitledPane>
-   <TitledPane fx:id="tpkeThuoc" animated="false" collapsible="false" layoutX="366.0" layoutY="300.0" prefHeight="579.0" prefWidth="1223.0" text="Kê thuốc">
+   <TitledPane fx:id="tpkeThuoc" animated="false" collapsible="false" layoutX="366.0" layoutY="340.0" prefHeight="540.0" prefWidth="1223.0" text="Kê thuốc">
       <content>
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="428.0" prefWidth="1217.0" styleClass="anchor" stylesheets="@../Styles/Examination.css">
             <Pane fx:id="panelKethuoc" layoutX="12.0" layoutY="3.0" prefHeight="101.0" prefWidth="1198.0" styleClass="container-pick">
                <children>
-                  <Button id="add" fx:id="btnThem" layoutX="1032.0" layoutY="9.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="74.0" text="Thêm" />
-                  <Button id="delete" fx:id="btnXoa" layoutX="1110.0" layoutY="9.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="75.0" text="Xoá" />
+                  <Button id="add" fx:id="btnThem" layoutX="1032.0" layoutY="9.0" mnemonicParsing="false" onAction="#handlebtnThem" prefHeight="43.0" prefWidth="74.0" text="Thêm" />
+                  <Button id="delete" fx:id="btnXoa" layoutX="1110.0" layoutY="9.0" mnemonicParsing="false" onAction="#handlebtnXoa" prefHeight="43.0" prefWidth="75.0" text="Xoá" />
                   <Text fill="RED" layoutX="109.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên thuốc">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField id="input-kethuoc" fx:id="tf_tenThuoc" layoutX="10.0" layoutY="24.0" prefHeight="28.0" prefWidth="286.0" promptText="Nhập tên thuốc hoặc ID" styleClass="input-field" stylesheets="@../Styles/Examination.css" />
+                  <TextField id="input-kethuoc" fx:id="tf_tenThuoc" layoutX="10.0" layoutY="24.0" onAction="#handletf_tenThuoc" prefHeight="28.0" prefWidth="286.0" promptText="Nhập tên thuốc hoặc ID" styleClass="input-field" stylesheets="@../Styles/Examination.css" />
                   <Text fill="RED" layoutX="301.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ĐVT">
                      <font>
                         <Font name="Segoe UI Semibold" size="16.0" />
@@ -369,7 +380,7 @@
                      </font>
                   </TextField>
                </children></Pane>
-            <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" prefHeight="426.0" prefWidth="1197.0">
+            <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" onMouseClicked="#handletbl_ChosenMedicine" prefHeight="426.0" prefWidth="1197.0">
                <columns>
                   <TableColumn fx:id="col_stt" prefWidth="49.99999809265137" text="STT" />
                   <TableColumn fx:id="col_maThuocChosen" prefWidth="49.99999809265137" text="ID" visible="false" />
@@ -398,7 +409,7 @@
    </TitledPane>
    <Pane fx:id="panel_MedicineResultSearch" layoutX="558.0" layoutY="474.0" prefHeight="409.0" prefWidth="935.0" styleClass="container-medicine_menu" visible="false">
       <children>
-         <TableView fx:id="tbl_resultSearchMedicine" layoutX="13.0" layoutY="48.0" prefHeight="363.0" prefWidth="907.0">
+         <TableView fx:id="tbl_resultSearchMedicine" layoutX="13.0" layoutY="48.0" onMouseClicked="#handletbl_resultSearchMedicineClicked" prefHeight="363.0" prefWidth="907.0">
            <columns>
                <TableColumn fx:id="colResult" prefWidth="94.00006103515625" text="Kết quả tìm kiếm">
                   <columns>
@@ -440,9 +451,9 @@
          </Pane>
       </children>
    </Pane>
-   <TitledPane fx:id="tp_khamBenh" animated="false" collapsible="false" layoutX="853.0" layoutY="86.0" prefHeight="207.0" prefWidth="735.0" text="Thông tin khám bệnh">
+   <TitledPane fx:id="tp_khamBenh" animated="false" collapsible="false" layoutX="853.0" layoutY="86.0" prefHeight="247.0" prefWidth="735.0" text="Thông tin khám bệnh">
       <content>
-         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="743.0" styleClass="anchor">
+         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="208.0" prefWidth="731.0" styleClass="anchor">
             <children>
                <Text layoutX="38.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Triệu chứng:">
                   <font>
@@ -474,11 +485,6 @@
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </Text>
-               <TextField fx:id="tf_luuY" layoutX="95.0" layoutY="127.0" prefHeight="37.0" prefWidth="620.0" promptText="Lưu ý" styleClass="input-field">
-                  <font>
-                     <Font name="Segoe UI" size="14.0" />
-                  </font>
-               </TextField>
                <Text layoutX="38.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bệnh phụ:">
                   <font>
                      <Font name="Segoe UI" size="16.0" />
@@ -548,6 +554,7 @@
                      </Text>
                   </children>
                </HBox>
+               <TextArea fx:id="ta_luuY" layoutX="166.0" layoutY="128.0" prefHeight="75.0" prefWidth="427.0" promptText="Lưu ý" styleClass="input-field" />
             </children>
          </AnchorPane>
       </content>
@@ -557,7 +564,7 @@
    </TitledPane>
    <Pane fx:id="panel_diseasesResultSearch" layoutX="1000.0" layoutY="234.0" prefHeight="400.0" prefWidth="472.0" styleClass="container-medicine_menu" visible="false">
       <children>
-         <TableView fx:id="tbl_resultSearchDisease" layoutX="11.0" layoutY="40.0" prefHeight="354.0" prefWidth="452.0">
+         <TableView fx:id="tbl_resultSearchDisease" layoutX="11.0" layoutY="40.0" onMouseClicked="#handeltbl_resultSearchDiseaseClicked" prefHeight="354.0" prefWidth="452.0">
             <columns>
                <TableColumn fx:id="colResult1" prefWidth="498.6666259765625" text="Kết quả tìm kiếm">
                   <columns>

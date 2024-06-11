@@ -68,7 +68,7 @@ public class SettingController implements Initializable {
         });
         tltSetting.setOnMousePressed(mouseEvent -> {
             xOffset = mouseEvent.getSceneX();
-            yOffset = mouseEvent.getScreenY();
+            yOffset = mouseEvent.getSceneY();
         });
         tltSetting.setOnMouseDragged(mouseEvent -> {
             Stage stage = (Stage) cancelButton.getScene().getWindow();

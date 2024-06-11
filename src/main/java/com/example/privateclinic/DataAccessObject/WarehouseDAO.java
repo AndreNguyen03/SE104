@@ -64,4 +64,20 @@ public class WarehouseDAO {
         }
         return 1;
     }
+
+    public int getMaxImportTimes(int medicineId) {
+        String query = "SELECT MAX(lannhap) FROM nhapkho WHERE mathuoc = ?";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setInt(1, medicineId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

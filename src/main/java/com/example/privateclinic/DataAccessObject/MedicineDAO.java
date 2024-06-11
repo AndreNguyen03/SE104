@@ -16,7 +16,6 @@ import java.util.List;
 
 public class MedicineDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
-
     public ObservableList<Medicine> searchMedicineByIDorName(String idOrName) {
         ObservableList<Medicine> medicines = FXCollections.observableArrayList();
         String query = "SELECT * FROM thuoc t, donvitinh dvt, dangthuoc dt, cachdung cd " +

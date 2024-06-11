@@ -30,9 +30,10 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="38.0" prefWidth="568.0" styleClass="anchor-pane">
                            <children>
-                              <JFXButton id="add" fx:id="addExcelFileBtn" layoutX="58.0" layoutY="6.0" onAction="#handleAddExcelFile" prefHeight="45.0" prefWidth="141.0" style="-fx-pref-width: 150px;" text="Thêm từ excel" />
-                              <JFXButton id="add" fx:id="sampleExcelFileBtn" layoutX="228.0" layoutY="6.0" onAction="#handleDownloadSampleExcelFile" prefHeight="43.0" prefWidth="155.0" style="-fx-pref-width: 150;" text="File excel mẫu" />
-                              <JFXButton id="cancel" fx:id="saveExcelFileBtn" layoutX="407.0" layoutY="6.0" onAction="#handleSaveExcelFile" prefHeight="25.0" prefWidth="99.0" text="Lưu" />
+                              <JFXButton id="add" fx:id="addExcelFileBtn" layoutX="18.0" layoutY="6.0" onAction="#handleAddExcelFile" prefHeight="45.0" prefWidth="141.0" style="-fx-pref-width: 150px;" text="Thêm từ excel" />
+                              <JFXButton id="add" fx:id="sampleExcelFileBtn" layoutX="178.0" layoutY="6.0" onAction="#handleDownloadSampleExcelFile" prefHeight="43.0" prefWidth="155.0" style="-fx-pref-width: 150;" text="File excel mẫu" />
+                              <JFXButton id="cancel" fx:id="saveExcelFileBtn" disable="true" layoutX="338.0" layoutY="6.0" onAction="#handleSaveExcelFile" prefHeight="25.0" prefWidth="99.0" text="Lưu" />
+                              <JFXButton id="delete" fx:id="cancelExcelFileBtn" disable="true" layoutX="448.0" layoutY="6.0" onAction="#handleCancelExcelFile" prefHeight="25.0" prefWidth="99.0" text="Hủy" />
                            </children>
                         </AnchorPane>
                     </content>

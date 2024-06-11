@@ -1,56 +1,50 @@
 package com.example.privateclinic.Controllers;
 
-import com.almasb.fxgl.scene.Scene;
 import com.example.privateclinic.Models.Model;
 import com.example.privateclinic.Models.User;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.controlsfx.control.PropertySheet;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class MenuController {
-    private User user;
-
+public class MenuController implements Initializable {
     @FXML
-    private MenuItem btnAspirine;
-
-    @FXML
-    private MenuItem btnDisease;
-
-    @FXML
-    private Button btnAccountant;
-
-    @FXML
-    private Button btnCategory;
-
-    @FXML
-    private Button btnExamination;
-
+    private Button btnEmployee;
     @FXML
     private Button btnLogout;
-
     @FXML
     private Button btnReport;
-
     @FXML
     private Button btnSetting;
-
+    @FXML
+    private Button btnExamination;
+    @FXML
+    private MenuItem btnDisease;
+    @FXML
+    private MenuItem btnAspirin;
+    @FXML
+    private MenuButton btnCategory;
     @FXML
     private Text titleTextField;
+    @FXML
+    private ImageView imageViewHome;
+    private User user;
+
+    public Button btnReception;
+
 
     @FXML
     private Pane mainPane;
@@ -60,6 +54,12 @@ public class MenuController {
         this.user = new User();
     }
 
+    public void handleLogo(MouseEvent mouseEvent) throws IOException {
+        mainPane.getChildren().clear();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Home.fxml"));
+        Parent reportSceneRoot = loader.load();
+        mainPane.getChildren().add(reportSceneRoot);
+    }
     @FXML
     void btnEmployeeClicked(ActionEvent event) throws IOException {
         mainPane.getChildren().clear();
@@ -142,4 +142,10 @@ public class MenuController {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();
         s.setIconified(true);
     }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        titleTextField.setFocusTraversable(true);
+    }
+
 }
