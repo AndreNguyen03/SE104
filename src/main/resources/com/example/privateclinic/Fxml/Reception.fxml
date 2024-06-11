@@ -86,15 +86,13 @@
                      <content>
                         <Pane prefHeight="200.0" prefWidth="200.0" styleClass="container-footer">
                            <children>
-                              <Text layoutX="9.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Tìm kiếm theo mã BN" wrappingWidth="226.443359375" />
-                              <TextField fx:id="tfPatientById" layoutX="172.0" layoutY="8.0" prefHeight="37.0" prefWidth="164.0" promptText="Mã bệnh nhân" styleClass="input-field" />
-                              <Text layoutX="9.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Tìm kiếm theo họ tên" wrappingWidth="176.443359375" />
-                              <TextField fx:id="tfPatientByName" layoutX="172.0" layoutY="51.0" prefHeight="37.0" prefWidth="166.0" promptText="Họ tên" styleClass="input-field" />
+                              <Text layoutX="9.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 16;" text="Tìm kiếm theo SDT" wrappingWidth="226.443359375" />
+                              <TextField fx:id="tfPatientByPhone" layoutX="172.0" layoutY="29.0" prefHeight="37.0" prefWidth="164.0" promptText="Số điện thoại" styleClass="input-field" />
                               <TableView fx:id="tvPatient" layoutX="8.0" layoutY="92.0" prefHeight="663.0" prefWidth="328.0">
                                 <columns>
-                                  <TableColumn fx:id="tcNumber" prefWidth="50.0" text="STT" />
                                   <TableColumn fx:id="tcPatientId" prefWidth="66.0" text="Mã BN" />
                                     <TableColumn fx:id="tcPatientName" prefWidth="210.66665649414062" text="Họ tên" />
+                                    <TableColumn fx:id="tcPatientPhoneNumber" prefWidth="120.0" text="Số điện thoại" />
                                 </columns>
                               </TableView>
                            </children>
@@ -161,10 +159,5 @@
             </ImageView>
          </children>
       </Pane>
-      <JFXButton fx:id="btnAddFromList1" layoutX="370.0" layoutY="115.0" onMouseClicked="#addPatientFromDB" prefHeight="129.0" prefWidth="89.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-border-color: black;" text="Thêm bệnh nhân cũ" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </JFXButton>
    </children>
 </AnchorPane>

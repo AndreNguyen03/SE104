@@ -69,11 +69,14 @@ public class ViewFactory {
         }
 
     }
-    public void showReceptionWindow() {
+    public void showReceptionWindow(User user) {
         if(stageReception==null)  //xử lí mở 2 lần scene
         {
-            receptionLoader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
+            FXMLLoader receptionLoader =  new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
             stageReception=createStage(receptionLoader);
+            ReceptionController receptionController = receptionLoader.getController();
+            receptionController.initUser(user);
+
         }
         else
         {
@@ -94,12 +97,14 @@ public class ViewFactory {
             stageExamination.toFront(); // nếu đã mở scene thì bring to front
         }
     }
-    public void showSettingWindow()
+    public void showSettingWindow(User user)
     {
         if(stageSetting==null)
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Setting.fxml"));
             stageSetting=createStage(loader);
+            SettingController settingController = loader.getController();
+            settingController.initData(user);
         }
         else
         {
