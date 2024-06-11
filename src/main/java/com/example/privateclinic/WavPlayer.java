@@ -19,7 +19,7 @@ public class WavPlayer {
                 Thread.sleep(1000);
             }
             while (clip.isRunning()) {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             }
 
             clip.close();

@@ -70,8 +70,8 @@
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng lượng thuốc (tháng)" />
             <Text fx:id="numberProductOfMonth" fill="WHITE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
-            <Text fill="WHITE" layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Today : " />
-            <Text fx:id="numberProductOfDay" fill="WHITE" layoutX="79.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Theo ngày:" />
+            <Text fx:id="numberProductOfDay" fill="WHITE" layoutX="107.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
          </children>
       </Pane>
       <Pane id="exam" layoutX="814.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
