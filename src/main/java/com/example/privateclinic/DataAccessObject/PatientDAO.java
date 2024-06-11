@@ -81,12 +81,13 @@ public class PatientDAO {
 //        }
 //    }
 
-    public void deletePatientFromAdmit(int patientId) {
-        String query = "DELETE FROM tiepnhan WHERE mabn = ?";
+    public void deletePatientFromAdmit(int patientId,Date date) {
+        String query = "DELETE FROM tiepnhan WHERE mabn = ? and ngayvao::date = ? ";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
 
             statement.setInt(1, patientId);
+            statement.setDate(2, date);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

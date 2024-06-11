@@ -163,15 +163,16 @@ public class UserDAO {
     }
     public boolean addEmployee(User employee) {
         String query = "INSERT INTO nhanvien (hoten, sdt, cccd, username, password, vitri, defaultpassword, diachi, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        String defaultPassword = GeneratePassword(true,true,true,true,8);
+        defaultpassword = GeneratePassword(true,true,true,false,8);
+        String hashDefaultpassword = GetHash(defaultpassword);
         try (PreparedStatement statement = connectDB.getPreparedStatement(query)) {
-            statement.setString(1, employee.getEmployeeUsername());
+            statement.setString(1, employee.getEmployName());
             statement.setString(2, employee.getEmployeePhoneNumber());
             statement.setString(3, employee.getEmployeeCitizenId());
             statement.setString(4, employee.getEmployeeUsername());
             statement.setString(5, "");
             statement.setString(6, employee.getEmployeePosition());
-            statement.setString(7, defaultPassword);
+            statement.setString(7, hashDefaultpassword);
             statement.setString(8, employee.getEmployeeAddress());
             statement.setString(9, employee.getEmployeeEmail());
             int affectedRows = statement.executeUpdate();

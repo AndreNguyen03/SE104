@@ -16,15 +16,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1356.0" styleClass="container-report" stylesheets="@../Styles/Report.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReportController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1356.0" styleClass="container-report" stylesheets="@../Styles/Report.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReportController">
    <children>
-      <TabPane layoutX="22.0" layoutY="48.0" prefHeight="720.0" prefWidth="779.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="22.0" layoutY="48.0" prefHeight="823.0" prefWidth="779.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab style="-fx-font-size: 16;" text="Doanh thu tháng">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="688.0" prefWidth="763.0">
                      <children>
-                        <TableView fx:id="monthlyReportTable" editable="true" layoutY="-1.0" prefHeight="723.0" prefWidth="779.0">
+                        <TableView fx:id="monthlyReportTable" editable="true" layoutY="-1.0" prefHeight="789.0" prefWidth="779.0" AnchorPane.bottomAnchor="2.3333333333332575" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-0.6666666666667425">
                           <columns>
                             <TableColumn fx:id="sttColumn" minWidth="30.0" prefWidth="89.0" text="STT" />
                             <TableColumn fx:id="dateColumn" prefWidth="163.33332061767578" text="Ngày" />
@@ -45,7 +45,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="drugUsageReportTable" prefHeight="724.0" prefWidth="779.0">
+                        <TableView fx:id="drugUsageReportTable" prefHeight="792.0" prefWidth="779.0">
                           <columns>
                             <TableColumn fx:id="drugSttColumn" prefWidth="75.0" text="STT" />
                             <TableColumn fx:id="drugNameColumn" prefWidth="186.0" text="Tên thuốc" />
@@ -59,14 +59,14 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Pane id="expend" layoutX="814.0" layoutY="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
+      <Pane id="expend" layoutX="814.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
          <children>
             <Text fill="WHITE" layoutX="11.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng doanh thu (tháng)" />
             <Text fx:id="valueRevenueMonth" fill="WHITE" layoutX="11.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
             <Text fill="WHITE" layoutX="11.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Theo ngày:" />
             <Text fx:id="valueRevenueToday" fill="WHITE" layoutX="108.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
          </children></Pane>
-      <Pane id="right" layoutX="1057.0" layoutY="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="239.0" styleClass="pnl">
+      <Pane id="right" layoutX="1057.0" layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="239.0" styleClass="pnl">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng lượng thuốc (tháng)" />
             <Text fx:id="numberProductOfMonth" fill="WHITE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
@@ -74,7 +74,7 @@
             <Text fx:id="numberProductOfDay" fill="WHITE" layoutX="107.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
          </children>
       </Pane>
-      <Pane id="exam" layoutX="814.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
+      <Pane id="exam" layoutX="814.0" layoutY="144.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng ca khám (tháng)" />
             <Text fx:id="numberExamOfMonth" fill="WHITE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
@@ -94,8 +94,8 @@
             <Font name="Segoe UI Semibold" size="18.0" />
          </font>
       </Text>
-      <BorderPane fx:id="borderPane" layoutX="808.0" layoutY="319.0" prefHeight="419.0" prefWidth="545.0" style="-fx-border-color: #4CB196;" />
-      <Pane fx:id="panelNoData" layoutX="992.0" layoutY="470.0" prefHeight="99.0" prefWidth="200.0" style="-fx-background-color: #ECF8DD; -fx-border-width: 0.5; -fx-border-color: #4CB196;">
+      <BorderPane fx:id="borderPane" layoutX="808.0" layoutY="299.0" prefHeight="570.0" prefWidth="545.0" style="-fx-border-color: #4CB196;" AnchorPane.bottomAnchor="11.0" />
+      <Pane fx:id="panelNoData" layoutX="992.0" layoutY="524.0" prefHeight="99.0" prefWidth="200.0" style="-fx-background-color: #ECF8DD; -fx-border-width: 0.5; -fx-border-color: #4CB196;">
          <children>
             <Text layoutX="32.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Không có dữ liệu">
                <font>
@@ -104,7 +104,7 @@
             </Text>
          </children>
       </Pane>
-      <Pane layoutX="805.0" layoutY="272.0" prefHeight="40.0" prefWidth="200.0" styleClass="container-report">
+      <Pane layoutX="805.0" layoutY="255.0" prefHeight="40.0" prefWidth="200.0" styleClass="container-report">
          <children>
             <MenuButton id="menu-button" layoutX="5.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Tuỳ chọn biểu đồ">
                <items>
@@ -130,6 +130,6 @@
             <ProgressIndicator layoutX="130.0" layoutY="97.0" prefHeight="53.0" prefWidth="102.0" />
          </children>
       </Pane>
-      <Button id="add" fx:id="btnLuu" layoutX="1096.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleShowHistory" prefHeight="53.0" prefWidth="68.0" style="-fx-pref-width: 200;" text="Lịch sử hoạt động" />
+      <Button id="add" fx:id="btnLuu" layoutX="1096.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleShowHistory" prefHeight="53.0" prefWidth="68.0" style="-fx-pref-width: 200;" text="Lịch sử hoạt động" />
    </children>
 </AnchorPane>

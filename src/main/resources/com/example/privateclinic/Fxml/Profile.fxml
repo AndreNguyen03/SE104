@@ -43,7 +43,7 @@
             </ImageView>
             <Pane layoutX="414.0" layoutY="1.0" onMouseClicked="#minimizeProfile" prefHeight="35.0" prefWidth="43.0" styleClass="minimize">
                <children>
-                  <ImageView fitHeight="27.0" fitWidth="18.0" layoutX="12.0" layoutY="10.0"  pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="27.0" fitWidth="18.0" layoutX="12.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/minimize-sign.png" />
                      </image>
@@ -59,13 +59,13 @@
          <children>
             <HBox prefHeight="30.0" prefWidth="350.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Mã nhân viên">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Mã nhân viên:">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin></Text>
                   <Label fx:id="employee_id_lbl" styleClass="lbl" text="null">
                      <HBox.margin>
-                        <Insets left="100.0" />
+                        <Insets left="102.0" />
                      </HBox.margin></Label>
                </children>
                <VBox.margin>
@@ -74,7 +74,7 @@
             </HBox>
             <HBox prefHeight="30.0" prefWidth="350.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Tên nhân viên">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Tên nhân viên:">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin></Text>
@@ -86,25 +86,25 @@
             </HBox>
             <HBox prefHeight="30.0" prefWidth="350.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Username">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Username:">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin></Text>
                   <Label fx:id="username_lbl" alignment="CENTER" styleClass="lbl" text="null">
                      <HBox.margin>
-                        <Insets left="125.0" />
+                        <Insets left="135.0" />
                      </HBox.margin></Label>
                </children>
             </HBox>
             <HBox prefHeight="30.0" prefWidth="350.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Vị trí làm việc">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Vị trí làm việc:">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin></Text>
                   <Label fx:id="position_lbl" styleClass="lbl" text="null">
                      <HBox.margin>
-                        <Insets left="100.0" />
+                        <Insets left="104.0" />
                      </HBox.margin></Label>
                </children>
             </HBox>

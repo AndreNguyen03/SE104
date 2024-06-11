@@ -69,6 +69,10 @@
     -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
     -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
 }
+#add:focused
+{
+    -fx-border-color: #577923;
+}
 #delete {
     -fx-padding: 3 8 8 8;
     -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
@@ -97,6 +101,9 @@
     --fx-padding: 6 10 9 10 ;
     -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
     -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
+}
+#delete:focused {
+    -fx-border-color: #a60d0d;
 }
 #edit {
     -fx-padding: 3 8 8 8;

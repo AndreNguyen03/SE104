@@ -59,6 +59,7 @@ public class MenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Home.fxml"));
         Parent reportSceneRoot = loader.load();
         mainPane.getChildren().add(reportSceneRoot);
+        titleTextField.setText("Trang chủ");
     }
     @FXML
     void btnEmployeeClicked(ActionEvent event) throws IOException {
@@ -68,6 +69,7 @@ public class MenuController implements Initializable {
         mainPane.getChildren().add(reportSceneRoot);
         EmployeeController employeeController = loader.getController();
         employeeController.initData(user);
+        titleTextField.setText("Nhân viên");
     }
 
 
@@ -130,6 +132,30 @@ public class MenuController implements Initializable {
     public void initData(User _user)
     {
         this.user=_user;
+        btnReport.setDisable(true);
+        btnEmployee.setDisable(true);
+        btnSetting.setDisable(true);
+        btnExamination.setDisable(true);
+        btnReception.setDisable(true);
+        btnCategory.setDisable(true);
+        switch (_user.getEmployeePosition().trim()) {
+            case "Bác sĩ":
+                btnExamination.setDisable(false);
+                btnCategory.setDisable(false);
+                break;
+            case "Chủ":
+                btnReport.setDisable(false);
+                btnEmployee.setDisable(false);
+                btnSetting.setDisable(false);
+                btnExamination.setDisable(false);
+                btnReception.setDisable(false);
+                btnCategory.setDisable(false);
+                break;
+            case "Tiếp tân":
+                btnReception.setDisable(false);
+                btnSetting.setDisable(false);
+                break;
+        }
     }
     public void ProfileEmploy_Clicked(MouseEvent mouseEvent) {
         String id = String.valueOf(this.user.getEmployee_id());

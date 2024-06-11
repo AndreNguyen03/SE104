@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public  class ExaminationController implements Initializable {
+    public AnchorPane examinationContainer;
     public Pane btnClose,paneTopSub;
     public DatePicker dp_date;
     public TableView<Medicine>  tbl_resultSearchMedicine;
@@ -195,7 +196,7 @@ public  class ExaminationController implements Initializable {
             receiptId.setText(String.valueOf(examination.getMahd()));
             txtPrescribeFee.setText(String.valueOf(examination.getTienthuoc()));
             txtExamFee.setText(String.valueOf(examination.getTienkham()));
-            txtExamFee.setText(String.valueOf(examination.getTienthuoc()+examination.getTienkham()));
+            txtTotalFee.setText(String.valueOf(examination.getTienthuoc()+examination.getTienkham()));
 
             patientId.setText(String.valueOf(patient.getPatientId()));
             patientName.setText(patient.getPatientName());
@@ -265,6 +266,7 @@ public  class ExaminationController implements Initializable {
     }
 
     private void SetListenner() {
+        examinationContainer.setOnKeyPressed(event -> handleKeyPress(event));
         tg_listCustomer.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldValue, Toggle newValue) {
@@ -406,6 +408,38 @@ public  class ExaminationController implements Initializable {
                 keyEvent.consume();
             }
         });
+    }
+
+    private void handleKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.G) {
+            if(tbl_customer.getItems().isEmpty()) return;
+            int id = tbl_customer.getItems().getFirst().getNumber();
+            if(rad_patientWaiting.isSelected()) {
+                String gender;
+                if(rad_womenVoice.isSelected()) gender = "women";
+                else gender ="men";
+                WavPlayer.playSound(gender+id + ".wav");
+                tbl_customer.getSelectionModel().selectFirst();
+            }
+        } else  if(event.getCode() == KeyCode.K){
+            if(tf_mabn.getText().isEmpty()) {
+                if(tbl_customer.getSelectionModel().isEmpty()) return;
+                pane_optionPatient.setDisable(false);
+                SetDisable();
+                ResetAllTextField();
+                SetUpToPrint(false);
+                tbl_chosenMedicine.getItems().clear();
+                tf_tenbs.setText("BS."+user.getEmployName());
+                ResetTF(tf_maBenhChinh, tf_tenBenhChinh, tf_tenBenhPhu, tf_tenBenhPhu);
+                fillDataPatient_exam();
+                lbl_noPatientResult.setVisible(false);
+            } else {
+                SetUnDisable();
+                tp_khamBenh.requestFocus();
+            }
+        } /*else if (event.getCode() == KeyCode.TAB && tf_trieuChung.getText().isEmpty()) {
+             tf_trieuChung.requestFocus();
+        }*/
     }
 
     private void PrepareToPrint(Examination examination, Patient patientChosenBefore, ObservableList<Receipt> items) {
@@ -590,8 +624,11 @@ public  class ExaminationController implements Initializable {
         });
         ta_luuY.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.TAB) {
-                tf_tenThuoc.requestFocus();
-                keyEvent.consume();
+                if(tf_trieuChung.getText().isEmpty()) tf_trieuChung.requestFocus(); else
+                {
+                    tf_tenThuoc.requestFocus();
+                    keyEvent.consume();
+                }
             }
         });
         tf_tenThuoc.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
@@ -604,6 +641,34 @@ public  class ExaminationController implements Initializable {
                 panel_MedicineResultSearch.setVisible(true);
                 tbl_resultSearchMedicine.requestFocus();
                 keyEvent.consume();
+            }
+        });
+        tf_note.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.TAB) {
+                if(!tf_note.getText().isEmpty()) btnThem.requestFocus();
+                keyEvent.consume();
+            }
+        });
+        btnThem.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                pressBtnThem();
+                keyEvent.consume();
+            } else if (keyEvent.getCode() == KeyCode.TAB) {
+                btnXoa.requestFocus();
+            }
+        });
+        btnXoa.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                handleDeleteChosenMedicine();
+                keyEvent.consume();
+            } else if (keyEvent.getCode() == KeyCode.TAB) {
+            }
+        });
+        tbl_chosenMedicine.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                tbl_ChosenMedicineDoubleClick();
+                btnXoa.setDisable(true);
+                tf_ngay.requestFocus();
             }
         });
     }
@@ -641,7 +706,7 @@ public  class ExaminationController implements Initializable {
                 }
                 if (examinationDAO.UpdateReception(examination.getMatn(), examination.getManv())) {
                     System.out.println("Update reception");
-                    History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{examId}");
+                    History history = new History(user.getEmployee_id(), STR."Khám bệnh ID: \{examId} - \{tf_tenbn.getText()}");
                     return historyDAO.addHistory(history);
                 }
             }
@@ -833,6 +898,11 @@ public  class ExaminationController implements Initializable {
         col_tenBenh.setCellValueFactory(new PropertyValueFactory<>("tenBenh"));
     }
     private boolean checkFillMedicine() {
+        if(tf_tenThuoc.getText().isEmpty())
+        {
+            _message = "Chưa nhập tên thuốc";
+            return false;
+        }
         if(Integer.parseInt(lbl_soLuong.getText()) == 0)
         {
             _message = "Chưa điền liều lượng";
@@ -900,8 +970,8 @@ public  class ExaminationController implements Initializable {
         {
             int stt = tbl_chosenMedicine.getItems().size();
             prescribe.setSothuTu(stt+1); // thu tu la 1, vi tri la 0
+            tbl_chosenMedicine.getSelectionModel().select(stt-1);
             tbl_chosenMedicine.getItems().add(stt,prescribe);
-            tbl_chosenMedicine.getSelectionModel().clearSelection();
         }
         else {
             prescribe.setSothuTu(position+1);
@@ -1397,6 +1467,10 @@ public  class ExaminationController implements Initializable {
     }
 
     public void handlebtnThem(ActionEvent event) {
+        pressBtnThem();
+    }
+
+    private void pressBtnThem() {
         if(btnThem.getText().equals("Thêm"))
         {
             if(checkFillMedicine())
@@ -1406,7 +1480,9 @@ public  class ExaminationController implements Initializable {
                 SetDisableKeThuoc(true);
                 ResetTF_KeThuoc();
                 tf_tenThuoc.clear();
-            } else showAlert("Warning",_message);
+            } else  {
+                showAlert("Warning",_message);
+            }
         } else { //Luu
             if(checkFillMedicine())
             {
@@ -1418,8 +1494,14 @@ public  class ExaminationController implements Initializable {
                 btnThem.setText("Thêm");
             } else showAlert("Warning",_message);
         }
+        tbl_chosenMedicine.requestFocus();
     }
+
     public void handlebtnXoa(ActionEvent event) {
+        handleDeleteChosenMedicine();
+    }
+
+    private void handleDeleteChosenMedicine() {
         Receipt prescribe = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
         if(!tbl_chosenMedicine.getItems().isEmpty()||prescribe!=null)
         {
@@ -1440,7 +1522,7 @@ public  class ExaminationController implements Initializable {
         if(mouseEvent.getClickCount()==2)
         {
             Patient patient = tbl_customer.getSelectionModel().getSelectedItem();
-            if(!String.valueOf(patient.getPatientId()).equals(tf_mabn.getText()) &&!tf_mabn.getText().isEmpty()) {
+            if(patient!=null&&!String.valueOf(patient.getPatientId()).equals(tf_mabn.getText()) &&!tf_mabn.getText().isEmpty()) {
                 if ( ShowYesNoAlert("chuyển sang "+patient.getPatientName()) == JOptionPane.YES_OPTION) {
                     /* existFilled();*/
                     SetDisable();
@@ -1492,23 +1574,28 @@ public  class ExaminationController implements Initializable {
         btnXoa.setDisable(false);
         if(mouseEvent.getClickCount()==2)
         {
-            prescribeChosenBefore = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
-            if(prescribeChosenBefore!=null)
-            {
-                tf_ngay.setDisable(false);
-                tf_sang.setDisable(false);
-                tf_trua.setDisable(false);
-                tf_chieu.setDisable(false);
-                tf_toi.setDisable(false);
-                tf_note.setDisable(false);
-                pressEnter=true;
-                FillToPanel_KeThuoc(prescribeChosenBefore);
-                pressEnter=false;
-                panel_MedicineResultSearch.setVisible(false);
-                btnThem.setText("Lưu");
-            }
+            tbl_ChosenMedicineDoubleClick();
         }
     }
+
+    private void tbl_ChosenMedicineDoubleClick() {
+        prescribeChosenBefore = tbl_chosenMedicine.getSelectionModel().getSelectedItem();
+        if(prescribeChosenBefore!=null)
+        {
+            tf_ngay.setDisable(false);
+            tf_sang.setDisable(false);
+            tf_trua.setDisable(false);
+            tf_chieu.setDisable(false);
+            tf_toi.setDisable(false);
+            tf_note.setDisable(false);
+            pressEnter=true;
+            FillToPanel_KeThuoc(prescribeChosenBefore);
+            pressEnter=false;
+            panel_MedicineResultSearch.setVisible(false);
+            btnThem.setText("Lưu");
+        }
+    }
+
     public void handleDp_dateChange(ActionEvent event) {
         SetDisable();
         tbl_chosenMedicine.getItems().clear();

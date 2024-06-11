@@ -42,7 +42,7 @@ public class ViewFactory {
         double width = resolution.getWidth();
         double height = resolution.getHeight();
         double w = width/1600;  // your window width
-        double h = height/900;  // your window height
+        double h = height/1000;  // your window height
         Scale scale = new Scale(w, h, 0, 0);
         root.getTransforms().add(scale);
         Scene scene = new Scene(root);

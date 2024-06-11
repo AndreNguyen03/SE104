@@ -64,7 +64,7 @@ public class ExaminationHistoryDAO {
     }
     private ObservableList<Receipt> getDetailReceipt(int exam_id) {
         ObservableList<Receipt> detailReceipts = FXCollections.observableArrayList();
-        String query ="SELECT hd.*, t.*,ct.*, cd.tencd,dvt.tendvt,dt.tendt FROM hoadon hd,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t,cthd ct WHERE hd.makb = ? AND ct.mathuoc = t.mathuoc AND ct.mahd = hd.mahd"+
+        String query ="SELECT hd.*, t.*,ct.*, cd.tencd,dvt.tendvt,dt.tendt, ct.soluong as sl FROM hoadon hd,cachdung cd, dangthuoc dt, donvitinh dvt,thuoc t,cthd ct WHERE hd.makb = ? AND ct.mathuoc = t.mathuoc AND ct.mahd = hd.mahd"+
                 " AND t.macd = cd.macd AND t.madt = dt.madt AND t.madvt = dvt.madvt";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1,exam_id);
@@ -84,7 +84,7 @@ public class ExaminationHistoryDAO {
                     rowDetailreceipt.setTrua(resultSet.getInt("trua"));
                     rowDetailreceipt.setChieu(resultSet.getInt("chieu"));
                     rowDetailreceipt.setToi(resultSet.getInt("toi"));
-                    rowDetailreceipt.setSoLuong(resultSet.getInt("soluong"));
+                    rowDetailreceipt.setSoLuong(resultSet.getInt("sl"));
                     rowDetailreceipt.setDonGia(resultSet.getInt("giaban"));
                     rowDetailreceipt.setThanhTien(resultSet.getInt("thanhtien"));
                     rowDetailreceipt.setNote(resultSet.getString("note"));

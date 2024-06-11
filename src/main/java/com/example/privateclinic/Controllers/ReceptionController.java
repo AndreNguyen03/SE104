@@ -205,6 +205,7 @@ public class ReceptionController implements Initializable {
         tfPatientBirthDay.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue) { // Mất tiêu điểm (focus)
                 String input = tfPatientBirthDay.getText();
+                if(input.isEmpty()) return;
                 String formattedDate = formatDateString(input);
                 if (formattedDate != null) {
                     tfPatientBirthDay.setText(formattedDate);
@@ -419,8 +420,8 @@ public class ReceptionController implements Initializable {
                 patient.setReceptionId(patientDAO.getReceptionId(patient.getPatientId()));
                 patients.add(patient);
                 patientsDetails.add(patient);
-                tvPatientDetails.refresh();
-                tvPatient.refresh();
+                tvPatient.setItems(patients);
+                tvPatientDetails.setItems(patientsDetails);
                 clearDataField();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm thành công!");
                 alert.showAndWait();
@@ -483,7 +484,7 @@ public class ReceptionController implements Initializable {
             alert1.showAndWait();
         } else {
             Patient patientToAdd = tvPatient.getSelectionModel().getSelectedItem();
-            int index = tvPatient.getItems().indexOf(patientToAdd);
+            int index = patientsDetails.size() + 1;
             if (checkExist(patientToAdd)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
@@ -518,7 +519,7 @@ public class ReceptionController implements Initializable {
         if ( result.get() == ButtonType.OK) {
             tvPatientDetails.getItems().remove(selectedPatient);
         }
-        patientDAO.deletePatientFromAdmit(selectedPatient.getPatientId());
+        patientDAO.deletePatientFromAdmit(selectedPatient.getPatientId(),Date.valueOf(dpDate.getValue()));
 
     }
 

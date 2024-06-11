@@ -81,35 +81,79 @@ public class EmployeeController implements Initializable {
         configureTableColumns();
         loadEmployeeData();
         setOnOffAddDeleteBtn();
+        validatePhoneNumber(tf_addPhoneNum);
         btnDeleteEmployee.setOnAction(event -> handleDeleteAction());
         btnAddEmployee.setOnAction(event -> handleAddAction());
         btnEditEmployee.setOnAction(event -> handleEditAction()); // Add this line to handle edit action
         btnCancel.setOnAction(event -> handleCancel());
         tfEmployee.setOnKeyPressed(event -> handleSearchKeyPressed(event));
-        ObservableList<String> statusList = FXCollections.observableArrayList("Bán hàng", "Kế toán","Quản lí kho");
+        ObservableList<String> statusList = FXCollections.observableArrayList( "Bác sĩ","Chủ","Tiếp tân");
         cb_position.setItems(statusList);
         addSelectionListener(); // Add this line to handle selection changes
-        SetTextChanged();
+        validateInput();
     }
 
-    private void SetTextChanged() {
+    private void validateInput() {
         tf_addPhoneNum.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                tf_addPhoneNum.setText(newValue.replaceAll("[^\\d]", oldValue));
-                showAlert("Warning","Chỉ được nhập số");
-            } else {
-                if (!newValue.isEmpty() && newValue.charAt(0) != '0') tf_addPhoneNum.setText(oldValue);
-            }
+            // Loại bỏ bất kỳ ký tự không phải là số
+            String formattedPhoneNumber = newValue.replaceAll("[^\\d]", "");
 
+            // Kiểm tra điều kiện:
+            // 1. Bắt đầu bằng 0.
+            // 2. Chiều dài tối đa là 10 ký tự.
+            if (formattedPhoneNumber.length() == 0 || formattedPhoneNumber.startsWith("0")) {
+                if (formattedPhoneNumber.length() <= 10) {
+                    tf_addPhoneNum.setText(formattedPhoneNumber);
+                } else {
+                    // Nếu chiều dài vượt quá 10 ký tự, cắt chuỗi thành 10 ký tự đầu tiên
+                    tf_addPhoneNum.setText(formattedPhoneNumber.substring(0, 10));
+                }
+            } else {
+                // Nếu không bắt đầu bằng 0, giữ nguyên giá trị cũ
+                tf_addPhoneNum.setText(oldValue);
+            }
         });
         tf_addcitizenId.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                tf_addcitizenId.setText(newValue.replaceAll("[^\\d]", ""));
-                showAlert("Warning", "Chỉ được nhập số");
+            // Loại bỏ bất kỳ ký tự không phải là số
+            String formattedPhoneNumber = newValue.replaceAll("[^\\d]", "");
+
+            // Kiểm tra điều kiện:
+            // 1. Bắt đầu bằng 0.
+            // 2. Chiều dài tối đa là 10 ký tự.
+            if (formattedPhoneNumber.length() == 0 || formattedPhoneNumber.startsWith("0")) {
+                if (formattedPhoneNumber.length() <= 12) {
+                    tf_addcitizenId.setText(formattedPhoneNumber);
+                } else {
+                    // Nếu chiều dài vượt quá 10 ký tự, cắt chuỗi thành 10 ký tự đầu tiên
+                    tf_addcitizenId.setText(formattedPhoneNumber.substring(0, 12));
+                }
+            } else {
+                // Nếu không bắt đầu bằng 0, giữ nguyên giá trị cũ
+                tf_addcitizenId.setText(oldValue);
             }
         });
     }
+    private void validatePhoneNumber(TextField tfPhoneNumber) {
+        tfPhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Loại bỏ bất kỳ ký tự không phải là số
+            String formattedPhoneNumber = newValue.replaceAll("[^\\d]", "");
 
+            // Kiểm tra điều kiện:
+            // 1. Bắt đầu bằng 0.
+            // 2. Chiều dài tối đa là 10 ký tự.
+            if (formattedPhoneNumber.length() == 0 || formattedPhoneNumber.startsWith("0")) {
+                if (formattedPhoneNumber.length() <= 10) {
+                    tfPhoneNumber.setText(formattedPhoneNumber);
+                } else {
+                    // Nếu chiều dài vượt quá 10 ký tự, cắt chuỗi thành 10 ký tự đầu tiên
+                    tfPhoneNumber.setText(formattedPhoneNumber.substring(0, 10));
+                }
+            } else {
+                // Nếu không bắt đầu bằng 0, giữ nguyên giá trị cũ
+                tfPhoneNumber.setText(oldValue);
+            }
+        });
+    }
     private void setOnOffAddDeleteBtn() {
         btnDeleteEmployee.setDisable(true); // Bắt đầu bằng việc vô hiệu hóa nút Delete
 

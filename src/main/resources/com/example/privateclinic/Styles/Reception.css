@@ -3,29 +3,32 @@
     -fx-background-color: #f3faea;
 }
 
-.button
-{
-    -fx-padding: 5 10 10 10 ;
-    -fx-background-insets: 0, 0 0 2 0 , 0 0 3 0, 0 0 4 0;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-background-color:
-            radial-gradient(center 50% 50%, radius 100%, #629d16, #4a7612);
+#add {
+    -fx-padding: 5 10 10 10;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-background-radius: 20;
+    -fx-pref-width: 100;
+    -fx-pref-height: 150;
+    -fx-text-fill: #67A10AFF;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #74b60c;
     -fx-font-weight: bold;
-    -fx-font-size: 1.08em;
-    -fx-text-fill: white;
+    -fx-font-size: 18px;
 }
-.button:hover
-{
-    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #67a910 0%, #578a17 100%),
-    #72b40f,
-    #7ac00e,
-    radial-gradient(center 50% 50%, radius 100%, #6f9d2b, #7ccb02);
+#add:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #78b713 0%, #67a10a 100%),
+    #6faf0a,
+    #7cc40c,
+    linear-gradient(to right, #97d23b, #7abe0d);
+    -fx-text-fill: #ffffff;
     -fx-cursor: hand;
-
 }
 
-.button:pressed
+#add:pressed
 {
     --fx-padding: 6 10 9 10 ;
     -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
