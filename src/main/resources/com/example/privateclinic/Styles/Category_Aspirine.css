@@ -60,9 +60,6 @@
     -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
 }
 
-
-
-
 .combo-box
 {
     -fx-border-width: 0.5px;
@@ -74,18 +71,6 @@
     -fx-font-size: 17px;
 
 }
-
-
-.combo-box:hover {
-    -fx-border-color: green;
-}
-.combo-box .arrow-button{
-}
-.combo-box .arrow-button .arrow{
-    -fx-background-color: green;
-
-}
-
 .combo-box-base:hover {
     -fx-background-color: #CAEF95;
     -fx-scale-x: 0.8;
@@ -136,6 +121,8 @@
     -fx-background-color: #6fa62f;
     -fx-text-fill: #ffffff;
 }
+
+
 
 .date-picker  *{
     -fx-primary-color: #66a611;

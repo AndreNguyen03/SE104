@@ -347,13 +347,14 @@ public class Category_AspirineController implements Initializable {
     void handleImportButton(ActionEvent event) {
         // Lấy thông tin từ các trường nhập liệu
         String medicineName = medicineNameTextField_2.getText();
-        String importTimesText = importTimesTextField.getText();
         String importQuantityText = importQuantityTextField.getText();
         String importPriceText = importPriceTextField.getText();
         LocalDate selectedDate = importDatePicker.getValue();
 
+        int importTimes = Integer.parseInt(importTimesTextField.getText());
+
         // Kiểm tra các trường nhập liệu có rỗng không
-        if (medicineName.isEmpty() || importTimesText.isEmpty() || importQuantityText.isEmpty() || importPriceText.isEmpty() || selectedDate == null) {
+        if (medicineName.isEmpty() || importQuantityText.isEmpty() || importPriceText.isEmpty() || selectedDate == null) {
             // Hiển thị thông báo lỗi nếu các trường nhập liệu bị bỏ trống
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Lỗi");
@@ -364,12 +365,10 @@ public class Category_AspirineController implements Initializable {
         }
 
         // Chuyển đổi các giá trị nhập liệu sang kiểu số nếu có thể
-        int importTimes;
         int importQuantity;
         double importPrice;
 
         try {
-            importTimes = Integer.parseInt(importTimesText);
             importQuantity = Integer.parseInt(importQuantityText);
             importPrice = Double.parseDouble(importPriceText);
         } catch (NumberFormatException e) {
@@ -377,7 +376,7 @@ public class Category_AspirineController implements Initializable {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Lỗi");
             errorAlert.setHeaderText(null);
-            errorAlert.setContentText("Nhập liệu không hợp lệ. Hãy nhập số vào các trường 'Lần nhập', 'Số lượng', và 'Giá'.");
+            errorAlert.setContentText("Nhập liệu không hợp lệ. Hãy nhập số vào các trường 'Số lượng', và 'Giá'.");
             errorAlert.showAndWait();
             return; // Dừng lại nếu có lỗi xảy ra
         }
@@ -432,6 +431,7 @@ public class Category_AspirineController implements Initializable {
                 // Đặt thông tin của thuốc vào các trường TextField và ComboBox
                 medicineNameTextField_1.setText(selectedMedicine.getTenThuoc());
                 medicineNameTextField_2.setText(selectedMedicine.getTenThuoc());
+                importTimesTextField.setText(String.valueOf(warehouseDAO.getMaxImportTimes(selectedMedicine.getMaThuoc()) + 1));
                 unitComboBox.setValue(selectedMedicine.getTenDonViTinh());
                 formComboBox.setValue(selectedMedicine.getTenDangThuoc());
                 useComboBox.setValue(selectedMedicine.getTenCachDung());
@@ -439,6 +439,7 @@ public class Category_AspirineController implements Initializable {
                 // Nếu không có hàng nào được chọn, xóa nội dung của các trường
                 medicineNameTextField_1.clear();
                 medicineNameTextField_2.clear();
+                importTimesTextField.clear();
                 unitComboBox.getSelectionModel().clearSelection();
                 formComboBox.getSelectionModel().clearSelection();
                 useComboBox.getSelectionModel().clearSelection();

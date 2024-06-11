@@ -45,7 +45,7 @@ public class Category_DiseaseController implements Initializable {
     private JFXButton deleteButton;
 
     @FXML
-    private JFXButton addExcelFileBtn, sampleExcelFileBtn, saveExcelFileBtn;
+    private JFXButton addExcelFileBtn, sampleExcelFileBtn, saveExcelFileBtn, cancelExcelFileBtn;
 
     @FXML
     private TextField diseaseICDTextField;
@@ -88,8 +88,6 @@ public class Category_DiseaseController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("maBenh"));
         icdColumn.setCellValueFactory(new PropertyValueFactory<>("maICD"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenBenh"));
-
-        diseaseTableView.setStyle("-fx-selection-bar: #5A8F15;");
         // Load data into table
         loadDiseaseData();
         searchDiseaseByICDAndByName();
@@ -102,6 +100,7 @@ public class Category_DiseaseController implements Initializable {
         addExcelFileBtn.setOnAction(this::handleAddExcelFile);
         sampleExcelFileBtn.setOnAction(this::handleDownloadSampleExcelFile);
         saveExcelFileBtn.setOnAction(this::handleSaveExcelFile);
+        cancelExcelFileBtn.setOnAction(this::handleCancelExcelFile);
 
         lbl_header.setOnMousePressed(mouseEvent -> {
             xOffset = mouseEvent.getSceneX();
@@ -120,7 +119,6 @@ public class Category_DiseaseController implements Initializable {
         diseaseData.addAll(diseases);
         diseaseTableView.setItems(diseaseData);
     }
-
     @FXML
     void handleAddDisease(ActionEvent event) {
 
@@ -277,6 +275,18 @@ public class Category_DiseaseController implements Initializable {
         diseaseCount.setText(String.valueOf(maxMabenh));
     }
 
+    private void disableButtons() {
+        addButton.setDisable(true);
+        editButton.setDisable(true);
+        deleteButton.setDisable(true);
+    }
+
+    private void enableButtons() {
+        addButton.setDisable(false);
+        editButton.setDisable(false);
+        deleteButton.setDisable(false);
+    }
+
     private void searchDiseaseByICDAndByName() {
         tf_diseaseByICD.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.trim().isEmpty()) {
@@ -334,7 +344,11 @@ public class Category_DiseaseController implements Initializable {
                 ObservableList<Disease> excelData = readDataFromExcel(selectedFile);
                 if (excelData != null) {
                     diseaseTableView.setItems(excelData);
+                    saveExcelFileBtn.setDisable(false);
+                    cancelExcelFileBtn.setDisable(false);
+                    disableButtons();
                     showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Nhập dữ liệu từ Excel thành công.");
+
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể đọc dữ liệu từ Excel.");
                 }
@@ -426,7 +440,10 @@ public class Category_DiseaseController implements Initializable {
         diseaseData.clear();
         loadDiseaseData();
         getDiseaseCount();
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã lưu dữ liệu vào cơ sở dữ liệu thành công.");
+        saveExcelFileBtn.setDisable(true);
+        cancelExcelFileBtn.setDisable(true);
+        enableButtons();
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo!", "Đã lưu dữ liệu thành công.");
     }
 
     @FXML
@@ -468,6 +485,18 @@ public class Category_DiseaseController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void handleCancelExcelFile(ActionEvent event) {
+        diseaseData.clear();
+        clearDiseaseFields();
+        loadDiseaseData();
+        getDiseaseCount();
+        saveExcelFileBtn.setDisable(true);
+        cancelExcelFileBtn.setDisable(true);
+        enableButtons();
+    }
+
     @FXML
     void close(MouseEvent event) {
         Stage s = (Stage) ((Node)event.getSource()).getScene().getWindow();

@@ -16,7 +16,7 @@
     -fx-background-insets: 0, 0 0 5 0 , 0 0 6 0, 0 0 7 0;
 
 }
-.left-container .button:hover,.menu-button:hover
+.left-container .button:hover
 {
     -fx-padding: 8 15 15 15 ;
     -fx-background-insets: 0, 0 0 5 0 , 0 0 6 0, 0 0 7 0;
@@ -28,73 +28,79 @@
     -fx-text-fill: #FFFFFF;
 
 }
+.left-container .menu-button:hover
+{
+    -fx-padding: 8 15 15 15 ;
+    -fx-background-insets: 0, 0 0 5 0 , 0 0 6 0, 0 0 7 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #67a910 0%, #578a17 100%),
+    #72b40f,
+    #7ac00e,
+    radial-gradient(center 50% 50%, radius 100%, #6f9d2b, #7ccb02);
+    -fx-cursor: hand;
+    -fx-text-fill: #FFFFFF;
 
-.left-container .button:focused,.menu-button:focused {
+}
+.left-container .button:focused {
     -fx-padding: 10 15 13 15;
     -fx-background-insets: 4 0 0 0, 4 0 5 0, 4 0 6 0, 4 0 7 0;
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #6f9d2b, #7ccb02);
     -fx-text-fill: #ffffff;
 }
-.menu-button:focused .label {
+.left-container .menu-button:focused {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 4 0 0 0, 4 0 5 0, 4 0 6 0, 4 0 7 0;
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #6f9d2b, #7ccb02);
+    -fx-text-fill: #ffffff;
+}
+.left-container .menu-button:focused .label {
     -fx-text-fill: #ffffff;
 }
 
-.menu-button .label
+.left-container .menu-button .label
 {
     -fx-text-fill: #4B7813;
     -fx-font-family: "Verdana";
     -fx-font-size: 16;
     -fx-font-weight: bold;
 }
-.menu-button:hover .label
+.left-container .menu-button:hover .label
 {
     -fx-text-fill: #FFFFFF;
 }
-.menu-button
+.left-container .menu-button
 {
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
 }
-.menu-button .arrow
+.left-container .menu-button .arrow
 {
     -fx-font-size: 1.5em;
     -fx-background-color: #4B7813;
 }
-.menu-button:hover .arrow
+.left-container .menu-button:hover .arrow
+{
+    -fx-background-color: #FFFFFF;
+}
+.left-container .menu-button .menu-item
+{
+    -fx-background-color: #afacac;
+
+}
+.left-container .menu-button .menu-item:hover
+{
+    -fx-background-color: #72b61c;
+
+}
+.left-container .menu-button .menu-item:focused
+{
+}
+.left-container .menu-button:focused .arrow
 {
     -fx-background-color: #FFFFFF;
 }
 
-.menu-button:focused .arrow
-{
-    -fx-background-color: #FFFFFF;
-}
-/*comboBox*/
-.menu-button .text-field
-{
-    -fx-background-radius: 20px;
-}
-
-.menu-button .menu-item {
-
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 14px;
-    -fx-background-color: #b9d588;
-}
-.menu-button .menu-item:hover {
-
-    -fx-background-color: #93d94c;
-}
-.menu-button .menu-item:pressed {
-
-    -fx-background-color: #b7e87d;
-}
-.menu-button .menu-item:focused {
-
-    -fx-background-color: #6fa62f;
-}
 .top-container
 {
     -fx-background-color: linear-gradient(to right,#D2FD95,#F8FDEF);
@@ -191,4 +197,20 @@
 #pane-profile-cat:pressed
 {
     -fx-background-color: #CAF191 ;
+}
+#imageViewHome {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+#panelHover {
+    -fx-opacity: 0;
+}
+#panelHover:hover {
+    -fx-cursor: hand;
+}
+#panelHover:hover {
+    -fx-opacity: 0.5;
+}
+#panelHover:pressed {
+    -fx-opacity: 1;
 }
