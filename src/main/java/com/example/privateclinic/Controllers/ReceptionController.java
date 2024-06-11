@@ -114,9 +114,6 @@ public class ReceptionController implements Initializable {
     private TextField tfPatientById;
 
     @FXML
-    private TextField tfPatientByName;
-
-    @FXML
     private TextField tfPatientId;
 
     @FXML
@@ -141,7 +138,7 @@ public class ReceptionController implements Initializable {
     private final PatientDAO patientDAO = new PatientDAO();
 
     private ObservableList<Patient> patientsDetails;
-    private ObservableList<Patient> patients;
+    private ObservableList<Patient> patients = FXCollections.observableArrayList(patientDAO.getAllPatients());
     public AnchorPane lbl_header,lbl_header2;
     private double xOffset = 0;
     private double yOffset =0;
@@ -164,7 +161,7 @@ public class ReceptionController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setDatePickerToday();
         validatePhoneNumber();
-        searchPatientByPhoneAndByName();
+        searchPatientByPhone();
         setPatientList();
         setPatientDetailList(Date.valueOf(dpDate.getValue()));
         setTableViewByDate();
@@ -305,7 +302,7 @@ public class ReceptionController implements Initializable {
 
                     Date selectedDate = Date.valueOf(dpDate.getValue());
                     setPatientDetailList(selectedDate);
-                    searchPatientByPhoneAndByName();
+                    searchPatientByPhone();
 
         });
     }
@@ -343,7 +340,7 @@ public class ReceptionController implements Initializable {
         });
     }
 
-    private void searchPatientByPhoneAndByName() {
+    private void searchPatientByPhone() {
         tfPatientByPhone.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
                 tvPatient.setItems(patients);
@@ -355,20 +352,8 @@ public class ReceptionController implements Initializable {
                         filteredList.add(patient);
                     }
                 }
-                tvPatient.setItems(filteredList);
-            }
-        });
 
-        tfPatientByName.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.isEmpty()) {
-                tvPatient.setItems(patients);
-            } else {
-                ObservableList<Patient> filteredList = FXCollections.observableArrayList();
-                for (Patient patient : patients) {
-                    if (patient.getPatientName().contains(newValue)) {
-                        filteredList.add(patient);
-                    }
-                }
+
                 tvPatient.setItems(filteredList);
             }
         });
