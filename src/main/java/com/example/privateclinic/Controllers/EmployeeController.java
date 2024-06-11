@@ -108,7 +108,7 @@ public class EmployeeController implements Initializable {
     }
 
     private void configureTableColumns() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Employee_id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
         citizenIdColumn.setCellValueFactory(new PropertyValueFactory<>("employeeCitizenId"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("employeeAddress"));
@@ -132,7 +132,7 @@ public class EmployeeController implements Initializable {
         if (selectedEmployee != null) {
             int sequence = ShowYesNoAlert("xoá "+selectedEmployee.getEmployeeName());
             if(sequence==JOptionPane.YES_OPTION) {
-                if (userDAO.deleteEmployee(selectedEmployee.getEmployeeId()))  {
+                if (userDAO.deleteEmployee(selectedEmployee.getEmployee_id()))  {
                     employees.remove(selectedEmployee);
                     loadEmployeeData();
                 }
@@ -238,7 +238,7 @@ public class EmployeeController implements Initializable {
                 tf_addPhoneNum.setText(newValue.getEmployeePhoneNumber());
                 tf_addEmail.setText(newValue.getEmployeeEmail());
                 tf_addPosition.setText(newValue.getEmployeePosition());
-                tf_maNV.setText(String.valueOf(newValue.getEmployeeId()));
+                tf_maNV.setText(String.valueOf(newValue.getEmployee_id()));
             } else {
                 clearAddEmployeeFields();
             }

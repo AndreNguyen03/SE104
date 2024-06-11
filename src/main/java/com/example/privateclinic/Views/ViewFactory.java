@@ -1,20 +1,13 @@
 package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.*;
-import com.example.privateclinic.Models.Customer;
 import com.example.privateclinic.Models.Patient;
 import com.example.privateclinic.Models.User;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -32,6 +25,7 @@ public class ViewFactory {
     Stage stageExaminationHistory = null;
     Stage stageCategoryAspirine= null;
     Stage stageCategoryDisease = null;
+    Stage stageReportHistory = null;
     FXMLLoader receptionLoader;
     public void showLoginWindow() {
         Scene scene = null;
@@ -126,20 +120,33 @@ public class ViewFactory {
             stageExaminationHistory.toFront(); // nếu đã mở scene thì bring to front
         }
     }
-    public void showCategoryDisease() {
+    public void showCategoryDisease(User user) {
         if(stageCategoryDisease==null){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Disease.fxml"));
             stageCategoryDisease=createStage(loader);
+            Category_DiseaseController categoryDiseaseController = loader.getController();
+            categoryDiseaseController.InitData(user);
         } else {
             stageCategoryDisease.toFront();
         }
     }
-    public void showCategoryAspirine() {
+    public void showCategoryAspirine(User user) {
         if(stageCategoryAspirine==null){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Category_Aspirine.fxml"));
             stageCategoryAspirine=createStage(loader);
+            Category_AspirineController categoryAspirineController = loader.getController();
+            categoryAspirineController.init(user);
+
         } else {
             stageCategoryAspirine.toFront();
+        }
+    }
+    public void showReportHistory() {
+        if(stageReportHistory==null){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/ReportHistory.fxml"));
+            stageReportHistory=createStage(loader);
+        } else {
+            stageReportHistory.toFront();
         }
     }
     private Stage createStage(FXMLLoader loader ) {
@@ -170,6 +177,7 @@ public class ViewFactory {
             if(stageExaminationHistory!=null) stageExaminationHistory.close();
             if(stageCategoryAspirine!=null) stageCategoryAspirine.close();
             if(stageCategoryDisease!=null) stageCategoryDisease.close();
+            if(stageReportHistory!=null) stageReportHistory.close();
         }
         //khi 1 stage nào đó đóng thì cập nhật tình hình các stage khác
         if(stageExamination!=null && !stageExamination.isShowing()) stageExamination=null;  // nếu khác null nhưng ko còn show thì cập nhật về null
@@ -179,6 +187,7 @@ public class ViewFactory {
         if(stageExaminationHistory!=null && !stageExaminationHistory.isShowing()) stageExaminationHistory=null;
         if(stageCategoryAspirine!=null && !stageCategoryAspirine.isShowing()) stageCategoryAspirine=null;
         if(stageCategoryDisease!=null && !stageCategoryDisease.isShowing()) stageCategoryDisease=null;
+        if(stageReportHistory!=null && !stageReportHistory.isShowing()) stageReportHistory=null;
 
     }
     public void minimizeStage(Stage stage)

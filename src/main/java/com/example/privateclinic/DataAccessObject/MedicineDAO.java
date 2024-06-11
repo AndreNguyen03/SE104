@@ -84,7 +84,7 @@ public class MedicineDAO {
         return -1;
     }
 
-    public void addMedicine(Medicine medicine) {
+    public boolean addMedicine(Medicine medicine) {
         LocalDate now = LocalDate.now();
 
         String query = "INSERT INTO thuoc (mathuoc, tenthuoc, madvt, soluong, giaban, madt, macd) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -100,9 +100,10 @@ public class MedicineDAO {
             statement.setInt(7, medicine.getMaCachDung());
 
 
-            statement.executeUpdate();
+            return statement.executeUpdate() >0 ;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -135,7 +136,7 @@ public class MedicineDAO {
     }
 
 
-    public void updateMedicine(Medicine medicine) {
+    public boolean updateMedicine(Medicine medicine) {
         String query = "UPDATE thuoc SET tenthuoc = ?, madvt = ?, soluong = ?, giaban = ?, madt = ?, macd = ? WHERE mathuoc = ?";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
@@ -148,21 +149,23 @@ public class MedicineDAO {
             statement.setInt(6, medicine.getMaCachDung());
             statement.setInt(7, medicine.getMaThuoc());
 
-            statement.executeUpdate();
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    public void deleteMedicine(int medicineId) {
+    public boolean deleteMedicine(int medicineId) {
         String query = "DELETE FROM thuoc WHERE mathuoc = ?";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
 
             statement.setInt(1, medicineId);
-            statement.executeUpdate();
+            return statement.executeUpdate() >0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

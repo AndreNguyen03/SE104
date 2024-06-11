@@ -71,12 +71,12 @@ public class MenuController implements Initializable {
 
     @FXML
     void btnAspirineClicked(ActionEvent event) throws IOException {
-        Model.getInstance().getViewFactory().showCategoryAspirine();
+        Model.getInstance().getViewFactory().showCategoryAspirine(user);
     }
 
     @FXML
     void btnDiseaseClicked(ActionEvent event) throws IOException {
-        Model.getInstance().getViewFactory().showCategoryDisease();
+        Model.getInstance().getViewFactory().showCategoryDisease(user);
     }
     @FXML
     void btnExaminationClicked(ActionEvent event) throws IOException {

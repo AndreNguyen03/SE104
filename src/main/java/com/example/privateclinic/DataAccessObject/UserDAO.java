@@ -178,7 +178,7 @@ public class UserDAO {
             if (affectedRows > 0) {
                 try (ResultSet rs = statement.getGeneratedKeys()) {
                     if (rs.next()) {
-                        employee.setEmployeeId(rs.getInt(1));
+                        employee.setEmployee_id(rs.getInt(1));
                     }
                 }
                 return true;
@@ -198,7 +198,7 @@ public class UserDAO {
             statement.setString(4, employee.getEmployeeAddress());
             statement.setString(5, employee.getEmployeePosition());
             statement.setString(6, employee.getEmployeeEmail());
-            statement.setInt(7, employee.getEmployeeId());
+            statement.setInt(7, employee.getEmployee_id());
             int aff =  statement.executeUpdate();
             if (aff > 0) return true;
         } catch (SQLException e) {
@@ -226,7 +226,7 @@ public class UserDAO {
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 User employee = new User();
-                employee.setEmployeeId(resultSet.getInt("manv"));
+                employee.setEmployee_id(resultSet.getInt("manv"));
                 employee.setEmployeeName(resultSet.getString("hoten"));
                 employee.setEmployeeCitizenId(resultSet.getString("cccd"));
                 employee.setEmployeePhoneNumber(resultSet.getString("sdt"));
@@ -258,7 +258,7 @@ public class UserDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User employee = new User();
-                employee.setEmployeeId(resultSet.getInt("manv"));
+                employee.setEmployee_id(resultSet.getInt("manv"));
                 employee.setEmployeeName(resultSet.getString("hoten"));
                 employee.setEmployeeCitizenId(resultSet.getString("cccd"));
                 employee.setEmployeePhoneNumber(resultSet.getString("sdt"));

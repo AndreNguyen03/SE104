@@ -168,7 +168,6 @@ public class ReceptionController implements Initializable {
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     DateTimeFormatter formatterDatePicker = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-
     Stage stagePatientData;
 
     @Override

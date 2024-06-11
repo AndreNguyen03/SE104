@@ -15,7 +15,6 @@ import java.util.List;
 public class ReportDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
     DateTimeFormatter formatterDatePicker = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     public List<MonthlyReport> getMonthlyReports(int month,int year) {
         List<MonthlyReport> monthlyReports = new ArrayList<>();
         String query = "SELECT count(kb.makb) as count,kb.ngay::date as date, SUM(hd.tongtien) as total, SUM(hd.tongtien)/count(kb.makb) as average  FROM khambenh kb,hoadon hd where hd.makb = kb.makb and EXTRACT(MONTH FROM kb.ngay) = ? AND EXTRACT(YEAR FROM kb.ngay) = ? GROUP BY ngay::date ORDER BY kb.ngay::date desc";
@@ -24,12 +23,13 @@ public class ReportDAO {
              statement.setInt(2,year);
              ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
+                double result = (double) resultSet.getInt("total") / getToTalMonth(month, year);
                 MonthlyReport monthlyReport = new MonthlyReport(
                         resultSet.getDate("date").toLocalDate().format(formatterDatePicker),
                         resultSet.getInt("count"),
                         resultSet.getInt("total"),
                         resultSet.getDouble("average"),
-                        (double) resultSet.getInt("total") /getToTalMonth(month,year));
+                        (double) Math.round(result * 100) / 100);
                 monthlyReports.add(monthlyReport);
             }
         } catch (SQLException e) {
@@ -44,7 +44,7 @@ public class ReportDAO {
                 "WHERE cthd.mathuoc = thuoc.mathuoc and dvt.madvt = thuoc.madvt and cthd.mahd = hd.mahd and hd.makb = kb.makb " +
                 "AND EXTRACT(MONTH FROM kb.ngay) = ? AND EXTRACT(YEAR FROM kb.ngay) = ? " +
                 "GROUP BY thuoc.tenthuoc,dvt.tendvt " +
-                "ORDER BY  SUM(cthd.soluong)";
+                "ORDER BY  SUM(cthd.soluong) DESC";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
         {
             statement.setInt(1,month);
@@ -65,7 +65,7 @@ public class ReportDAO {
         return drugUsageReports;
     }
     public int getToTalMonth(int month,int year) throws SQLException {
-        String query =" SELECT SUM(hd.tongtien) as sl FROM hoadon hd, khambenh kb WHERE kb.makb = hd.makb AND EXTRACT(MONTH FROM kb.ngay) = ? AND EXTRACT(YEAR FROM kb.ngay) = ? GROUP BY ngay::date ";
+        String query =" SELECT SUM(hd.tongtien) as sl FROM hoadon hd, khambenh kb WHERE kb.makb = hd.makb AND EXTRACT(MONTH FROM kb.ngay) = ? AND EXTRACT(YEAR FROM kb.ngay) = ? ";
         int total = 0;
         try(PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1,month);

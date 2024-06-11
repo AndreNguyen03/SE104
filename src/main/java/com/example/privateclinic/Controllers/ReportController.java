@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.ReportDAO;
 import com.example.privateclinic.Models.DrugUsageReport;
+import com.example.privateclinic.Models.Model;
 import com.example.privateclinic.Models.MonthlyReport;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -83,7 +84,7 @@ public class ReportController {
         SetUp();
         SetUpTable();
         LoadProductBarChart();
-        LoadData(cbMonth.getValue(),cbMonth.getValue(),cbYear.getValue());
+        LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
         initializeChart();
     }
 
@@ -93,12 +94,12 @@ public class ReportController {
             try {
                 Thread.sleep(1000);
                 Platform.runLater(() -> {
+                    LoadThreePanel(day,month,year);
                     ObservableList<MonthlyReport> observableReports = FXCollections.observableArrayList(reportDAO.getMonthlyReports(month,year));
                     monthlyReportTable.setItems(observableReports);
                     ObservableList<DrugUsageReport> observableDrugUsageReport= FXCollections.observableArrayList(reportDAO.getDrugUsageReports(month,year));
                     drugUsageReportTable.setItems(observableDrugUsageReport);
                     LoadChar();
-                    LoadThreePanel(day,month,year);
                 });
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -120,6 +121,7 @@ public class ReportController {
             numberExamOfToday.setText(reportDAO.GetNumberExamOfToday(day,month,year));
             ConvertValueNullToZero(numberProductOfMonth,numberProductOfDay,valueRevenueMonth,valueRevenueToday,numberExamOfMonth,numberExamOfToday);
         } catch (SQLException e){
+            e.printStackTrace();
         }
 
     }
@@ -305,5 +307,9 @@ public class ReportController {
                 });
             }
         }).start();
+    }
+
+    public void handleShowHistory(ActionEvent event) {
+        Model.getInstance().getViewFactory().showReportHistory();
     }
 }

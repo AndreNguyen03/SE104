@@ -1,10 +1,9 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.*;
-import com.example.privateclinic.Models.Medicine;
-import com.example.privateclinic.Models.Model;
-import com.example.privateclinic.Models.Warehouse;
+import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -66,6 +65,8 @@ public class Category_AspirineController implements Initializable {
 
     @FXML
     private TableColumn<Medicine, Integer> idColumn;
+    @FXML
+    private TableColumn<Medicine, Integer> sttColumn;
 
     @FXML
     private TableColumn<Medicine, String> nameColumn;
@@ -92,10 +93,14 @@ public class Category_AspirineController implements Initializable {
     private WarehouseDAO warehouseDAO = new WarehouseDAO();
     public Pane lbl_header;
     private final ObservableList<Medicine> medicineData = FXCollections.observableArrayList();
-
+    private HistoryDAO historyDAO = new HistoryDAO();
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private double xOffset = 0;
     private double yOffset =0;
+    private User employee_init;
+    public void init(User employee){
+        employee_init = employee;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -107,6 +112,7 @@ public class Category_AspirineController implements Initializable {
         warehouseDAO = new WarehouseDAO();
 
         // Set up columns
+        sttColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(medicineTableView.getItems().indexOf(cellData.getValue()) + 1).asObject());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("maThuoc"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenThuoc"));
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("tenDonViTinh"));
@@ -206,7 +212,8 @@ public class Category_AspirineController implements Initializable {
                 int unitID = unitDAO.getUnitIDByName(medicineUnit);
                 int formID = medicinetypeDAO.getMedicineTypeIDByName(medicineForm);
                 int useID = usewayDAO.getUseWayIDByName(medicineUse);
-                medicineDAO.addMedicine(new Medicine(medicineDAO.getNextMedicineId(), medicineName, unitID, 0, 0, formID, useID));
+                if(medicineDAO.addMedicine(new Medicine(medicineDAO.getNextMedicineId(), medicineName, unitID, 0, 0, formID, useID)));
+                historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Thêm DM thuốc ID :"+(medicineDAO.getNextMedicineId()-1)+" " ));
                 medicineData.clear();
                 clearMedicineFields();
                 loadMedicineData();
@@ -263,7 +270,8 @@ public class Category_AspirineController implements Initializable {
                     selectedMedicine.setMaCachDung(useID);
 
                     // Cập nhật thuốc trong cơ sở dữ liệu
-                    medicineDAO.updateMedicine(selectedMedicine);
+                    if(medicineDAO.updateMedicine(selectedMedicine))
+                        historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Sửa DM thuốc ID:"+selectedMedicine.getMaThuoc()+"-"+selectedMedicine.getTenThuoc()+"" ));
                     medicineData.clear();
                     clearMedicineFields();
                     loadMedicineData();
@@ -289,10 +297,9 @@ public class Category_AspirineController implements Initializable {
             Optional<ButtonType> result = confirmDeleteAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 int medicineID = selectedMedicine.getMaThuoc();
-                warehouseDAO.deleteWarehouse(medicineID);
-                medicineDAO.deleteMedicine(medicineID);
+                if(warehouseDAO.deleteWarehouse(medicineID) && medicineDAO.deleteMedicine(medicineID))
+                    historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Xoá DM thuốc ID:"+medicineID+"-"+selectedMedicine.getTenThuoc()+"" ));
                 medicineData.clear(); // Xóa dữ liệu hiện tại trong bảng
-                medicineDAO.updateMedicineIds(); // Cập nhật lại các ID sau khi xóa
                 loadMedicineData(); // Tải lại dữ liệu từ cơ sở dữ liệu
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -395,12 +402,12 @@ public class Category_AspirineController implements Initializable {
                 Medicine medicine = medicineDAO.getMedicineByName(medicineName);
                 int currentQuantity = medicine.getSoLuong();
                 int newQuantity = currentQuantity + importQuantity;
-
-                // Thêm hàng nhập vào cơ sở dữ liệu bằng cách gọi phương thức từ warehouseDAO
-                warehouseDAO.addWarehouse(new Warehouse(warehouseDAO.getNextWarehouseId(), medicineID, 9, importTimes, importQuantity, selectedDate, importPrice));
                 medicine.setSoLuong(newQuantity);
                 medicine.setGiaBan(importPrice);
-                medicineDAO.updateMedicine(medicine);
+                // Thêm hàng nhập vào cơ sở dữ liệu bằng cách gọi phương thức từ warehouseDAO
+                if(warehouseDAO.addWarehouse(new Warehouse(warehouseDAO.getNextWarehouseId(), medicineID, 9, importTimes, importQuantity, selectedDate, importPrice))
+                &&medicineDAO.updateMedicine(medicine))
+                    historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Nhập kho DM thuốc ID:"+medicineID+"-"+medicine.getTenThuoc()+"" ));
                 medicineData.clear();
                 loadMedicineData();
                 // Hiển thị thông báo thành công
