@@ -379,8 +379,8 @@ public class ReceptionController implements Initializable {
         validatePhoneNumber(tfPatientPhoneNumber);
     }
 
-    private void validatePhoneNumber(TextField tfPatientPhoneNumber) {
-        tfPatientPhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+    private void validatePhoneNumber(TextField tfPhoneNumber) {
+        tfPhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
             // Loại bỏ bất kỳ ký tự không phải là số
             String formattedPhoneNumber = newValue.replaceAll("[^\\d]", "");
 
@@ -389,14 +389,14 @@ public class ReceptionController implements Initializable {
             // 2. Chiều dài tối đa là 10 ký tự.
             if (formattedPhoneNumber.length() == 0 || formattedPhoneNumber.startsWith("0")) {
                 if (formattedPhoneNumber.length() <= 10) {
-                    tfPatientPhoneNumber.setText(formattedPhoneNumber);
+                    tfPhoneNumber.setText(formattedPhoneNumber);
                 } else {
                     // Nếu chiều dài vượt quá 10 ký tự, cắt chuỗi thành 10 ký tự đầu tiên
-                    tfPatientPhoneNumber.setText(formattedPhoneNumber.substring(0, 10));
+                    tfPhoneNumber.setText(formattedPhoneNumber.substring(0, 10));
                 }
             } else {
                 // Nếu không bắt đầu bằng 0, giữ nguyên giá trị cũ
-                tfPatientPhoneNumber.setText(oldValue);
+                tfPhoneNumber.setText(oldValue);
             }
         });
     }
