@@ -15,7 +15,7 @@ import java.util.List;
 public class WarehouseDAO {
     ConnectDB connectDB = ConnectDB.getInstance();
 
-    public void addWarehouse(Warehouse warehouse) {
+    public boolean addWarehouse(Warehouse warehouse) {
         LocalDate now = LocalDate.now();
 
         String query = "INSERT INTO nhapkho (manhap, mathuoc, manv, lannhap, soluong, ngay, gia) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -30,21 +30,23 @@ public class WarehouseDAO {
             statement.setDate(6, Date.valueOf(now));
             statement.setDouble(7, warehouse.getImportPrice());
 
-            statement.executeUpdate();
+             return statement.executeUpdate()>0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    public void deleteWarehouse(int medicineId) {
+    public boolean deleteWarehouse(int medicineId) {
         String query = "DELETE FROM nhapkho WHERE mathuoc = ?";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
 
             statement.setInt(1, medicineId);
-            statement.executeUpdate();
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

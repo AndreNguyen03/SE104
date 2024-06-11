@@ -221,3 +221,33 @@
     -fx-background-color: linear-gradient(to right, #5f9c7a, #6bc794);
     -fx-effect: dropshadow(three-pass-box, rgb(57, 100, 5), 5, 0.2, 0, 2);
 }
+#add {
+    -fx-padding: 3 8 8 8;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-background-radius: 20;
+    -fx-text-fill: #67A10AFF;
+    -fx-font-family: "Segoe UI black";
+    -fx-background-color: transparent;
+    -fx-border-color: #74b60c;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+#add:hover {
+    -fx-border-width: 0;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100% , #78b713 0%, #67a10a 100%),
+    #6faf0a,
+    #7cc40c,
+    linear-gradient(to right, #adea4e, #7abe0d);
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+#add:pressed
+{
+    --fx-padding: 6 10 9 10 ;
+    -fx-background-insets: 1 0 0 0, 1 0 1 0 , 1 0 2 0, 1 0 3 0;
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0),4,0,0,1);
+}

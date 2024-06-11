@@ -82,6 +82,8 @@ public class ReceptionController implements Initializable {
     @FXML
     private TableColumn<Patient, String> tcDoctor;
 
+    @FXML
+    private TableColumn<Integer, Integer> tcNumber;
 
     @FXML
     private TableColumn<Integer, Integer> tcNumberDetails;

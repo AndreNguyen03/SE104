@@ -42,7 +42,6 @@ public class Patient {
         this.patientPhoneNumber = patientPhoneNumber;
         this.patientBirth = patientBirth;
         this.patientAddress = patientAddress;
-        this.arrivalDate = arrivalDate;
     }
 
     public Patient(int patientId, String patientName, String patientGender, String patientPhoneNumber, Date patientBirth, String patientAddress,Date arrivalDate,int receptionId,int number) {

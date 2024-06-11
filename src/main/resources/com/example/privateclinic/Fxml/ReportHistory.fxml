@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="735.0" styleClass="container" stylesheets="@../Styles/History.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReportHistoryController">
+   <children>
+      <TitledPane animated="false" collapsible="false" layoutX="23.0" layoutY="71.0" prefHeight="128.0" prefWidth="696.0" style="-fx-font-size: 16;" text="Lọc">
+        <content>
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="89.0" prefWidth="691.0" styleClass="anchor-pane">
+               <children>
+                  <HBox layoutX="32.0" layoutY="6.0" prefHeight="39.0" prefWidth="627.0">
+                     <children>
+                        <MenuButton id="menu-button" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Tuỳ chọn lọc">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleMenuDayMonthYear" text="Ngày/tháng/năm" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleMenuMonthYear" text="Tháng/năm" />
+                           </items>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </MenuButton>
+                        <Text fx:id="lblDay" fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Ngày">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <ComboBox fx:id="cbDay" onAction="#handlePickDay" prefHeight="33.0" prefWidth="130.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <Text fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Tháng">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <ComboBox fx:id="cbMonth" onAction="#handlePickMonth" prefHeight="33.0" prefWidth="130.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <Text fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Năm">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <ComboBox fx:id="cbYear" onAction="#handlePickYear" prefHeight="39.0" prefWidth="130.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
+                  </HBox>
+                  <Text fx:id="lblDay1" fill="#2c4a05" layoutX="497.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15; -fx-font-size: 13;" text="Hôm nay:">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="lblToday" fill="#2c4a05" layoutX="562.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15; -fx-font-size: 13;" text="date">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="btnLamMoi" layoutX="32.0" layoutY="48.0" mnemonicParsing="false" onAction="#handlebtnLamMoi" prefHeight="33.0" prefWidth="91.0" style="-fx-pref-height: 30px;" text="Làm mới" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
+      <Text layoutX="421.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="Danh sách có :" />
+      <Text fx:id="diseaseCount" layoutX="564.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="None" />
+      <Text layoutX="626.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="Hoạt động" wrappingWidth="90.890625" />
+      <TableView fx:id="reportHistoryTableView" layoutX="21.0" layoutY="229.0" prefHeight="394.0" prefWidth="696.0">
+        <columns>
+          <TableColumn fx:id="idColumn" prefWidth="45.33337593078613" text="STT" />
+            <TableColumn fx:id="dateColumn" prefWidth="158.00005340576172" text="Ngày" />
+            <TableColumn fx:id="employeeColumn" prefWidth="155.3333282470703" text="Nhân viên" />
+          <TableColumn fx:id="contentColumn" prefWidth="333.33331298828125" text="Nội dung" />
+        </columns>
+      </TableView>
+      <Pane fx:id="lbl_header" layoutX="2.0" layoutY="2.0" prefHeight="61.0" prefWidth="732.0" styleClass="pane-top">
+         <children>
+            <Pane fx:id="btnClose" layoutX="687.0" onMouseClicked="#close" prefHeight="35.0" prefWidth="43.0" styleClass="pane_close">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="image_hover">
+                     <image>
+                        <Image url="@../Images/close-white.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="9.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="image">
+                     <image>
+                        <Image url="@../Images/close-gray.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane layoutX="17.0" prefHeight="61.0" prefWidth="129.0">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="54.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" styleClass="image_logo">
+                     <image>
+                        <Image url="@../Images/Clinic_hori.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Text layoutX="251.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_tiltle" text="Lịch sử hoạt động" />
+            <Pane layoutX="645.0" onMouseClicked="#minimizeCategory" prefHeight="35.0" prefWidth="43.0" styleClass="minimize">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="18.0" layoutX="12.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/minimize-sign.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Text fx:id="lblRefresh" layoutX="23.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18;" styleClass="lbl" text="Làm mới" />
+   </children>
+   <effect>
+      <Blend />
+   </effect>
+</AnchorPane>

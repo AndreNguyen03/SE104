@@ -1,9 +1,13 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.DiseaseDAO;
+import com.example.privateclinic.DataAccessObject.HistoryDAO;
 import com.example.privateclinic.Models.Disease;
+import com.example.privateclinic.Models.History;
 import com.example.privateclinic.Models.Model;
+import com.example.privateclinic.Models.User;
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -64,6 +68,8 @@ public class Category_DiseaseController implements Initializable {
 
     @FXML
     private TableColumn<Disease, Integer> idColumn;
+    @FXML
+    private TableColumn<Disease, Integer> sttColumn;
 
     @FXML
     private TableColumn<Disease, String> icdColumn;
@@ -76,15 +82,20 @@ public class Category_DiseaseController implements Initializable {
     @FXML
     private Pane lbl_header;
     private DiseaseDAO diseaseDAO = new DiseaseDAO();
-
+    private HistoryDAO historyDAO = new HistoryDAO();
     private final ObservableList<Disease> diseaseData = FXCollections.observableArrayList();
+    private User employee_init;
     private double xOffset;
     private  double yOffset;
+    public void InitData(User user){
+        employee_init = user;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         diseaseDAO = new DiseaseDAO();
         // Set up columns
+        sttColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(diseaseTableView.getItems().indexOf(cellData.getValue()) + 1).asObject());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("maBenh"));
         icdColumn.setCellValueFactory(new PropertyValueFactory<>("maICD"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tenBenh"));
@@ -149,7 +160,8 @@ public class Category_DiseaseController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                diseaseDAO.addDisease(new Disease(diseaseDAO.getNextDiseaseId(), diseaseName, diseaseICD));
+                if(diseaseDAO.addDisease(new Disease(diseaseDAO.getNextDiseaseId(), diseaseName, diseaseICD)))
+                    historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Thêm DM bệnh ICD : "+diseaseICD +"-"+diseaseName+" " ));
                 diseaseData.clear();
                 clearDiseaseFields();
                 loadDiseaseData();
@@ -199,7 +211,8 @@ public class Category_DiseaseController implements Initializable {
                 selectedDisease.setMaICD(diseaseICD);
                 selectedDisease.setTenBenh(diseaseName);
 
-                diseaseDAO.updateDisease(selectedDisease);
+                if(diseaseDAO.updateDisease(selectedDisease))
+                    historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Sửa DM bệnh ICD :"+selectedDisease.getMaICD()+"-" +selectedDisease.getTenBenh() ));
                 diseaseData.clear();
                 clearDiseaseFields();
                 loadDiseaseData();
@@ -225,9 +238,9 @@ public class Category_DiseaseController implements Initializable {
             Optional<ButtonType> result = confirmDeleteAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 int diseaseID = selectedDisease.getMaBenh();
-                diseaseDAO.deleteDisease(diseaseID);
+                if(diseaseDAO.deleteDisease(diseaseID))
+                    historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Xoá DM bệnh ICD :"+selectedDisease.getMaICD()+"-" +selectedDisease.getTenBenh() ));
                 diseaseData.clear(); // Xóa dữ liệu hiện tại trong bảng
-                diseaseDAO.updateDiseaseIds(); // Cập nhật lại các ID sau khi xóa
                 loadDiseaseData(); // Tải lại dữ liệu từ cơ sở dữ liệu
                 getDiseaseCount();
 
@@ -436,7 +449,8 @@ public class Category_DiseaseController implements Initializable {
             }
         }
 
-        diseaseDAO.addDiseases(newDiseases);
+        if(diseaseDAO.addDiseases(newDiseases))
+            historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Nhập danh sách bệnh: file excel"));
         diseaseData.clear();
         loadDiseaseData();
         getDiseaseCount();

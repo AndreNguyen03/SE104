@@ -128,15 +128,6 @@ public class User {
         this.Position = employeePosition;
         this.Username = employeeUsername;
     }
-
-    public int getEmployeeId() {
-        return Employee_id;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.Employee_id = employeeId;
-    }
-
     public String getEmployeeName() {
         return EmployName;
     }
@@ -193,21 +184,6 @@ public class User {
         this.Username = employeeUsername;
     }
 
-    public String getEmployeePassword() {
-        return Password;
-    }
-
-    public void setEmployeePassword(String employeePassword) {
-        this.Password = employeePassword;
-    }
-
-    public String getDefaultpassword() {
-        return Password;
-    }
-
-    public void setDefaultpassword(String defaultpassword) {
-        this.Password = defaultpassword;
-    }
 }
 
 

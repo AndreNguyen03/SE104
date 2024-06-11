@@ -59,9 +59,10 @@
       </TitledPane>
       <TableView fx:id="diseaseTableView" layoutX="22.0" layoutY="447.0" prefHeight="394.0" prefWidth="641.0">
         <columns>
-          <TableColumn fx:id="idColumn" prefWidth="85.0" text="STT" />
-            <TableColumn fx:id="icdColumn" prefWidth="116.0" text="Mã ICD" />
-          <TableColumn fx:id="nameColumn" prefWidth="524.0" text="Tên bệnh" />
+            <TableColumn fx:id="sttColumn" prefWidth="48.00006294250488" text="STT" />
+          <TableColumn fx:id="idColumn" prefWidth="75.99999237060547" text="Mã bệnh" />
+            <TableColumn fx:id="icdColumn" prefWidth="134.6667022705078" text="Mã ICD" />
+          <TableColumn fx:id="nameColumn" prefWidth="500.0" text="Tên bệnh" />
         </columns>
       </TableView>
       <Pane fx:id="lbl_header" layoutX="2.0" layoutY="2.0" prefHeight="61.0" prefWidth="680.0" styleClass="pane-top">
