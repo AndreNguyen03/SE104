@@ -66,6 +66,8 @@ public class MenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Employee.fxml"));
         Parent reportSceneRoot = loader.load();
         mainPane.getChildren().add(reportSceneRoot);
+        EmployeeController employeeController = loader.getController();
+        employeeController.initData(user);
     }
 
 
@@ -90,7 +92,7 @@ public class MenuController implements Initializable {
 
     @FXML
     void btnReceptionClicked(ActionEvent event) throws IOException {
-        Model.getInstance().getViewFactory().showReceptionWindow();
+        Model.getInstance().getViewFactory().showReceptionWindow(user);
     }
 
     @FXML
@@ -103,7 +105,8 @@ public class MenuController implements Initializable {
 
     @FXML
     void btnSettingClicked(ActionEvent event) {
-        Model.getInstance().getViewFactory().showSettingWindow();
+        Model.getInstance().getViewFactory().showSettingWindow(user);
+
     }
     @FXML
     void closeMenu(MouseEvent event) {

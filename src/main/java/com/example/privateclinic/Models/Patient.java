@@ -7,7 +7,7 @@ public class Patient {
     private String patientName;
     private String patientGender;
     private String patientPhoneNumber;
-        private Date patientBirth;
+    private Date patientBirth;
     private Object arrivalDate;
     private String patientAddress;
 
