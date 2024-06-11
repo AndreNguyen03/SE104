@@ -4,7 +4,6 @@ import java.sql.Date;
 
 public class History {
     int mals;
-
     int manv;
     Date ngay;
     String noiDung;

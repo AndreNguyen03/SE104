@@ -1,6 +1,8 @@
 package com.example.privateclinic.Controllers;
 
+import com.example.privateclinic.DataAccessObject.HistoryDAO;
 import com.example.privateclinic.DataAccessObject.UserDAO;
+import com.example.privateclinic.Models.History;
 import com.example.privateclinic.Models.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -66,6 +68,12 @@ public class EmployeeController implements Initializable {
 
     private final UserDAO userDAO = new UserDAO();
     private ObservableList<User> employees;
+    User user;
+    private HistoryDAO historyDAO = new HistoryDAO();
+
+    public void initData(User user) {
+        this.user =user;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -133,6 +141,8 @@ public class EmployeeController implements Initializable {
             if(sequence==JOptionPane.YES_OPTION) {
                 if (userDAO.deleteEmployee(selectedEmployee.getEmployeeId()))  {
                     employees.remove(selectedEmployee);
+                    History history = new History(user.getEmployee_id(), STR."Đã xóa nhân viên ID: \{selectedEmployee.getEmployee_id()} - \{selectedEmployee.getEmployeeName()}");
+                    historyDAO.addHistory(history);
                     loadEmployeeData();
                 }
             } else {}
@@ -166,6 +176,8 @@ public class EmployeeController implements Initializable {
                         clearAddEmployeeFields();
                         cb_position.setVisible(false);
                         tf_addPosition.setVisible(true);
+                        History history = new History(user.getEmployee_id(), STR."Đã chỉnh sửa thông tin nhân viên ID: \{employee.getEmployee_id()} - \{employee.getEmployeeName()}");
+                        historyDAO.addHistory(history);
                     } else {
                         showAlert("Warning", "Error!");
                     }
@@ -180,6 +192,8 @@ public class EmployeeController implements Initializable {
                         clearAddEmployeeFields();
                         cb_position.setVisible(false);
                         tf_addPosition.setVisible(true);
+                        History history = new History(user.getEmployee_id(), STR."Đã thêm nhân viên ID: \{newEmployee.getEmployee_id()} - \{newEmployee.getEmployeeName()}");
+                        historyDAO.addHistory(history);
                     }
                 } else {}
             }

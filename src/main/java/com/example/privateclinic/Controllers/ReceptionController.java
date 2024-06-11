@@ -1,6 +1,7 @@
 package com.example.privateclinic.Controllers;
 
-import com.example.privateclinic.Models.Medicine;
+import com.example.privateclinic.DataAccessObject.HistoryDAO;
+import com.example.privateclinic.Models.*;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -11,8 +12,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.example.privateclinic.DataAccessObject.PatientDAO;
-import com.example.privateclinic.Models.Model;
-import com.example.privateclinic.Models.Patient;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -54,6 +53,7 @@ import java.util.*;
 import java.util.List;
 
 public class ReceptionController implements Initializable {
+
     @FXML
     private Pane btnClose;
 
@@ -82,8 +82,6 @@ public class ReceptionController implements Initializable {
     @FXML
     private TableColumn<Patient, String> tcDoctor;
 
-    @FXML
-    private TableColumn<Integer, Integer> tcNumber;
 
     @FXML
     private TableColumn<Integer, Integer> tcNumberDetails;
@@ -133,13 +131,9 @@ public class ReceptionController implements Initializable {
     @FXML
     private TableView<Patient> tvPatientDetails;
 
-    public TableView<Patient> getTvPatientDetails() {
-        return tvPatientDetails;
-    }
+    @FXML
+    private TextField tfPatientByPhone;
 
-    public void setTvPatientDetails(TableView<Patient> tvPatientDetails) {
-        this.tvPatientDetails = tvPatientDetails;
-    }
 
     @FXML
     private TextArea taPatientAddress;
@@ -152,30 +146,26 @@ public class ReceptionController implements Initializable {
     private double xOffset = 0;
     private double yOffset =0;
     Patient selectedPatient;
-
-    public ObservableList<Patient> getPatientsDetails() {
-        return patientsDetails;
-    }
-
-    public void setPatientsDetails(ObservableList<Patient> patientsDetails) {
-        this.patientsDetails = patientsDetails;
-    }
-
-    public ObservableList<Patient> getPatients() {
-        return patients;
-    }
+    public int MAX_PATIENT = patientDAO.getMaxPatient();
+    private final HistoryDAO historyDAO = new HistoryDAO();
 
     final private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+    @FXML
+    private TableColumn<Patient,String> tcPatientPhoneNumber;
 
-    Stage stagePatientData;
+    User user;
+    public void initUser(User user) {
+        this.user = user;
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setDatePickerToday();
         validatePhoneNumber();
-        searchPatientByIdAndByName();
-        setPatientList(Date.valueOf(dpDate.getValue()));
+        searchPatientByPhoneAndByName();
+        setPatientList();
         setPatientDetailList(Date.valueOf(dpDate.getValue()));
         setTableViewByDate();
         setOnOffAddDeleteBtn();
@@ -212,6 +202,32 @@ public class ReceptionController implements Initializable {
         // Đặt lịch để kiểm tra mỗi 30 giây
         timer.schedule(task, 0, 30000);
 
+
+        tfPatientBirthDay.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue) { // Mất tiêu điểm (focus)
+                String input = tfPatientBirthDay.getText();
+                String formattedDate = formatDateString(input);
+                if (formattedDate != null) {
+                    tfPatientBirthDay.setText(formattedDate);
+                    if (!isValidDate(formattedDate)) {
+                        showAlert("Invalid Date", "Ngày sinh không hợp lệ: " + formattedDate);
+                        tfPatientBirthDay.setText("");
+                    }
+                } else {
+                    showAlert("Invalid Input", "Vui lòng nhập ngày hợp lệ ở định dạng ddMMyyyy.!");
+                    tfPatientBirthDay.setText("");
+                }
+            }
+        });
+    }
+
+
+    private void setPatientList() {
+        tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+        tcPatientPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("patientPhoneNumber"));
+        ObservableList<Patient> patients = FXCollections.observableList(patientDAO.getAllPatients());
+        tvPatient.setItems(patients);
     }
 
     private void setPatientsDetailsRowClicked() {
@@ -288,9 +304,8 @@ public class ReceptionController implements Initializable {
         dpDate.setOnAction(event -> {
 
                     Date selectedDate = Date.valueOf(dpDate.getValue());
-                    setPatientList(selectedDate);
                     setPatientDetailList(selectedDate);
-                    searchPatientByIdAndByName();
+                    searchPatientByPhoneAndByName();
 
         });
     }
@@ -328,16 +343,15 @@ public class ReceptionController implements Initializable {
         });
     }
 
-    private void searchPatientByIdAndByName() {
-        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientDAO.getPatientsByDateReception(Date.valueOf(dpDate.getValue())));
-        tfPatientById.textProperty().addListener((observable, oldValue, newValue) -> {
+    private void searchPatientByPhoneAndByName() {
+        tfPatientByPhone.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
-                tvPatient.setItems(patientList);
+                tvPatient.setItems(patients);
             } else {
 
                 ObservableList<Patient> filteredList = FXCollections.observableArrayList();
-                for (Patient patient : patientList) {
-                    if (patient.getPatientId()==Integer.parseInt(newValue)) {
+                for (Patient patient : patients) {
+                    if (patient.getPatientPhoneNumber().startsWith(newValue)) {
                         filteredList.add(patient);
                     }
                 }
@@ -347,10 +361,10 @@ public class ReceptionController implements Initializable {
 
         tfPatientByName.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.isEmpty()) {
-                tvPatient.setItems(patientList);
+                tvPatient.setItems(patients);
             } else {
                 ObservableList<Patient> filteredList = FXCollections.observableArrayList();
-                for (Patient patient : patientList) {
+                for (Patient patient : patients) {
                     if (patient.getPatientName().contains(newValue)) {
                         filteredList.add(patient);
                     }
@@ -361,6 +375,11 @@ public class ReceptionController implements Initializable {
     }
 
     private void validatePhoneNumber() {
+        validatePhoneNumber(tfPatientByPhone);
+        validatePhoneNumber(tfPatientPhoneNumber);
+    }
+
+    private void validatePhoneNumber(TextField tfPatientPhoneNumber) {
         tfPatientPhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
             // Loại bỏ bất kỳ ký tự không phải là số
             String formattedPhoneNumber = newValue.replaceAll("[^\\d]", "");
@@ -387,44 +406,43 @@ public class ReceptionController implements Initializable {
         Stage stage = (Stage) btnClose.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
     }
-
-    @FXML
-    void addPatientFromDB(MouseEvent event) {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/PatientCategory.fxml"));
-            stagePatientData=createStage(loader);
-            PatientCategoryController patientCategoryController = loader.getController();
-            patientCategoryController.setController(this);
-
-    }
-
     @FXML
     void addPatientToDatabase(ActionEvent event) throws ParseException {
         // Định dạng của chuỗi ngày
-        if(checkFillData()){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-            // Phân tích chuỗi thành LocalDate
-            LocalDate localDate = LocalDate.parse(tfPatientBirthDay.getText(), formatter);
-            // Chuyển đổi LocalDate thành java.sql.Date
-            Date patientBirthDay = Date.valueOf(localDate);
-            String patientName = tfPatientName.getText();
-            String patientGender = cbPatientGender.getValue();
-            String patientPhoneNumber = tfPatientPhoneNumber.getText();
-            String patientAddress = taPatientAddress.getText();
-            Patient patient = new Patient(patientDAO.getNextPatientId(), patientName, patientGender
-                    , patientPhoneNumber, patientBirthDay, patientAddress);
-            patientDAO.addPatient(patient);
-            int index = patients.size()+1;
-            patientDAO.admitPatient(patient.getPatientId(),index);
-            patient.setReceptionId(patientDAO.getReceptionId(patient.getPatientId()));
-            patients.add(patient);
-            clearDataField();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm thành công!");
-            alert.showAndWait();
+        if (tvPatientDetails.getItems().size() >= MAX_PATIENT) {
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, STR."Đã tiếp nhận đủ \{MAX_PATIENT}  người");
+            alert1.showAndWait();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Chưa nhập đủ thông tin");
-            alert.showAndWait();
+            if (checkFillData()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                // Phân tích chuỗi thành LocalDate
+                LocalDate localDate = LocalDate.parse(tfPatientBirthDay.getText(), formatter);
+                // Chuyển đổi LocalDate thành java.sql.Date
+                Date patientBirthDay = Date.valueOf(localDate);
+                String patientName = tfPatientName.getText();
+                String patientGender = cbPatientGender.getValue();
+                String patientPhoneNumber = tfPatientPhoneNumber.getText();
+                String patientAddress = taPatientAddress.getText();
+                Patient patient = new Patient(patientDAO.getNextPatientId(), patientName, patientGender
+                        , patientPhoneNumber, patientBirthDay, patientAddress);
+                patientDAO.addPatient(patient);
+                int index = patientsDetails.size() + 1;
+                patientDAO.admitPatient(patient.getPatientId(), index);
+                patient.setReceptionId(patientDAO.getReceptionId(patient.getPatientId()));
+                patients.add(patient);
+                patientsDetails.add(patient);
+                tvPatientDetails.refresh();
+                tvPatient.refresh();
+                clearDataField();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thêm thành công!");
+                alert.showAndWait();
+                History history = new History(user.getEmployee_id(), STR."Tiếp nhận ID: \{patient.getReceptionId()} - \{patient.getPatientName()}");
+                historyDAO.addHistory(history);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Chưa nhập đủ thông tin");
+                alert.showAndWait();
+            }
         }
     }
 
@@ -437,20 +455,7 @@ public class ReceptionController implements Initializable {
         return true;
     }
 
-    private void setPatientList(Date date) {
-        tcNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatient.getItems().indexOf(cellData.getValue()) + 1).asObject());
-        tcPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
-        tcPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        patients = patientDAO.getPatientsByDateReception(date);
-        if (patients != null && !patients.isEmpty()) {
-            Platform.runLater(() -> {
-                tvPatient.getItems().clear();
-                tvPatient.setItems(patients);
-            });
-        } else {
-            tvPatient.getItems().clear();
-        }
-    }
+
 
     private void setPatientDetailList(Date date) {
         tcNumberDetails.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatientDetails.getItems().indexOf(cellData.getValue()) + 1).asObject());
@@ -486,20 +491,27 @@ public class ReceptionController implements Initializable {
 
     @FXML
     void addPatientToDetails(MouseEvent event) {
-        Patient patientToAdd = tvPatient.getSelectionModel().getSelectedItem();
-        int index = tvPatient.getItems().indexOf(patientToAdd);
-        if(checkExist(patientToAdd)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText("Bệnh nhân đã tồn tại");
-            alert.setContentText(STR."Bệnh nhân với ID \{patientToAdd.getPatientId()} đã tồn tại trong danh sách.");
-            alert.showAndWait();
+        if (tvPatientDetails.getItems().size() >= MAX_PATIENT) {
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, STR."Đã tiếp nhận đủ \{MAX_PATIENT}  người");
+            alert1.showAndWait();
+        } else {
+            Patient patientToAdd = tvPatient.getSelectionModel().getSelectedItem();
+            int index = tvPatient.getItems().indexOf(patientToAdd);
+            if (checkExist(patientToAdd)) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText("Bệnh nhân đã tồn tại");
+                alert.setContentText(STR."Bệnh nhân với ID \{patientToAdd.getPatientId()} đã tồn tại trong danh sách.");
+                alert.showAndWait();
+            } else if (patientToAdd != null && !checkExist(patientToAdd)) {
+                patientsDetails.add(patientToAdd);
+                patientDAO.admitPatient(patientToAdd.getPatientId(), index);
+                patientToAdd.setReceptionId(patientDAO.getReceptionId(patientToAdd.getPatientId()));
+                History history = new History(user.getEmployee_id(), STR."Tiếp nhận ID: \{patientToAdd.getReceptionId()} - \{patientToAdd.getPatientName()}");
+                historyDAO.addHistory(history);
+            }
+            tvPatientDetails.setItems(patientsDetails);
         }
-        else if(patientToAdd!= null && !checkExist(patientToAdd)) {
-            patientsDetails.add(patientToAdd);
-            patientDAO.admitPatient(patientToAdd.getPatientId(), index);
-        }
-        tvPatientDetails.setItems(patientsDetails);
     }
 
     private boolean checkExist(Patient patientToAdd) {
@@ -519,6 +531,8 @@ public class ReceptionController implements Initializable {
         if ( result.get() == ButtonType.OK) {
             tvPatientDetails.getItems().remove(selectedPatient);
         }
+        patientDAO.deletePatientFromAdmit(selectedPatient.getPatientId());
+
     }
 
     @FXML
@@ -578,28 +592,42 @@ public class ReceptionController implements Initializable {
 
     }
 
-    public void addPatientToList(Patient selected) {
-        patients.add(selected);
-        tvPatient.refresh();
-    }
-
-    private Stage createStage(FXMLLoader loader ) {
-        Scene scene = null;
-        try {
-            scene = new Scene(loader.load());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
-        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
-        return stage;
-    }
-
     public void minimizeReception(MouseEvent mouseEvent) {
         Model.getInstance().getViewFactory().minimizeStage((Stage) btnClose.getScene().getWindow());
+    }
+
+    private String formatDateString(String input) {
+        if (input.matches("\\d{8}")) {
+            String day = input.substring(0, 2);
+            String month = input.substring(2, 4);
+            String year = input.substring(4, 8);
+            String formattedDate = day + "/" + month + "/" + year;
+            return formattedDate;
+        } else if (input.matches("\\d{6}")) {
+            String day = input.substring(0, 2);
+            String month = input.substring(2, 4);
+            String year = "20" + input.substring(4, 6);
+            String formattedDate = day + "/" + month + "/" + year;
+            return formattedDate;
+        }
+        return null;
+    }
+
+    private boolean isValidDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate parsedDate = LocalDate.parse(date, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

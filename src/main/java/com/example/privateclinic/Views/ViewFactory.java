@@ -1,20 +1,13 @@
 package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.*;
-import com.example.privateclinic.Models.Customer;
 import com.example.privateclinic.Models.Patient;
 import com.example.privateclinic.Models.User;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -32,7 +25,6 @@ public class ViewFactory {
     Stage stageExaminationHistory = null;
     Stage stageCategoryAspirine= null;
     Stage stageCategoryDisease = null;
-    FXMLLoader receptionLoader;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -75,11 +67,14 @@ public class ViewFactory {
         }
 
     }
-    public void showReceptionWindow() {
+    public void showReceptionWindow(User user) {
         if(stageReception==null)  //xử lí mở 2 lần scene
         {
-            receptionLoader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
+            FXMLLoader receptionLoader =  new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Reception.fxml"));
             stageReception=createStage(receptionLoader);
+            ReceptionController receptionController = receptionLoader.getController();
+            receptionController.initUser(user);
+
         }
         else
         {
@@ -100,12 +95,14 @@ public class ViewFactory {
             stageExamination.toFront(); // nếu đã mở scene thì bring to front
         }
     }
-    public void showSettingWindow()
+    public void showSettingWindow(User user)
     {
         if(stageSetting==null)
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Setting.fxml"));
             stageSetting=createStage(loader);
+            SettingController settingController = loader.getController();
+            settingController.initData(user);
         }
         else
         {
