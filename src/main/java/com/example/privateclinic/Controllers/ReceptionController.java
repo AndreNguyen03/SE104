@@ -82,12 +82,8 @@ public class ReceptionController implements Initializable {
 
     @FXML
     private TableColumn<Patient, String> tcDoctor;
-
     @FXML
-    private TableColumn<Integer, Integer> tcNumber;
-
-    @FXML
-    private TableColumn<Integer, Integer> tcNumberDetails;
+    private TableColumn<Patient, Integer> tcNumberDetails;
 
     @FXML
     private TableColumn<Patient, String> tcPatientAddressDetail;
@@ -189,7 +185,6 @@ public class ReceptionController implements Initializable {
             stage.setY(mouseEvent.getScreenY()-yOffset);
         });
         setTableRowFactory(tvPatientDetails,patientDAO);
-        setPatientsDetailsRowClicked();
 
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -231,16 +226,7 @@ public class ReceptionController implements Initializable {
         tvPatient.setItems(patients);
     }
 
-    private void setPatientsDetailsRowClicked() {
-        tvPatientDetails.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                // Lấy phần tử được chọn
-                selectedPatient = newSelection;
-                // Thực hiện các thao tác với phần tử được chọn ở đây
-                // Ví dụ: Hiển thị thông tin của phần tử được chọn, xử lý các thao tác khác...
-            }
-        });
-    }
+
 
 
     public void setTableRowFactory(TableView<Patient> tvPatientDetails, PatientDAO patientDAO) {
@@ -444,9 +430,10 @@ public class ReceptionController implements Initializable {
                 Patient patient = new Patient(patientDAO.getNextPatientId(), patientName, patientGender
                         , patientPhoneNumber, patientBirthDay, patientAddress);
                 patientDAO.addPatient(patient);
-                int index = patientsDetails.size() + 1;
+                int index = patientDAO.getSerialNumber();
                 patientDAO.admitPatient(patient.getPatientId(), index);
                 patient.setReceptionId(patientDAO.getReceptionId(patient.getPatientId()));
+                patient.setPatientSerialNumber(index);
                 patients.add(patient);
                 patientsDetails.add(patient);
                 tvPatient.setItems(patients);
@@ -475,7 +462,7 @@ public class ReceptionController implements Initializable {
 
 
     private void setPatientDetailList(Date date) {
-        tcNumberDetails.setCellValueFactory(cellData -> new SimpleIntegerProperty(tvPatientDetails.getItems().indexOf(cellData.getValue()) + 1).asObject());
+        tcNumberDetails.setCellValueFactory(new PropertyValueFactory("patientSerialNumber"));
         tcPatientIdDetail.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         tcPatientNameDetail.setCellValueFactory(new PropertyValueFactory<>("patientName"));
         tcPatientGenderDetail.setCellValueFactory(new PropertyValueFactory<>("patientGender"));
@@ -513,7 +500,7 @@ public class ReceptionController implements Initializable {
             alert1.showAndWait();
         } else {
             Patient patientToAdd = tvPatient.getSelectionModel().getSelectedItem();
-            int index = patientsDetails.size() + 1;
+            int index = patientDAO.getSerialNumber();
             if (checkExist(patientToAdd)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
@@ -521,6 +508,7 @@ public class ReceptionController implements Initializable {
                 alert.setContentText(STR."Bệnh nhân với ID \{patientToAdd.getPatientId()} đã tồn tại trong danh sách.");
                 alert.showAndWait();
             } else if (patientToAdd != null && !checkExist(patientToAdd)) {
+                patientToAdd.setPatientSerialNumber(index);
                 patientsDetails.add(patientToAdd);
                 patientDAO.admitPatient(patientToAdd.getPatientId(), index);
                 patientToAdd.setReceptionId(patientDAO.getReceptionId(patientToAdd.getPatientId()));
@@ -542,10 +530,10 @@ public class ReceptionController implements Initializable {
 
     @FXML
     void detelePatientFromDetails(MouseEvent event) {
+        Patient selectedPatient = tvPatientDetails.getSelectionModel().getSelectedItem();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Xóa bệnh nhân",ButtonType.OK,ButtonType.CANCEL);
         alert.setContentText("Bạn chắc chắn muốn xóa ?");
-        Patient patient = tvPatientDetails.getSelectionModel().getSelectedItem();
-        if(patient.getDoctor()!=null)  {
+        if(selectedPatient.getDoctor()!=null)  {
             Alert alert1 = new Alert(Alert.AlertType.ERROR, STR."Không thể xoá bệnh nhân đã khám!");
             alert1.showAndWait();
             return;
@@ -553,9 +541,10 @@ public class ReceptionController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if ( result.get() == ButtonType.OK) {
             tvPatientDetails.getItems().remove(selectedPatient);
-        }
-        if(patientDAO.deletePatientFromAdmit(selectedPatient.getPatientId(),Date.valueOf(dpDate.getValue())))
+            patientDAO.deletePatientFromAdmit(selectedPatient.getPatientId(),Date.valueOf(dpDate.getValue()));
             historyDAO.addHistory(new History(user.getEmployee_id(), STR."Xoá tiếp nhận ID:  \{selectedPatient.getReceptionId()} - \{selectedPatient.getPatientName()}"));
+        }
+
     }
 
     @FXML
