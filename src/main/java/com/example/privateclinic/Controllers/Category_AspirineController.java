@@ -378,6 +378,15 @@ public class Category_AspirineController implements Initializable {
         try {
             importQuantity = Integer.parseInt(importQuantityText);
             importPrice = Double.parseDouble(importPriceText);
+            if(importQuantity<=0) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Lỗi");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Số lượng nhập phải lớn hơn 0");
+                errorAlert.showAndWait();
+                importQuantityTextField.clear();
+                return;
+            }
         } catch (NumberFormatException e) {
             // Hiển thị thông báo lỗi nếu không thể chuyển đổi sang kiểu số
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);

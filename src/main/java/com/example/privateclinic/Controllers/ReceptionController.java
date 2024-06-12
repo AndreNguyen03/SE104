@@ -37,6 +37,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.awt.*;
@@ -81,8 +82,6 @@ public class ReceptionController implements Initializable {
 
     @FXML
     private TableColumn<Patient, String> tcDoctor;
-
-
     @FXML
     private TableColumn<Patient, Integer> tcNumberDetails;
 
@@ -294,11 +293,23 @@ public class ReceptionController implements Initializable {
                     Date selectedDate = Date.valueOf(dpDate.getValue());
                     setPatientDetailList(selectedDate);
                     searchPatientByPhone();
-
+            int day = LocalDate.now().getDayOfMonth();
+            int month = LocalDate.now().getMonthValue();
+            int year = LocalDate.now().getYear();
+            if(dpDate.getValue().getDayOfMonth()!=day || dpDate.getValue().getYear()!=year|| dpDate.getValue().getMonthValue()!=month)
+            {
+                btnAddFromList.setVisible(false);
+                btnAddNewPatient.setVisible(false);
+                btnDeleteFromList.setVisible(false);
+                btnPrintWaitingSlip.setVisible(false);
+            } else {
+                btnAddFromList.setVisible(true);
+                btnAddNewPatient.setVisible(true);
+                btnDeleteFromList.setVisible(true);
+                btnPrintWaitingSlip.setVisible(true);
+            }
         });
     }
-
-
     private void setDatePickerToday() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -327,6 +338,22 @@ public class ReceptionController implements Initializable {
                 } else {
                     return null;
                 }
+            }
+        });
+        dpDate.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item.isAfter(LocalDate.now())) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #EEEEEE;");
+                        }
+                    }
+                };
             }
         });
     }
@@ -506,11 +533,18 @@ public class ReceptionController implements Initializable {
         Patient selectedPatient = tvPatientDetails.getSelectionModel().getSelectedItem();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Xóa bệnh nhân",ButtonType.OK,ButtonType.CANCEL);
         alert.setContentText("Bạn chắc chắn muốn xóa ?");
+        if(selectedPatient.getDoctor()!=null)  {
+            Alert alert1 = new Alert(Alert.AlertType.ERROR, STR."Không thể xoá bệnh nhân đã khám!");
+            alert1.showAndWait();
+            return;
+        }
         Optional<ButtonType> result = alert.showAndWait();
         if ( result.get() == ButtonType.OK) {
             tvPatientDetails.getItems().remove(selectedPatient);
             patientDAO.deletePatientFromAdmit(selectedPatient.getPatientId(),Date.valueOf(dpDate.getValue()));
+            historyDAO.addHistory(new History(user.getEmployee_id(), STR."Xoá tiếp nhận ID:  \{selectedPatient.getReceptionId()} - \{selectedPatient.getPatientName()}"));
         }
+
     }
 
     @FXML

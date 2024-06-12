@@ -678,7 +678,7 @@
                            <Font name="Segoe UI Semibold" size="18.0" />
                         </font>
                         <HBox.margin>
-                           <Insets left="15.0" />
+                           <Insets />
                         </HBox.margin>
                      </Text>
                      <Text fx:id="txtTotalFee" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">

@@ -103,6 +103,7 @@ public class MenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Report.fxml"));
         Parent reportSceneRoot = loader.load();
         mainPane.getChildren().add(reportSceneRoot);
+        titleTextField.setText("Báo cáo");
     }
 
     @FXML
