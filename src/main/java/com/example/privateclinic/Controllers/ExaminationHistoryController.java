@@ -52,7 +52,7 @@ public class ExaminationHistoryController implements Initializable {
     public TextField tf_trieuChungHistory;
     public TextField tf_maBenhChinhHistory;
     public TextField tf_tenBenhChinhHistory;
-    public TextField tf_luuYHistory;
+    public TextArea ta_luuYHistory;
     public TextField tf_maBenhPhuHistory;
     public TextField tf_tenBenhPhuHistory;
     public TextField tf_maTiepNhan;
@@ -177,7 +177,7 @@ public class ExaminationHistoryController implements Initializable {
         tf_maBenhPhuHistory.setText(String.valueOf(examination.getSubDisease().getMaBenh()));
         tf_tenBenhPhuHistory.setText(examination.getSubDisease().getTenBenh());
         tf_tenbs.setText("BS."+examination.getTenNhanVien());
-        tf_luuYHistory.setText(examination.getLuuy());
+        ta_luuYHistory.setText(examination.getLuuy());
         txtReceiptId.setText(String.valueOf(examination.getMahd()));
         tbl_kethuocHistory.setItems(detailReceipts);
         txtExamFee.setText(String.valueOf(examination.getTienkham()));

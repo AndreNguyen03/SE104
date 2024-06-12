@@ -1296,7 +1296,7 @@ public  class ExaminationController implements Initializable {
     }
 
     public void closeDisease(MouseEvent mouseEvent) {
-        if (panel_diseasesResultSearch.getLayoutY()==191) {
+        if (panel_diseasesResultSearch.getLayoutY()==210) {
             tf_maBenhChinh.clear();
             tf_tenBenhChinh.clear();
         } else  {

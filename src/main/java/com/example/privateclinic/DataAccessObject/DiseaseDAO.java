@@ -35,6 +35,7 @@ public class DiseaseDAO {
             } catch (NumberFormatException e) {
             }
         }
+        query+=" ORDER BY mabenh ASC";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query))
         {
             if(!idOrName.isEmpty()) {
