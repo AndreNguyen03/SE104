@@ -10,6 +10,15 @@ public class Patient {
     private Date patientBirth;
     private Object arrivalDate;
     private String patientAddress;
+    private int patientSerialNumber;
+
+    public int getPatientSerialNumber() {
+        return patientSerialNumber;
+    }
+
+    public void setPatientSerialNumber(int patientSerialNumber) {
+        this.patientSerialNumber = patientSerialNumber;
+    }
 
     private String doctor;
 

@@ -283,9 +283,9 @@ public class PatientDAO {
 
     public ObservableList<Patient> getPatientsByDateReception(Date date) {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
-        String query = "SELECT DISTINCT subquery.mabn, subquery.hoten, subquery.gioitinh, subquery.ngaysinh, subquery.sdt, subquery.diachi, subquery.ngayvao, subquery.hoten_nv\n" +
+        String query = "SELECT DISTINCT subquery.mabn, subquery.hoten, subquery.gioitinh, subquery.ngaysinh, subquery.sdt, subquery.diachi, subquery.ngayvao, subquery.hoten_nv,subquery.stt\n" +
                 "FROM (\n" +
-                "    SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao, nv.hoten AS hoten_nv,\n" +
+                "    SELECT bn.mabn, bn.hoten, bn.gioitinh, bn.ngaysinh, bn.sdt, bn.diachi, tn.ngayvao, nv.hoten AS hoten_nv, tn.stt,\n" +
                 "           ROW_NUMBER() OVER (PARTITION BY bn.mabn ORDER BY bn.hoten DESC) as rn\n" +
                 "    FROM benhnhan bn\n" +
                 "    JOIN tiepnhan tn ON tn.mabn = bn.mabn\n" +
@@ -293,7 +293,8 @@ public class PatientDAO {
                 "    LEFT JOIN nhanvien nv ON kb.manv = nv.manv\n" +
                 "    WHERE DATE(tn.ngayvao) = ?\n" +
                 ") AS subquery\n" +
-                "WHERE subquery.rn = 1;";
+                "WHERE subquery.rn = 1 " +
+                "ORDER BY subquery.stt ASC";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setDate(1, date);
@@ -307,6 +308,7 @@ public class PatientDAO {
                     record.setPatientPhoneNumber(resultSet.getString(5));
                     record.setPatientAddress(resultSet.getString(6));
                     record.setArrivalDate(resultSet.getObject(7));
+                    record.setPatientSerialNumber(resultSet.getInt(9));
 
                     // Kiểm tra cột thứ 8 có tồn tại không trước khi truy cập
                     try {
@@ -363,6 +365,23 @@ public class PatientDAO {
                 result = resultSet.getInt(1);
             }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    public int getSerialNumber() {
+        int result =0;
+        String query = "SELECT COALESCE(MAX(stt), 0) AS max_stt " +
+                "FROM tiepnhan " +
+                "WHERE DATE(ngayvao) = CURRENT_DATE ";
+        try(Statement statement = connectDB.databaseLink.createStatement();
+            ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                result = resultSet.getInt(1) + 1;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

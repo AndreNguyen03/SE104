@@ -344,7 +344,7 @@ public class EmployeeController implements Initializable {
         String fromEmail = "kiseryouta2003@gmail.com";
         String password = "qcqa slmu vkbr edha";
         String subject = "OTP code";
-        String body = "Your default password for Pharmacy account is " + defaultpassword;
+        String body = "Your default password for Clinic account is " + defaultpassword;
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
