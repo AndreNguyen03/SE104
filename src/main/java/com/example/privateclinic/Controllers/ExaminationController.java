@@ -542,7 +542,7 @@ public  class ExaminationController implements Initializable {
         });
 
         dp_date.setPromptText(formatterDatePicker.format(LocalDate.now()));
-        Callback<DatePicker, DateCell> dayCellFactory = new Callback<>() {
+        dp_date.setDayCellFactory(new Callback<DatePicker, DateCell>() {
             @Override
             public DateCell call(final DatePicker datePicker) {
                 return new DateCell() {
@@ -550,21 +550,15 @@ public  class ExaminationController implements Initializable {
                     public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
 
-                        // Vô hiệu hóa tất cả các ngày kể từ tháng sau về sau
-                        LocalDate today = LocalDate.now();
-                        LocalDate startOfNextMonth = today.withDayOfMonth(1).plusMonths(1);
-
-                        if (item.isAfter(startOfNextMonth.minusDays(1))) {
+                        if (item.isAfter(LocalDate.now())) {
                             setDisable(true);
-                            setStyle("-fx-background-color: #ffc0cb;"); // Màu nền tùy chọn cho các ngày bị vô hiệu hóa
+                            setStyle("-fx-background-color: #EEEEEE;");
                         }
                     }
                 };
             }
-        };
+        });
 
-        // Thiết lập dayCellFactory cho DatePicker
-        dp_date.setDayCellFactory(dayCellFactory);
         SetTAB();
     }
 
@@ -1148,7 +1142,8 @@ public  class ExaminationController implements Initializable {
                 if(prescribe.getNgay()>maxDay) maxDay = prescribe.getNgay();
             }
             LocalDate date = LocalDate.now();
-            document.add(new Paragraph(STR."\nLời dặn: \{examination.getLuuy()}                                                              Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
+            document.add(new Paragraph(STR."\nLời dặn: \{examination.getLuuy()}  "));
+            document.add(new Paragraph(        "Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
             document.add(new Paragraph(STR."Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
                 document.add(new Paragraph(STR."Toa uống:       " + maxDay +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
             document.add(new Paragraph(STR."\n\nKhám lại mang theo đơn này." , footerbold));
