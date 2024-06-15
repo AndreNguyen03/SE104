@@ -1,9 +1,10 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.ReportDAO;
-import com.example.privateclinic.Models.DrugUsageReport;
+import com.example.privateclinic.Models.Report.DoctorReport;
+import com.example.privateclinic.Models.Report.DrugUsageReport;
 import com.example.privateclinic.Models.Model;
-import com.example.privateclinic.Models.MonthlyReport;
+import com.example.privateclinic.Models.Report.MonthlyReport;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -15,21 +16,24 @@ import javafx.scene.chart.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.YearMonth;
 
 public class ReportController {
 
+    public TableView<DoctorReport> doctorUsageReportTable;
+    public TableColumn<DoctorReport,Integer> doctorSttColumn;
+    public TableColumn<DoctorReport,String>  doctorNameColumn;
+    public TableColumn<DoctorReport,String>  doctorPositionColumn;
+    public TableColumn<DoctorReport,Integer>  doctorQuantityColumn;
+    public TableColumn<DoctorReport,Integer>  doctorTotalColumn;
+    public TableColumn<DoctorReport,Integer>  doctorIDColumn;
     @FXML
     private TableView<MonthlyReport> monthlyReportTable;
 
@@ -78,13 +82,13 @@ public class ReportController {
     public Text numberProductOfMonth,numberProductOfDay;
     public Text numberExamOfMonth,numberExamOfToday;
     ReportDAO reportDAO = new ReportDAO();
-
+    ObservableList<DrugUsageReport> drugMonthUsageReports,drugYearUsageReports;
     @FXML
     public void initialize() {
         SetUp();
         SetUpTable();
-        LoadProductBarChart();
         LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
+        LoadProductMonthBarChart();
         initializeChart();
     }
 
@@ -97,8 +101,11 @@ public class ReportController {
                     LoadThreePanel(day,month,year);
                     ObservableList<MonthlyReport> observableReports = FXCollections.observableArrayList(reportDAO.getMonthlyReports(month,year));
                     monthlyReportTable.setItems(observableReports);
-                    ObservableList<DrugUsageReport> observableDrugUsageReport= FXCollections.observableArrayList(reportDAO.getDrugUsageReports(month,year));
-                    drugUsageReportTable.setItems(observableDrugUsageReport);
+                    drugMonthUsageReports= FXCollections.observableArrayList(reportDAO.getDrugUsageReports(month,year));
+                    drugUsageReportTable.setItems(drugMonthUsageReports);
+                    drugYearUsageReports = FXCollections.observableArrayList(reportDAO.getDrugYearUsageReports(year));
+                    ObservableList<DoctorReport> observableDoctorMonthlyReport = FXCollections.observableArrayList(reportDAO.getDoctorReport(month,year));
+                    doctorUsageReportTable.setItems(observableDoctorMonthlyReport);
                     LoadChar();
                 });
             } catch (InterruptedException e) {
@@ -115,10 +122,10 @@ public class ReportController {
         try {
             numberProductOfMonth.setText(reportDAO.GetNumberOfProductMonth(month,year));
             numberProductOfDay.setText(reportDAO.GetNumberOfProductToday(day,month,year));
-            valueRevenueMonth.setText((reportDAO.GetRevenueFromExamMonth(month,year)));
-            valueRevenueToday.setText((reportDAO.GetRevenueFromExamToday(day,month,year)));
-            numberExamOfMonth.setText(reportDAO.GetNumberExamOfMonth(month,year));
-            numberExamOfToday.setText(reportDAO.GetNumberExamOfToday(day,month,year));
+            valueRevenueMonth.setText((reportDAO.GetRevenueFromExamMonth(month,year))+" VNĐ");
+            valueRevenueToday.setText((reportDAO.GetRevenueFromExamToday(day,month,year))+" VNĐ");
+            numberExamOfMonth.setText(reportDAO.GetNumberExamOfMonth(month,year) + " ca");
+            numberExamOfToday.setText(reportDAO.GetNumberExamOfToday(day,month,year)+" ca");
             ConvertValueNullToZero(numberProductOfMonth,numberProductOfDay,valueRevenueMonth,valueRevenueToday,numberExamOfMonth,numberExamOfToday);
         } catch (SQLException e){
             e.printStackTrace();
@@ -136,12 +143,21 @@ public class ReportController {
 
     private void LoadChar() {
         Node node =  borderPane.getCenter();
-        if(node.getId().equals("productBart")) {
-            LoadProductBarChart();
-        } else if(node.getId().equals("productPie")) {
-            LoadProductPieChart();
+        if(node==null) return;
+        if(node.getId().equals("productMonthBar")) {
+            LoadProductMonthPieChart();
+        } else if(node.getId().equals("productMonthPie")) {
+            LoadProductMonthPieChart();
         } else if (node.getId().equals("revenueBar")) {
                 LoadRevenueBarChar();
+        } else if(node.getId().equals("productYearBar")) {
+            LoadProductYearBarChart();
+        } else if(node.getId().equals("productYearPie")) {
+            LoadProductYearPieChar();
+        } else if(node.getId().equals("patientYearBar")) {
+            LoadPatientsCountEachMonthBarChar();
+        } else if(node.getId().equals("patientMonthBar")) {
+            LoadPatientsCountEachDayBarChar();
         }
     }
 
@@ -183,33 +199,40 @@ public class ReportController {
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         usageCountColumn.setCellValueFactory(new PropertyValueFactory<>("usageCount"));
+
+        doctorSttColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(doctorUsageReportTable.getItems().indexOf(cellData.getValue()) + 1).asObject());
+        doctorNameColumn.setCellValueFactory(new PropertyValueFactory<>("employName"));
+        doctorPositionColumn.setCellValueFactory(new PropertyValueFactory<>("employPosition"));
+        doctorQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("turn"));
+        doctorTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+        doctorIDColumn.setCellValueFactory(new PropertyValueFactory<>("employId"));
     }
     private void initializeChart() {
 
     }
-    private void LoadProductPieChart() {
+    private void LoadProductMonthPieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         int count=0;
 
-        for(DrugUsageReport drug : drugUsageReportTable.getItems()) {
+        for(DrugUsageReport drug : drugMonthUsageReports) {
             if(count++==20) break;
             pieChartData.add(new PieChart.Data(drug.getDrugName(), drug.getQuantity()));
         }
         //Create PieChsrt object
         PieChart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle("Biểu đồ cơ cấu các sản phẩm bán chạy trong tháng "+cbMonth.getValue()+" năm" + cbYear.getValue());
+        pieChart.setTitle("Biểu đồ cơ cấu các sản phẩm bán chạy trong tháng "+cbMonth.getValue()+" năm " + cbYear.getValue());
         pieChart.setClockwise(true);
         pieChart.setLabelLineLength(50);
         pieChart.setLabelsVisible(true);
         pieChart.setStartAngle(180);
 
-        pieChart.setId("productPie");
+        pieChart.setId("productMonthPie");
         borderPane.setCenter(pieChart);
         if(drugUsageReportTable.getItems().isEmpty()) {
             panelNoData.setVisible(true);
         } else panelNoData.setVisible(false);
     }
-    private void LoadProductBarChart() {
+    private void LoadProductMonthBarChart() {
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Sản phẩm");
 
@@ -230,7 +253,7 @@ public class ReportController {
         barChart.getData().add(data);
 
         //add to border pane
-        barChart.setId("productBart");
+        barChart.setId("productMonthBar");
         borderPane.setCenter(barChart);
         if(drugUsageReportTable.getItems().isEmpty()) {
             panelNoData.setVisible(true);
@@ -238,67 +261,40 @@ public class ReportController {
     }
 
     private void LoadRevenueBarChar() {
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Tháng");
-
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Thu nhập (VNĐ)");
-
-        BarChart barChart = new BarChart(xAxis,yAxis);
-
-        XYChart.Series data = new XYChart.Series();
-        data.setName("Biểu đồ thống kê thu nhập trong năm "+cbYear.getValue()+" (đơn vị tháng)");
-        //provide data
-        boolean haveData = false;
-        for(int i =1 ;i <=12;i++) {
-            try {
-                int dt = reportDAO.getToTalMonth(i,cbYear.getValue());
-                if(dt>0) haveData = true;
-                data.getData().add(new XYChart.Data("Tháng "+i,dt));
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-        barChart.getData().add(data);
-        //add to border pane
-        barChart.setId("revenueBar");
-        borderPane.setCenter(barChart);
-        if(!haveData) {
-            panelNoData.setVisible(true);
-        } else panelNoData.setVisible(false);
-    }
-    public void handlePickMonth(ActionEvent event) {
-        LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
-        LoadProductPieChart();
-        LoadProductBarChart();
-    }
-    public void handlePickYear(ActionEvent event) {
-        LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
-        if (borderPane.getCenter().getId().equals("revenueBar"))
-            LoadRevenueBarChar();
-        LoadProductPieChart();
-        LoadProductBarChart();
-    }
-    public void handleRevenueBarChar(ActionEvent event) {
-        LoadRevenueBarChar();
-    }
-
-    public void handleProductPieChar(ActionEvent event) {
-        LoadProductPieChart();
-    }
-
-    public void handleProductBarChart(ActionEvent event) {
-        LoadProductBarChart();
-    }
-
-    public void handlePickDay(ActionEvent event) {
         paneProgress.setVisible(true);
         new Thread(()->{
             try {
                 Thread.sleep(1000);
                 Platform.runLater(() -> {
-                LoadThreePanel(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
-            });
+                    CategoryAxis xAxis = new CategoryAxis();
+                    xAxis.setLabel("Tháng");
+
+                    NumberAxis yAxis = new NumberAxis();
+                    yAxis.setLabel("Thu nhập (VNĐ)");
+
+                    BarChart barChart = new BarChart(xAxis,yAxis);
+
+                    XYChart.Series data = new XYChart.Series();
+                    data.setName("Biểu đồ thống kê thu nhập trong năm "+cbYear.getValue()+" (đơn vị tháng)");
+                    //provide data
+                    boolean haveData = false;
+                    for(int i =1 ;i <=12;i++) {
+                        try {
+                            int dt = reportDAO.getToTalMonth(i,cbYear.getValue());
+                            if(dt>0) haveData = true;
+                            data.getData().add(new XYChart.Data("Tháng "+i,dt));
+                        } catch (SQLException e){
+                            e.printStackTrace();
+                        }
+                    }
+                    barChart.getData().add(data);
+                    //add to border pane
+                    barChart.setId("revenueBar");
+                    borderPane.setCenter(barChart);
+                    if(!haveData) {
+                        panelNoData.setVisible(true);
+                    } else panelNoData.setVisible(false);
+                });
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -309,7 +305,216 @@ public class ReportController {
         }).start();
     }
 
+    private void LoadProductYearBarChart() {
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Sản phẩm");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Số lượng đã bán");
+
+        BarChart barChart = new BarChart(xAxis,yAxis);
+
+        XYChart.Series data = new XYChart.Series();
+        data.setName("Những sản phẩm hàng hàng đầu năm "+cbYear.getValue()+" ");
+
+        //provide data
+        /*int count=0;*/
+        for(DrugUsageReport bill : drugYearUsageReports) {
+            data.getData().add(new XYChart.Data(bill.getDrugName(),bill.getQuantity()));
+            /*if(++count==10) break;*/
+        }
+        barChart.getData().add(data);
+
+        //add to border pane
+        barChart.setId("productYearBar");
+        borderPane.setCenter(barChart);
+        if(drugUsageReportTable.getItems().isEmpty()) {
+            panelNoData.setVisible(true);
+        } else panelNoData.setVisible(false);
+    }
+    private void LoadPatientsCountEachMonthBarChar() {
+        paneProgress.setVisible(true);
+        new Thread(()->{
+            try {
+                Thread.sleep(800);
+                Platform.runLater(() -> {
+                    CategoryAxis xAxis = new CategoryAxis();
+                    xAxis.setLabel("Tháng");
+
+                    NumberAxis yAxis = new NumberAxis();
+                    yAxis.setLabel("Người");
+
+                    BarChart barChart = new BarChart(xAxis, yAxis);
+
+                    XYChart.Series data = new XYChart.Series();
+                    data.setName("Theo dõi số lượng bệnh nhân qua từng tháng (năm " + cbYear.getValue() + ")");
+
+                    //provide data
+                    /*int count=0;*/
+                    boolean haveData = false;
+                    for (int i = 1; i <= 12; i++) {
+                        int dt = reportDAO.getPatientReport(i, cbYear.getValue());
+                        if (dt > 0) haveData = true;
+                        data.getData().add(new XYChart.Data("Tháng " + i, dt));
+                    }
+                    barChart.getData().add(data);
+
+                    //add to border pane
+                    barChart.setId("patientYearBar");
+                    borderPane.setCenter(barChart);
+                    if (!haveData) {
+                        panelNoData.setVisible(true);
+                    } else panelNoData.setVisible(false);
+                });
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Platform.runLater(() -> {
+                    paneProgress.setVisible(false);
+                });
+            }
+        }).start();
+    }
+    private void LoadPatientsCountEachDayBarChar() {
+        paneProgress.setVisible(true);
+        new Thread(()->{
+            try {
+                Thread.sleep(800);
+                Platform.runLater(() -> {
+                    CategoryAxis xAxis = new CategoryAxis();
+                    xAxis.setLabel("Ngày");
+
+                    NumberAxis yAxis = new NumberAxis();
+                    yAxis.setLabel("Người");
+
+                    BarChart barChart = new BarChart(xAxis,yAxis);
+
+                    XYChart.Series data = new XYChart.Series();
+                    data.setName("Theo dõi số lượng bệnh nhân qua từng ngày (tháng "+cbMonth.getValue()+"- năm "+cbYear.getValue()+")");
+
+                    YearMonth yearMonth = YearMonth.of(cbYear.getValue(),cbMonth.getValue());
+                    int daysInMonth = yearMonth.lengthOfMonth();
+                    boolean haveData = false;
+                    for(int i =1 ;i <=daysInMonth;i++) {
+                        int dt = reportDAO.getPatientReport(i,cbMonth.getValue(),cbYear.getValue());
+                        if(dt>0) haveData = true;
+                        data.getData().add(new XYChart.Data("Ngày "+i,dt));
+                    }
+
+                    barChart.getData().add(data);
+
+                    //add to border pane
+                    barChart.setId("patientMonthBar");
+                    borderPane.setCenter(barChart);
+                    if(!haveData) {
+                        panelNoData.setVisible(true);
+                    } else panelNoData.setVisible(false);
+                });
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Platform.runLater(() -> {
+                    paneProgress.setVisible(false);
+                });
+            }
+        }).start();
+    }
+    private void LoadDoctorMonthPieChar() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        int count=0;
+
+        for(DoctorReport doctor : doctorUsageReportTable.getItems()) {
+            if(count++==20) break;
+            pieChartData.add(new PieChart.Data(doctor.getEmployId()+"-"+doctor.getEmployName(), doctor.getTotal()));
+        }
+        //Create PieChsrt object
+        PieChart pieChart = new PieChart(pieChartData);
+        pieChart.setTitle("Biểu đồ đóng góp doanh thu (nhân viên) tháng " + cbMonth.getValue());
+        pieChart.setClockwise(true);
+        pieChart.setLabelLineLength(50);
+        pieChart.setLabelsVisible(true);
+        pieChart.setStartAngle(180);
+
+        pieChart.setId("productYearPie");
+        borderPane.setCenter(pieChart);
+        if(drugUsageReportTable.getItems().isEmpty()) {
+            panelNoData.setVisible(true);
+        } else panelNoData.setVisible(false);
+
+    }
+    private void LoadProductYearPieChar() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        int count=0;
+
+        for(DrugUsageReport drug : drugYearUsageReports) {
+            if(count++==20) break;
+            pieChartData.add(new PieChart.Data(drug.getDrugName(), drug.getQuantity()));
+        }
+        //Create PieChsrt object
+        PieChart pieChart = new PieChart(pieChartData);
+        pieChart.setTitle("Biểu đồ cơ cấu các sản phẩm bán chạy trong năm " + cbYear.getValue());
+        pieChart.setClockwise(true);
+        pieChart.setLabelLineLength(50);
+        pieChart.setLabelsVisible(true);
+        pieChart.setStartAngle(180);
+
+        pieChart.setId("productYearPie");
+        borderPane.setCenter(pieChart);
+        if(drugUsageReportTable.getItems().isEmpty()) {
+            panelNoData.setVisible(true);
+        } else panelNoData.setVisible(false);
+    }
+    public void handlePickDay(ActionEvent event) {
+        paneProgress.setVisible(true);
+        new Thread(()->{
+            try {
+                Thread.sleep(1000);
+                Platform.runLater(() -> {
+                    LoadThreePanel(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
+                });
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Platform.runLater(() -> {
+                    paneProgress.setVisible(false);
+                });
+            }
+        }).start();
+    }
+    public void handlePickMonth(ActionEvent event) {
+        LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
+    }
+    public void handlePickYear(ActionEvent event) {
+        LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
+    }
+    public void handleRevenueBarChar(ActionEvent event) {
+        LoadRevenueBarChar();
+    }
+
+    public void handleProductMonthPieChar(ActionEvent event) {
+        LoadProductMonthPieChart();
+    }
+    public void handleProductYearPieChar(ActionEvent event) {
+        LoadProductYearPieChar();
+    }
+    public void handleDoctorMonthPieChar(ActionEvent event) {
+        LoadDoctorMonthPieChar();
+    }
+    public void handleProductMonthBarChart(ActionEvent event) {
+        LoadProductMonthBarChart();
+    }
+    public void handleProductYearBarChart(ActionEvent event) {
+        LoadProductYearBarChart();
+    }
     public void handleShowHistory(ActionEvent event) {
         Model.getInstance().getViewFactory().showReportHistory();
     }
+
+    public void handlePatientsCountEachMonth(ActionEvent event) {
+        LoadPatientsCountEachMonthBarChar();
+    }
+    public void handlePatientsCountEachDay(ActionEvent event) {
+        LoadPatientsCountEachDayBarChar();
+    }
+
 }

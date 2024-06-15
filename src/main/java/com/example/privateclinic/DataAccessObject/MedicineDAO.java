@@ -1,5 +1,6 @@
 package com.example.privateclinic.DataAccessObject;
 
+import com.example.privateclinic.ForeignKeyViolationException;
 import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
@@ -156,15 +157,17 @@ public class MedicineDAO {
         }
     }
 
-    public boolean deleteMedicine(int medicineId) {
+    public boolean deleteMedicine(int medicineId) throws ForeignKeyViolationException{
         String query = "DELETE FROM thuoc WHERE mathuoc = ?";
-
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
-
             statement.setInt(1, medicineId);
             return statement.executeUpdate() >0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("23503")) { // Mã lỗi cho vi phạm khóa ngoại
+                throw new ForeignKeyViolationException("Không thể xoá sản phẩm, tồn tại một quan hệ sử dụng dữ liệu!");
+            } else {
+                e.printStackTrace();
+            }
             return false;
         }
     }

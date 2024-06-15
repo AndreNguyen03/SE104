@@ -1,4 +1,4 @@
-package com.example.privateclinic.Models;
+package com.example.privateclinic.Models.Report;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

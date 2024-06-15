@@ -117,7 +117,7 @@
                <Insets />
             </opaqueInsets>
          </Button>
-         <Button id="logout" fx:id="btnLogout" layoutX="3.0" layoutY="846.0" mnemonicParsing="false" onAction="#btnLogoutClicked" onMouseClicked="#closeMenu" prefHeight="54.0" prefWidth="243.0" text="Đăng xuất" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="846.0">
+         <Button id="logout" fx:id="btnLogout" layoutX="2.0" layoutY="944.3333333333334" mnemonicParsing="false" onAction="#btnLogoutClicked" onMouseClicked="#closeMenu" prefHeight="54.0" prefWidth="243.0" text="Đăng xuất" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="944.3333333333334">
             <font>
                <Font size="19.0" />
             </font>

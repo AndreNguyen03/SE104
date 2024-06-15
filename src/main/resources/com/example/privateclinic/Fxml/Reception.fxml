@@ -52,9 +52,9 @@
                               <TextField fx:id="tfPatientByPhone" layoutX="172.0" layoutY="29.0" prefHeight="37.0" prefWidth="164.0" promptText="Số điện thoại" styleClass="input-field" />
                               <TableView fx:id="tvPatient" layoutX="8.0" layoutY="88.0" prefHeight="663.0" prefWidth="328.0">
                                 <columns>
-                                  <TableColumn fx:id="tcPatientId" prefWidth="66.0" text="Mã BN" />
-                                    <TableColumn fx:id="tcPatientName" prefWidth="210.66665649414062" text="Họ tên" />
-                                    <TableColumn fx:id="tcPatientPhoneNumber" prefWidth="120.0" text="Số điện thoại" />
+                                  <TableColumn fx:id="tcPatientId" prefWidth="53.3333101272583" text="Mã BN" />
+                                    <TableColumn fx:id="tcPatientName" prefWidth="223.33333587646484" text="Họ tên" />
+                                    <TableColumn fx:id="tcPatientPhoneNumber" prefWidth="110.0" text="Số điện thoại" />
                                 </columns>
                               </TableView>
                            </children>

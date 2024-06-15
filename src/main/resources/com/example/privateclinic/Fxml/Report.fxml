@@ -57,29 +57,47 @@
                      </children></AnchorPane>
             </content>
           </Tab>
+            <Tab text="Bác sĩ">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="doctorUsageReportTable" prefHeight="792.0" prefWidth="779.0">
+                           <columns>
+                              <TableColumn fx:id="doctorSttColumn" prefWidth="75.0" sortable="false" text="STT" />
+                              <TableColumn fx:id="doctorIDColumn" prefWidth="75.0" sortable="false" text="Mã NV" />
+                              <TableColumn fx:id="doctorNameColumn" prefWidth="153.3332748413086" sortable="false" text="Họ và tên" />
+                              <TableColumn fx:id="doctorPositionColumn" prefWidth="176.66664123535156" sortable="false" text="Vị trí" />
+                              <TableColumn fx:id="doctorQuantityColumn" prefWidth="144.66659545898438" sortable="false" text="Số lượt khám bệnh" />
+                              <TableColumn fx:id="doctorTotalColumn" prefWidth="150.6666259765625" sortable="false" text="Tổng tiền" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
-      <Pane id="expend" layoutX="814.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
+      <Pane id="expend" layoutX="814.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="240.0" styleClass="pnl">
          <children>
-            <Text fill="WHITE" layoutX="11.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng doanh thu (tháng)" />
-            <Text fx:id="valueRevenueMonth" fill="WHITE" layoutX="11.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
-            <Text fill="WHITE" layoutX="11.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Theo ngày:" />
-            <Text fx:id="valueRevenueToday" fill="WHITE" layoutX="108.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
+            <Text fill="WHITE" layoutX="11.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_small" text="Tổng doanh thu (tháng)" />
+            <Text fx:id="valueRevenueMonth" fill="WHITE" layoutX="11.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_big" text="None" />
+            <Text fill="WHITE" layoutX="11.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_small" text="Theo ngày:" />
+            <Text fx:id="valueRevenueToday" fill="WHITE" layoutX="11.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_big" text="None" />
          </children></Pane>
-      <Pane id="right" layoutX="1057.0" layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="239.0" styleClass="pnl">
+      <Pane id="right" layoutX="1092.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="240.0" styleClass="pnl">
          <children>
-            <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng lượng thuốc (tháng)" />
-            <Text fx:id="numberProductOfMonth" fill="WHITE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
-            <Text fill="WHITE" layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Theo ngày:" />
-            <Text fx:id="numberProductOfDay" fill="WHITE" layoutX="107.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_small" text="Tổng lượng thuốc (tháng)" />
+            <Text fx:id="numberProductOfMonth" fill="WHITE" layoutX="14.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_big" text="None" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_small" text="Theo ngày:" />
+            <Text fx:id="numberProductOfDay" fill="WHITE" layoutX="14.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_big" text="None" />
          </children>
       </Pane>
-      <Pane id="exam" layoutX="814.0" layoutY="144.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="219.0" styleClass="pnl">
+      <Pane id="exam" layoutX="815.0" layoutY="134.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="240.0" styleClass="pnl">
          <children>
-            <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Tổng ca khám (tháng)" />
-            <Text fx:id="numberExamOfMonth" fill="WHITE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="None" />
-            <Text fill="WHITE" layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_panel" text="Theo ngày:" />
-            <Text fx:id="numberExamOfToday" fill="WHITE" layoutX="109.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18; -fx-text-fill: white;" text="None" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_small" text="Tổng ca khám (tháng)" />
+            <Text fx:id="numberExamOfMonth" fill="WHITE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_big" text="None" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_small" text="Theo ngày:" />
+            <Text fx:id="numberExamOfToday" fill="WHITE" layoutX="14.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="lbl_big" text="None" />
          </children>
       </Pane>
       <ComboBox fx:id="cbYear" layoutX="704.0" layoutY="10.0" onAction="#handlePickYear" prefHeight="33.0" prefWidth="106.0" />
@@ -104,17 +122,38 @@
             </Text>
          </children>
       </Pane>
-      <Pane layoutX="805.0" layoutY="255.0" prefHeight="40.0" prefWidth="200.0" styleClass="container-report">
+      <Pane layoutX="805.0" layoutY="261.0" prefHeight="34.0" prefWidth="200.0" styleClass="container-report">
          <children>
-            <MenuButton id="menu-button" layoutX="5.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Tuỳ chọn biểu đồ">
+            <MenuButton id="menu-button" layoutX="5.0" layoutY="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Tuỳ chọn biểu đồ">
                <items>
                   <Menu mnemonicParsing="false" text="Thống kê bán thuốc">
+                     <items>
+                        <Menu mnemonicParsing="false" text="Biểu tròn cơ cấu">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleProductMonthPieChar" text="Tháng" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleProductYearPieChar" text="Năm" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Biểu đồ cột">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleProductMonthBarChart" text="Tháng" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleProductYearBarChart" text="Năm" />
+                           </items>
+                        </Menu>
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Thống kê bác sĩ">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleProductPieChar" text="Biểu đồ tròn cơ cấu bán thuốc" />
-                      <MenuItem mnemonicParsing="false" onAction="#handleProductBarChart" text="Biểu đồ cột thống kê tháng" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleDoctorMonthPieChar" text="Biểu đồ tháng" />
                     </items>
                   </Menu>
-                  <MenuItem mnemonicParsing="false" onAction="#handleRevenueBarChar" text="Biểu đồ doanh thu năm" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleRevenueBarChar" text="Doanh thu cả năm" />
+                  <Menu mnemonicParsing="false" text="Theo dõi số lượng bệnh nhân">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#handlePatientsCountEachMonth" text="Qua từng tháng" />
+                        <MenuItem mnemonicParsing="false" onAction="#handlePatientsCountEachDay" text="Qua từng ngày" />
+                    </items>
+                  </Menu>
                </items>
             </MenuButton>
          </children>

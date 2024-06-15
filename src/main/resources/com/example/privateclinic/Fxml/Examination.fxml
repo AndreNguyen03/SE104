@@ -380,7 +380,7 @@
                      </font>
                   </TextField>
                </children></Pane>
-            <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" onMouseClicked="#handletbl_ChosenMedicine" prefHeight="426.0" prefWidth="1197.0">
+            <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" onMouseClicked="#handletbl_ChosenMedicine" prefHeight="390.0" prefWidth="1197.0">
                <columns>
                   <TableColumn fx:id="col_stt" prefWidth="49.99999809265137" text="STT" />
                   <TableColumn fx:id="col_maThuocChosen" prefWidth="49.99999809265137" text="ID" visible="false" />

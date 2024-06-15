@@ -27,4 +27,6 @@ module com.example.privateclinic {
     exports com.example.privateclinic.Models;
     exports com.example.privateclinic.Views;
     opens com.example.privateclinic.Models to javafx.fxml;
+    exports com.example.privateclinic.Models.Report;
+    opens com.example.privateclinic.Models.Report to javafx.fxml;
 }

@@ -1,6 +1,7 @@
 package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.*;
+import com.example.privateclinic.ForeignKeyViolationException;
 import com.example.privateclinic.Models.*;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -297,16 +298,25 @@ public class Category_AspirineController implements Initializable {
             Optional<ButtonType> result = confirmDeleteAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 int medicineID = selectedMedicine.getMaThuoc();
-                if(warehouseDAO.deleteWarehouse(medicineID) && medicineDAO.deleteMedicine(medicineID))
-                    historyDAO.addHistory(new History(employee_init.getEmployee_id(),"Xoá DM thuốc ID:"+medicineID+"-"+selectedMedicine.getTenThuoc()+"" ));
-                medicineData.clear(); // Xóa dữ liệu hiện tại trong bảng
-                loadMedicineData(); // Tải lại dữ liệu từ cơ sở dữ liệu
+                try {
+                    if (warehouseDAO.deleteWarehouse(medicineID) && medicineDAO.deleteMedicine(medicineID)) {
+                        historyDAO.addHistory(new History(employee_init.getEmployee_id(), "Xoá DM thuốc ID:" + medicineID + "-" + selectedMedicine.getTenThuoc() + ""));
+                        medicineData.clear(); // Xóa dữ liệu hiện tại trong bảng
+                        loadMedicineData(); // Tải lại dữ liệu từ cơ sở dữ liệu
 
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Thành công");
-                successAlert.setHeaderText(null);
-                successAlert.setContentText("Đã xóa thuốc thành công.");
-                successAlert.showAndWait();
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Thành công");
+                        successAlert.setHeaderText(null);
+                        successAlert.setContentText("Đã xóa thuốc thành công.");
+                        successAlert.showAndWait();
+                    }
+                } catch (ForeignKeyViolationException e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Cảnh báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                }
             }
         } else {
             // Hiển thị thông báo lỗi nếu không có hàng nào được chọn

@@ -199,8 +199,12 @@
     -fx-background-color: #f6fcef;
 }
 
-.lbl_panel {
-    -fx-font-size: 18px;
+.lbl_big {
+    -fx-font-size: 26px;
+    -fx-font-family: "Segoe UI Black";
+}
+.lbl_small {
+    -fx-font-size: 17px;
     -fx-font-family: "Segoe UI Semibold";
 }
 .pnl {

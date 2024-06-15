@@ -1,4 +1,4 @@
-package com.example.privateclinic.Models;
+package com.example.privateclinic.Models.Report;
 
 public class DrugUsageReport {
     private String drugName;

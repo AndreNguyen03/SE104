@@ -2,6 +2,7 @@ package com.example.privateclinic.Controllers;
 
 import com.example.privateclinic.DataAccessObject.HistoryDAO;
 import com.example.privateclinic.DataAccessObject.UserDAO;
+import com.example.privateclinic.ForeignKeyViolationException;
 import com.example.privateclinic.Models.History;
 import com.example.privateclinic.Models.User;
 import javafx.application.Platform;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 
 import javax.mail.*;
@@ -66,7 +68,7 @@ public class EmployeeController implements Initializable {
     private TableColumn<User, String> positionColumn;
     @FXML
     private TableColumn<User, String> usernameColumn;
-
+    public Pane paneProgress;
     private final UserDAO userDAO = new UserDAO();
     private ObservableList<User> employees;
     User user;
@@ -127,9 +129,6 @@ public class EmployeeController implements Initializable {
                     // Nếu chiều dài vượt quá 10 ký tự, cắt chuỗi thành 10 ký tự đầu tiên
                     tf_addcitizenId.setText(formattedPhoneNumber.substring(0, 12));
                 }
-            } else {
-                // Nếu không bắt đầu bằng 0, giữ nguyên giá trị cũ
-                tf_addcitizenId.setText(oldValue);
             }
         });
     }
@@ -184,13 +183,21 @@ public class EmployeeController implements Initializable {
         if (selectedEmployee != null) {
             int sequence = ShowYesNoAlert("xoá "+selectedEmployee.getEmployeeName());
             if(sequence==JOptionPane.YES_OPTION) {
-                if (userDAO.deleteEmployee(selectedEmployee.getEmployee_id()))  {
-                    employees.remove(selectedEmployee);
-                    History history = new History(user.getEmployee_id(), STR."Đã xóa nhân viên ID: \{selectedEmployee.getEmployee_id()} - \{selectedEmployee.getEmployeeName()}");
-                    historyDAO.addHistory(history);
-                    loadEmployeeData();
+                try {
+                    if (userDAO.deleteEmployee(selectedEmployee.getEmployee_id()))  {
+                        employees.remove(selectedEmployee);
+                        History history = new History(user.getEmployee_id(), STR."Đã xóa nhân viên ID: \{selectedEmployee.getEmployee_id()} - \{selectedEmployee.getEmployeeName()}");
+                        historyDAO.addHistory(history);
+                        loadEmployeeData();
+                    }
+                } catch (ForeignKeyViolationException e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Cảnh báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
                 }
-            } else {}
+            }
         }
     }
 
@@ -210,41 +217,59 @@ public class EmployeeController implements Initializable {
         String position = cb_position.getValue();
         String username = tf_addEmail.getText();
         if (!name.isEmpty() && !citizenId.isEmpty() && !address.isEmpty() && !phoneNum.isEmpty() && checkEmail() && !cb_position.getValue().isEmpty()) {
-            if(btnAddEmployee.getText().equals("Lưu")) {
-                int id = Integer.parseInt(tf_maNV.getText());
-                int sequence = ShowYesNoAlert("lưu "+name);
-                if(sequence==JOptionPane.YES_OPTION) {
-                    User employee = new User(id,name, citizenId, address, phoneNum, email, position, username);
-                    if (userDAO.updateEmployee(employee)) {
-                        btnAddEmployee.setText("Thêm");
-                        loadEmployeeData();
-                        clearAddEmployeeFields();
-                        cb_position.setVisible(false);
-                        tf_addPosition.setVisible(true);
-                        History history = new History(user.getEmployee_id(), STR."Đã chỉnh sửa thông tin nhân viên ID: \{employee.getEmployee_id()} - \{employee.getEmployeeName()}");
-                        historyDAO.addHistory(history);
+        paneProgress.setVisible(true);
+        new Thread(()->{
+            try {
+                Thread.sleep(1000);
+                Platform.runLater(() -> {
+                    if(btnAddEmployee.getText().equals("Lưu")) {
+                        int id = Integer.parseInt(tf_maNV.getText());
+                        int sequence = ShowYesNoAlert("lưu "+name);
+                        if(sequence==JOptionPane.YES_OPTION) {
+                            User employee = new User(id,name, citizenId, address, phoneNum, email, position, username);
+                            if (userDAO.updateEmployee(employee)) {
+                                btnAddEmployee.setText("Thêm");
+                                loadEmployeeData();
+                                clearAddEmployeeFields();
+                                cb_position.setVisible(false);
+                                tf_addPosition.setVisible(true);
+                                History history = new History(user.getEmployee_id(), STR."Đã chỉnh sửa thông tin nhân viên ID: \{employee.getEmployee_id()} - \{employee.getEmployeeName()}");
+                                historyDAO.addHistory(history);
+                            } else {
+                                showAlert("Warning", "Error!");
+                            }
+                        }
                     } else {
-                        showAlert("Warning", "Error!");
+                        int sequence = ShowYesNoAlert("thêm "+name);
+                        if(sequence==JOptionPane.YES_OPTION) {
+                            User newEmployee = new User(name, citizenId, address, phoneNum, email, position, username);
+                            if(userDAO.addEmployee(newEmployee)) {
+                                SendDefaultPassword(newEmployee.getEmployeeEmail());
+                                loadEmployeeData();
+                                clearAddEmployeeFields();
+                                cb_position.setVisible(false);
+                                tf_addPosition.setVisible(true);
+                                History history = new History(user.getEmployee_id(), STR."Đã thêm nhân viên ID: \{newEmployee.getEmployee_id()} - \{newEmployee.getEmployeeName()}");
+                                historyDAO.addHistory(history);
+                            }
+                        }
                     }
-                }
-            } else {
-                int sequence = ShowYesNoAlert("thêm "+name);
-                if(sequence==JOptionPane.YES_OPTION) {
-                    User newEmployee = new User(name, citizenId, address, phoneNum, email, position, username);
-                    if(userDAO.addEmployee(newEmployee)) {
-                        SendDefaultPassword(newEmployee.getEmployeeEmail());
-                        loadEmployeeData();
-                        clearAddEmployeeFields();
-                        cb_position.setVisible(false);
-                        tf_addPosition.setVisible(true);
-                        History history = new History(user.getEmployee_id(), STR."Đã thêm nhân viên ID: \{newEmployee.getEmployee_id()} - \{newEmployee.getEmployeeName()}");
-                        historyDAO.addHistory(history);
-                    }
-                }
+                });
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Platform.runLater(() -> {
+                    paneProgress.setVisible(false);
+                });
             }
+        }).start();
         } else {
             showAlert("Warning","Kiểm tra lại thông tin!");
         }
+    }
+
+    private void AddEmployee() {
+
     }
 
     private boolean checkEmail() {

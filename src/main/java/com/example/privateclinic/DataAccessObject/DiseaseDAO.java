@@ -1,5 +1,6 @@
 package com.example.privateclinic.DataAccessObject;
 
+import com.example.privateclinic.ForeignKeyViolationException;
 import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.Disease;
 import com.example.privateclinic.Models.History;
@@ -137,7 +138,7 @@ public class DiseaseDAO {
         }
     }
 
-    public boolean deleteDisease(int diseaseID) {
+    public boolean deleteDisease(int diseaseID) throws ForeignKeyViolationException {
         String query = "DELETE FROM benh WHERE mabenh = ?";
 
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
@@ -145,7 +146,11 @@ public class DiseaseDAO {
             statement.setInt(1, diseaseID);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("23503")) { // Mã lỗi cho vi phạm khóa ngoại
+                throw new ForeignKeyViolationException("Không thể xoá bệnh, tồn tại một quan hệ sử dụng dữ liệu!");
+            } else {
+                e.printStackTrace();
+            }
             return false;
         }
     }

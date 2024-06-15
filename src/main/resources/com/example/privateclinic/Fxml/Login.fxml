@@ -199,7 +199,7 @@
                               <Insets left="4.0" top="4.0" />
                            </HBox.margin>
                         </ImageView>
-                        <TextField fx:id="tfUsername_Login" prefHeight="32.0" prefWidth="215.0" promptText="Username" styleClass="inputText" />
+                        <TextField fx:id="tfUsername_Login" prefHeight="32.0" prefWidth="215.0" promptText="Username (admin)" styleClass="inputText" />
                      </children>
                   </HBox>
                   <Button fx:id="btnLogin" layoutX="180.0" layoutY="268.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="112.0" text="Đăng nhập" textFill="WHITE">
@@ -222,7 +222,7 @@
                         </ImageView>
                         <Pane prefHeight="32.0" prefWidth="215.0">
                            <children>
-                              <PasswordField fx:id="pfPassword_Login" depthTest="DISABLE" onKeyTyped="#passwordFieldKeyTyped" prefHeight="32.0" prefWidth="211.0" promptText="Password" styleClass="password-field" />
+                              <PasswordField fx:id="pfPassword_Login" depthTest="DISABLE" onKeyTyped="#passwordFieldKeyTyped" prefHeight="32.0" prefWidth="211.0" promptText="Password (admin2024)" styleClass="password-field" />
                               <TextField fx:id="tfShowPasswordLogin" prefHeight="32.0" prefWidth="211.0" promptText="Password" styleClass="inputText" visible="false" />
                            </children>
                         </Pane>
@@ -270,6 +270,16 @@
                </children>
             </Pane>
             <Text fill="#2c4a05" layoutX="162.0" layoutY="494.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15; -fx-font-size: 13px;" text="\@Green UIT group">
+               <font>
+                  <Font name="Segoe UI Semibold" size="18.0" />
+               </font>
+            </Text>
+            <Text fill="#2c4a05" layoutX="1069.0" layoutY="101.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15; -fx-font-size: 13px;" text="\@OTP-Email">
+               <font>
+                  <Font name="Segoe UI Semibold" size="18.0" />
+               </font>
+            </Text>
+            <Text fill="#2c4a05" layoutX="291.0" layoutY="494.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15; -fx-font-size: 13px;" text="\@OTP-Email">
                <font>
                   <Font name="Segoe UI Semibold" size="18.0" />
                </font>

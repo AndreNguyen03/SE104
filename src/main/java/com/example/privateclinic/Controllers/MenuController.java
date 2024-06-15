@@ -151,6 +151,17 @@ public class MenuController implements Initializable {
                 btnExamination.setDisable(false);
                 btnReception.setDisable(false);
                 btnCategory.setDisable(false);
+                mainPane.getChildren().clear();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Report.fxml"));
+                Parent reportSceneRoot = null;
+                try {
+                    reportSceneRoot = loader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                mainPane.getChildren().add(reportSceneRoot);
+                titleTextField.setText("Báo cáo");
                 break;
             case "Tiếp tân":
                 btnReception.setDisable(false);

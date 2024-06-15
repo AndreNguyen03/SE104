@@ -1,5 +1,6 @@
 package com.example.privateclinic.DataAccessObject;
 
+import com.example.privateclinic.ForeignKeyViolationException;
 import com.example.privateclinic.Models.ConnectDB;
 import com.example.privateclinic.Models.User;
 import javafx.collections.FXCollections;
@@ -208,14 +209,18 @@ public class UserDAO {
         return false;
     }
 
-    public boolean deleteEmployee(int employeeId) {
+    public boolean deleteEmployee(int employeeId)  throws ForeignKeyViolationException{
         String query = "DELETE FROM nhanvien WHERE manv = ?";
         try (PreparedStatement statement = connectDB.getPreparedStatement(query)) {
             statement.setInt(1, employeeId);
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected>0) return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("23503")) { // Mã lỗi cho vi phạm khóa ngoại
+                throw new ForeignKeyViolationException("Không thể xoá nhân viên, tồn tại một quan hệ sử dụng dữ liệu!");
+            } else {
+                e.printStackTrace();
+            }
         }
         return false;
     }

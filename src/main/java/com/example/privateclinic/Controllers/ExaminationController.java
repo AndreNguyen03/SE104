@@ -1142,8 +1142,8 @@ public  class ExaminationController implements Initializable {
                 if(prescribe.getNgay()>maxDay) maxDay = prescribe.getNgay();
             }
             LocalDate date = LocalDate.now();
-            document.add(new Paragraph(STR."\nLời dặn: \{examination.getLuuy()}  "));
-            document.add(new Paragraph(        "Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
+            document.add(new Paragraph(STR."\nLời dặn: \{examination.getLuuy()}  ", boldFont));
+            document.add(new Paragraph(       "                                                                                            Ngày "+date.getDayOfMonth()+ " tháng " + date.getMonthValue() + " năm " + date.getYear(), boldFont));
             document.add(new Paragraph(STR."Cộng khoản:     " + index +"                                                                        Bác sĩ/Y sĩ khám bệnh", boldFont));
                 document.add(new Paragraph(STR."Toa uống:       " + maxDay +" ngày" +"                                                              (Ký, ghi rõ họ tên)" , regularFont));
             document.add(new Paragraph(STR."\n\nKhám lại mang theo đơn này." , footerbold));
