@@ -9,8 +9,6 @@ public class Examination {
     int matn;
     int mabn;
     LocalDateTime ngay;
-    /*int maBenhChinh;
-    int maBenhPhu;*/
     Disease mainDisease;
     Disease subDisease;
     String luuy;
@@ -22,15 +20,6 @@ public class Examination {
     public Examination() {
     }
 
-   /* public Examination(int receptionId, int manv, int mabn, int maBenhChinh, int maBenhPhu, String trieuchung, String luuy) {
-        this.matn = receptionId;
-        this.manv = manv;
-        this.mabn = mabn;
-        this.maBenhChinh = maBenhChinh;
-        this.maBenhPhu = maBenhPhu;
-        this.trieuChung = trieuchung;
-        this.luuy = luuy;
-    }*/
    public Examination(int receptionId, int manv,String employee_name, int mabn, Disease _mainDisease, Disease _subDisease, String trieuchung, String luuy) {
        this.matn = receptionId;
        this.manv = manv;
