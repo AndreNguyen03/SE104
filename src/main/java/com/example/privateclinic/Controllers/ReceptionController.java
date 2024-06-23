@@ -371,7 +371,6 @@ public class ReceptionController implements Initializable {
                     }
                 }
 
-
                 tvPatient.setItems(filteredList);
             }
         });

@@ -35,7 +35,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Text layoutX="118.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Thông tin nhân viên" />
+            <Text layoutX="149.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt" text="Thông tin nhân viên" />
             <ImageView fitHeight="54.0" fitWidth="113.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Images/Clinic_hori.png" />

@@ -91,7 +91,7 @@
             </TextField>
          </children>
       </HBox>
-      <TitledPane animated="false" collapsible="false" layoutX="390.0" layoutY="22.0" prefHeight="241.0" prefWidth="595.0" text="Thêm nhân viên">
+      <TitledPane animated="false" collapsible="false" layoutX="390.0" layoutY="22.0" prefHeight="241.0" prefWidth="595.0" text="Quản lý nhân viên">
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="198.0" prefWidth="605.0" style="-fx-background-color: ffffff;">
                <children>

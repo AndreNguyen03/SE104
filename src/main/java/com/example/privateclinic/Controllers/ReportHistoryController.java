@@ -104,6 +104,7 @@ public class ReportHistoryController implements Initializable {
                 if (time_remaining == 1) {
                     lblRefresh.setText("Đang làm mới.....");
                     System.out.println("Lam moi");
+                    lblToday.setText(LocalDateTime.now().format(formatter));
                     if(!cbDay.isVisible()) LoadData(0,cbMonth.getValue(),cbYear.getValue());
                     else LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
                 }

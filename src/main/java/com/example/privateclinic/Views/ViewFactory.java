@@ -1,6 +1,7 @@
 package com.example.privateclinic.Views;
 
 import com.example.privateclinic.Controllers.*;
+import com.example.privateclinic.Models.ExaminationHistory;
 import com.example.privateclinic.Models.Patient;
 import com.example.privateclinic.Models.User;
 import javafx.geometry.Rectangle2D;
@@ -26,7 +27,6 @@ public class ViewFactory {
     Stage stageCategoryAspirine= null;
     Stage stageCategoryDisease = null;
     Stage stageReportHistory = null;
-    FXMLLoader receptionLoader;
     public void showLoginWindow() {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Login.fxml"));
@@ -111,17 +111,21 @@ public class ViewFactory {
             stageSetting.toFront();
         }
     }
-    public void showHistoryExamination(Patient patient, ExaminationController _examinationController,boolean fromWaitingList)
+    public void showHistoryExamination(Patient patient, ExaminationController _examinationController, boolean fromWaitingList, ExaminationHistory examinationHistory)
     {
         if(stageExaminationHistory==null) //xử lí mở 2 lần scene
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/ExaminationHistory.fxml"));
             stageExaminationHistory=createStage(loader);
             ExaminationHistoryController examHistoryController = loader.getController();
-            examHistoryController.initData(patient,_examinationController,fromWaitingList);
+            examHistoryController.initData(patient,_examinationController,fromWaitingList,examinationHistory);
         }
-        else
-        {
+        else {
+            closeStage(stageExaminationHistory);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/ExaminationHistory.fxml"));
+            stageExaminationHistory=createStage(loader);
+            ExaminationHistoryController examHistoryController = loader.getController();
+            examHistoryController.initData(patient,_examinationController,fromWaitingList,examinationHistory);
             stageExaminationHistory.toFront(); // nếu đã mở scene thì bring to front
         }
     }
@@ -154,7 +158,7 @@ public class ViewFactory {
             stageReportHistory.toFront();
         }
     }
-    private Stage createStage(FXMLLoader loader ) {
+    private Stage createStage(FXMLLoader loader) {
         Scene scene = null;
         try {
             scene = new Scene(loader.load());

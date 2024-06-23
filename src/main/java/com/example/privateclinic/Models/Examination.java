@@ -8,11 +8,12 @@ public class Examination {
     int manv;
     int matn;
     int mabn;
-    LocalDateTime ngay;
+    String ngay;
     Disease mainDisease;
     Disease subDisease;
     String luuy;
     String trieuChung;
+
     String tenNhanVien;
     int mahd;
     int tienkham;
@@ -47,29 +48,13 @@ public class Examination {
         this.manv = manv;
     }
 
-    public LocalDateTime getNgay() {
+    public String getNgay() {
         return ngay;
     }
 
-    public void setNgay(LocalDateTime ngay) {
+    public void setNgay(String ngay) {
         this.ngay = ngay;
     }
-
-/*    public int getMaBenhChinh() {
-        return maBenhChinh;
-    }
-
-    public void setMaBenhChinh(int maBenhChinh) {
-        this.maBenhChinh = maBenhChinh;
-    }
-
-    public int getMaBenhPhu() {
-        return maBenhPhu;
-    }
-
-    public void setMaBenhPhu(int maBenhPhu) {
-        this.maBenhPhu = maBenhPhu;
-    }*/
 
     public Disease getMainDisease() {
         return mainDisease;

@@ -111,6 +111,9 @@ public  class ExaminationController implements Initializable {
     public Button btnCancel;
     public Button btnCallPatient;
     public Button btnInToaThuoc;
+    public Text totalMedicineFee;
+    public Text totalFee;
+    public HBox hboxTotal;
     @FXML
     RadioButton rad_patientWaiting,rad_patientDone;
     public Label  lbl_soLuong;
@@ -231,6 +234,7 @@ public  class ExaminationController implements Initializable {
         panelLeft.setVisible(bool);
         panelRight.setVisible(bool);
         tpkeThuoc.setDisable(!bool);
+        hboxTotal.setVisible(!bool);
         tp_thongTin.setVisible(!bool);
         tp_khamBenh.setVisible(!bool);
         paneBlock.setVisible(bool);
@@ -978,13 +982,11 @@ public  class ExaminationController implements Initializable {
         pane_optionPatient.setDisable(false);
         tpkeThuoc.setDisable(false);
         tp_khamBenh.setDisable(false);
-        tp_thongTin.setDisable(false);
     }
 
     private void SetDisable() {
         tpkeThuoc.setDisable(true);
         tp_khamBenh.setDisable(true);
-        tp_thongTin.setDisable(true);
         lbl_noMedicineResult.setVisible(true);
         if(tbl_customer.getItems().isEmpty()) lbl_noPatientResult.setVisible(true); else lbl_noPatientResult.setVisible(false);
         if(tbl_chosenMedicine.getItems().isEmpty()) lbl_noPickMedicine.setVisible(true); else lbl_noPickMedicine.setVisible(false);
@@ -1027,11 +1029,11 @@ public  class ExaminationController implements Initializable {
                         textField.setText(newValue.replaceAll("[^\\d]", "0"));
                     }
                 }
-                UpTotal();
+                UpdateAmountMedicine();
             });
         }
     }
-    private void UpTotal() {
+    private void UpdateAmountMedicine() {
        int total =0;
        int ngay = tf_ngay.getText().isBlank()? 1:Integer.parseInt(tf_ngay.getText().trim());
        int sang= tf_sang.getText().isBlank() ? 0 : Integer.parseInt(tf_sang.getText().trim());
@@ -1087,9 +1089,6 @@ public  class ExaminationController implements Initializable {
         alert.showAndWait();
     }
     private int ShowYesNoAlert(String string) {
-/*        JFrame frame = new JFrame("Table Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);*/
         return JOptionPane.showConfirmDialog(null, "Có phải bạn muốn " + string + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
         );
     }
@@ -1378,7 +1377,7 @@ public  class ExaminationController implements Initializable {
     public void handlebtnLichSuKham(ActionEvent event) {
         if(patientChosenBefore!=null) {
             boolean fromWaitingList = CheckPatientInWaitingList(patientChosenBefore);
-            Model.getInstance().getViewFactory().showHistoryExamination(patientChosenBefore,ExaminationController.this,fromWaitingList);
+            Model.getInstance().getViewFactory().showHistoryExamination(patientChosenBefore,ExaminationController.this,fromWaitingList,null);
         }
     }
 
@@ -1471,6 +1470,7 @@ public  class ExaminationController implements Initializable {
             if(checkFillMedicine())
             {
                 addMedicineToMedicineTable(medicineChosenBefore.getMaThuoc(), medicineChosenBefore.getGiaBan(),-1);
+                AutoUpdateTotalPay();
                 lbl_noPickMedicine.setVisible(false);
                 SetDisableKeThuoc(true);
                 ResetTF_KeThuoc();
@@ -1490,6 +1490,20 @@ public  class ExaminationController implements Initializable {
             } else showAlert("Warning",_message);
         }
         tbl_chosenMedicine.requestFocus();
+    }
+
+    private void AutoUpdateTotalPay() {
+        ObservableList<Receipt> list = tbl_chosenMedicine.getItems();
+        int totalMedicine =0, total;
+        for(Receipt receipt : list) {
+            totalMedicine += receipt.getDonGia();
+        }
+        if(examfee.getText().isEmpty()||examfee.getText().equals("0"))
+            total = totalMedicine;
+        else
+            total = Integer.parseInt(examfee.getText()) + totalMedicine;
+        totalMedicineFee.setText(totalMedicine + "VNĐ");
+        totalFee.setText(total + "VNĐ");
     }
 
     public void handlebtnXoa(ActionEvent event) {

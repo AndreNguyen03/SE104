@@ -41,4 +41,45 @@ public class ExaminationHistory {
     public void setExamination(Examination examination) {
         this.examination = examination;
     }
+
+    public String getPatientName() {
+        return patient.getPatientName();
+    }
+    public int getPatientId() {
+        return patient.getPatientId();
+    }
+    public String getPatientPhoneNumber() {
+        return patient.getPatientPhoneNumber();
+    }
+    public int getNumber() {
+        return patient.getNumber();
+    }
+
+    public String getPatientAddress() {
+        return patient.getPatientAddress();
+    }
+    public String getTenNhanVien() {
+        return examination.getTenNhanVien();
+    }
+    public String getNgay() {
+        return examination.getNgay();
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public int getMatn() {
+        return examination.getMatn();
+    }
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+    public String getTenBenh() {
+        return examination.getMainDisease().getTenBenh();
+    }
+    public String getTrieuChung() {
+        return examination.getTrieuChung();
+    }
+
 }

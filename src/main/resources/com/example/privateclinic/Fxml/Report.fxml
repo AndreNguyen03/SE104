@@ -18,7 +18,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1356.0" styleClass="container-report" stylesheets="@../Styles/Report.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.ReportController">
    <children>
-      <TabPane layoutX="22.0" layoutY="48.0" prefHeight="823.0" prefWidth="779.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="22.0" layoutY="72.0" prefHeight="799.0" prefWidth="779.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab style="-fx-font-size: 16;" text="Doanh thu tháng">
             <content>
@@ -170,5 +170,6 @@
          </children>
       </Pane>
       <Button id="add" fx:id="btnLuu" layoutX="1096.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleShowHistory" prefHeight="53.0" prefWidth="68.0" style="-fx-pref-width: 200;" text="Lịch sử hoạt động" />
+      <Button id="add" layoutX="22.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleReFresh" prefHeight="53.0" prefWidth="68.0" style="-fx-pref-width: 150;" text="Làm mới" />
    </children>
 </AnchorPane>

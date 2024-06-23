@@ -134,6 +134,14 @@
             </cursor>
          </Button>
          <Pane id="panelHover" layoutY="1.0" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleLogo" prefHeight="248.0" prefWidth="249.0" style="-fx-background-color: D8FDA47E;" />
+         <Button id="menu_button" fx:id="btnPatient" layoutX="3.0" layoutY="613.0" mnemonicParsing="false" onAction="#btnPatientClicked" prefHeight="54.0" prefWidth="243.0" text="Bệnh nhân">
+            <font>
+               <Font size="19.0" />
+            </font>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </Button>
       </AnchorPane>
       <Pane fx:id="mainPane" layoutX="250.0" layoutY="119.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1350.0">
          <children>

@@ -379,6 +379,42 @@
                         <Font name="Segoe UI" size="14.0" />
                      </font>
                   </TextField>
+                  <HBox fx:id="hboxTotal" layoutX="14.0" layoutY="65.0" prefHeight="27.0" prefWidth="494.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thuốc:">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text fx:id="totalMedicineFee" fill="#0f9d58" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px; -fx-font-family: Segoe UI Black;" text="0">
+                           <font>
+                              <Font name="Segoe UI Black" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" top="2.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền thanh toán:">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="50.0" top="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <Text fx:id="totalFee" fill="#0f9d58" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 18px; -fx-font-family: Segoe UI Black;" text="0">
+                           <font>
+                              <Font name="Segoe UI Black" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" top="2.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
+                  </HBox>
                </children></Pane>
             <TableView id="tableview-main" fx:id="tbl_chosenMedicine" layoutX="11.0" layoutY="108.0" onMouseClicked="#handletbl_ChosenMedicine" prefHeight="390.0" prefWidth="1197.0">
                <columns>

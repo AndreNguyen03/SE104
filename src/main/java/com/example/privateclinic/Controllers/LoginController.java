@@ -464,16 +464,6 @@ public class LoginController implements Initializable {
     @FXML
     void close(MouseEvent event) {
         Stage s = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        s.close();
-    }
-
-    public void showLogin() {
-        Model.getInstance().getViewFactory().showLoginWindow();
-    }
-
-    @FXML
-    void minimize(MouseEvent event) {
-        Stage s = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        s.setIconified(true);
+        Model.getInstance().getViewFactory().closeStage(s);
     }
 }

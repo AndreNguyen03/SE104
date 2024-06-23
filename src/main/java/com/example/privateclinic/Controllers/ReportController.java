@@ -89,27 +89,23 @@ public class ReportController {
         SetUpTable();
         LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
         LoadProductMonthBarChart();
-        initializeChart();
     }
 
     private void LoadData(int day,int month,int year) {
         paneProgress.setVisible(true);
         new Thread(()->{
             try {
-                Thread.sleep(1000);
+                LoadThreePanel(day,month,year);
+                ObservableList<MonthlyReport> observableReports = FXCollections.observableArrayList(reportDAO.getMonthlyReports(month,year));
+                drugMonthUsageReports= FXCollections.observableArrayList(reportDAO.getDrugUsageReports(month,year));
+                drugYearUsageReports = FXCollections.observableArrayList(reportDAO.getDrugYearUsageReports(year));
+                ObservableList<DoctorReport> observableDoctorMonthlyReport = FXCollections.observableArrayList(reportDAO.getDoctorReport(month,year));
                 Platform.runLater(() -> {
-                    LoadThreePanel(day,month,year);
-                    ObservableList<MonthlyReport> observableReports = FXCollections.observableArrayList(reportDAO.getMonthlyReports(month,year));
-                    monthlyReportTable.setItems(observableReports);
-                    drugMonthUsageReports= FXCollections.observableArrayList(reportDAO.getDrugUsageReports(month,year));
-                    drugUsageReportTable.setItems(drugMonthUsageReports);
-                    drugYearUsageReports = FXCollections.observableArrayList(reportDAO.getDrugYearUsageReports(year));
-                    ObservableList<DoctorReport> observableDoctorMonthlyReport = FXCollections.observableArrayList(reportDAO.getDoctorReport(month,year));
                     doctorUsageReportTable.setItems(observableDoctorMonthlyReport);
-                    LoadChar();
-                });
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                    monthlyReportTable.setItems(observableReports);
+                    drugUsageReportTable.setItems(drugMonthUsageReports);
+                        });
+                LoadChar();
             } finally {
                 Platform.runLater(() -> {
                     paneProgress.setVisible(false);
@@ -207,9 +203,6 @@ public class ReportController {
         doctorTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
         doctorIDColumn.setCellValueFactory(new PropertyValueFactory<>("employId"));
     }
-    private void initializeChart() {
-
-    }
     private void LoadProductMonthPieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         int count=0;
@@ -225,12 +218,13 @@ public class ReportController {
         pieChart.setLabelLineLength(50);
         pieChart.setLabelsVisible(true);
         pieChart.setStartAngle(180);
-
-        pieChart.setId("productMonthPie");
-        borderPane.setCenter(pieChart);
-        if(drugUsageReportTable.getItems().isEmpty()) {
-            panelNoData.setVisible(true);
-        } else panelNoData.setVisible(false);
+        Platform.runLater(() -> {
+            pieChart.setId("productMonthPie");
+            borderPane.setCenter(pieChart);
+            if(drugUsageReportTable.getItems().isEmpty()) {
+                panelNoData.setVisible(true);
+            } else panelNoData.setVisible(false);
+        });
     }
     private void LoadProductMonthBarChart() {
         CategoryAxis xAxis = new CategoryAxis();
@@ -264,8 +258,6 @@ public class ReportController {
         paneProgress.setVisible(true);
         new Thread(()->{
             try {
-                Thread.sleep(1000);
-                Platform.runLater(() -> {
                     CategoryAxis xAxis = new CategoryAxis();
                     xAxis.setLabel("Tháng");
 
@@ -287,16 +279,15 @@ public class ReportController {
                             e.printStackTrace();
                         }
                     }
+                if(!haveData) {
+                    panelNoData.setVisible(true);
+                } else panelNoData.setVisible(false);
+                Platform.runLater(() -> {
                     barChart.getData().add(data);
                     //add to border pane
                     barChart.setId("revenueBar");
                     borderPane.setCenter(barChart);
-                    if(!haveData) {
-                        panelNoData.setVisible(true);
-                    } else panelNoData.setVisible(false);
                 });
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             } finally {
                 Platform.runLater(() -> {
                     paneProgress.setVisible(false);
@@ -336,38 +327,34 @@ public class ReportController {
         paneProgress.setVisible(true);
         new Thread(()->{
             try {
-                Thread.sleep(800);
+                CategoryAxis xAxis = new CategoryAxis();
+                xAxis.setLabel("Tháng");
+
+                NumberAxis yAxis = new NumberAxis();
+                yAxis.setLabel("Người");
+
+                BarChart barChart = new BarChart(xAxis, yAxis);
+
+                XYChart.Series data = new XYChart.Series();
+                data.setName("Theo dõi số lượng bệnh nhân qua từng tháng (năm " + cbYear.getValue() + ")");
+
+                //provide data
+                /*int count=0;*/
+                boolean haveData = false;
+                for (int i = 1; i <= 12; i++) {
+                    int dt = reportDAO.getPatientReport(i, cbYear.getValue());
+                    if (dt > 0) haveData = true;
+                    data.getData().add(new XYChart.Data("Tháng " + i, dt));
+                }
+                if (!haveData) {
+                    panelNoData.setVisible(true);
+                } else panelNoData.setVisible(false);
                 Platform.runLater(() -> {
-                    CategoryAxis xAxis = new CategoryAxis();
-                    xAxis.setLabel("Tháng");
-
-                    NumberAxis yAxis = new NumberAxis();
-                    yAxis.setLabel("Người");
-
-                    BarChart barChart = new BarChart(xAxis, yAxis);
-
-                    XYChart.Series data = new XYChart.Series();
-                    data.setName("Theo dõi số lượng bệnh nhân qua từng tháng (năm " + cbYear.getValue() + ")");
-
-                    //provide data
-                    /*int count=0;*/
-                    boolean haveData = false;
-                    for (int i = 1; i <= 12; i++) {
-                        int dt = reportDAO.getPatientReport(i, cbYear.getValue());
-                        if (dt > 0) haveData = true;
-                        data.getData().add(new XYChart.Data("Tháng " + i, dt));
-                    }
                     barChart.getData().add(data);
-
                     //add to border pane
                     barChart.setId("patientYearBar");
                     borderPane.setCenter(barChart);
-                    if (!haveData) {
-                        panelNoData.setVisible(true);
-                    } else panelNoData.setVisible(false);
                 });
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             } finally {
                 Platform.runLater(() -> {
                     paneProgress.setVisible(false);
@@ -380,7 +367,6 @@ public class ReportController {
         new Thread(()->{
             try {
                 Thread.sleep(800);
-                Platform.runLater(() -> {
                     CategoryAxis xAxis = new CategoryAxis();
                     xAxis.setLabel("Ngày");
 
@@ -397,18 +383,17 @@ public class ReportController {
                     boolean haveData = false;
                     for(int i =1 ;i <=daysInMonth;i++) {
                         int dt = reportDAO.getPatientReport(i,cbMonth.getValue(),cbYear.getValue());
-                        if(dt>0) haveData = true;
+                        if(dt>0&&!haveData) haveData = true;
                         data.getData().add(new XYChart.Data("Ngày "+i,dt));
                     }
-
-                    barChart.getData().add(data);
-
+                if(!haveData) {
+                    panelNoData.setVisible(true);
+                } else panelNoData.setVisible(false);
+                Platform.runLater(() -> {
                     //add to border pane
                     barChart.setId("patientMonthBar");
                     borderPane.setCenter(barChart);
-                    if(!haveData) {
-                        panelNoData.setVisible(true);
-                    } else panelNoData.setVisible(false);
+                    barChart.getData().add(data);
                 });
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -517,4 +502,7 @@ public class ReportController {
         LoadPatientsCountEachDayBarChar();
     }
 
+    public void handleReFresh(ActionEvent event) {
+        LoadData(cbDay.getValue(),cbMonth.getValue(),cbYear.getValue());
+    }
 }

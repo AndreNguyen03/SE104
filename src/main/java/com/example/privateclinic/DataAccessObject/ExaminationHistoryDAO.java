@@ -17,14 +17,16 @@ public class ExaminationHistoryDAO {
     DiseaseDAO diseaseDAO = new DiseaseDAO();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public  ObservableList<ExaminationHistory> getHistoryExaminationByDate(int id, int year)
+    public  ObservableList<ExaminationHistory> getHistoryExaminationByYear(int id,int year)
     {
         ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
         String query = "SELECT DISTINCT hd.*, kb.*, bn.*, tn.*, b1.mabenh AS maBenhChinh, b2.mabenh AS maBenhPhu, nv.hoten as tenbs " +
-                "FROM khambenh kb JOIN benh b1 ON b1.mabenh = kb.benhchinh LEFT JOIN benh b2 ON b2.mabenh = kb.benhphu JOIN benhnhan bn ON bn.mabn = ? JOIN tiepnhan tn ON tn.matn = kb.matn AND bn.mabn = tn.mabn JOIN hoadon hd ON hd.makb = kb.makb JOIN nhanvien nv ON nv.manv = kb.manv WHERE EXTRACT(YEAR FROM kb.ngay) <= ?";
+                "FROM khambenh kb JOIN benh b1 ON b1.mabenh = kb.benhchinh LEFT JOIN benh b2 ON b2.mabenh = kb.benhphu JOIN benhnhan bn ON bn.mabn = ? JOIN tiepnhan tn ON tn.matn = kb.matn AND bn.mabn = tn.mabn JOIN hoadon hd ON hd.makb = kb.makb JOIN nhanvien nv ON nv.manv = kb.manv ";
+                if(year>0) query+="WHERE EXTRACT(YEAR FROM kb.ngay) = ? ";
+        query+= "ORDER BY kb.ngay DESC";
         try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
             statement.setInt(1, id);
-            statement.setInt(2, year);
+            if(year>0) statement.setInt(2, year);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Patient patient = new Patient();
@@ -44,7 +46,122 @@ public class ExaminationHistoryDAO {
                     examination.setTenNhanVien(getEmployee(examination.getManv()));
                     examination.setMainDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhChinh")));
                     examination.setSubDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhPhu")));
-                    examination.setNgay(LocalDateTime.parse(resultSet.getString("ngay"),formatter));
+                    examination.setNgay(resultSet.getString("ngay"));
+                    examination.setTrieuChung(resultSet.getString("trieuchung"));
+                    examination.setLuuy(resultSet.getString("luuy"));
+                    examination.setTienkham(resultSet.getInt("tienkham"));
+                    examination.setTienthuoc(resultSet.getInt("tienthuoc"));
+                    examination.setMahd(resultSet.getInt("mahd"));
+                    examination.setTenNhanVien(resultSet.getString("tenbs"));
+                    ObservableList<Receipt> receipt = getDetailReceipt(examination.getMakb());
+
+                    ExaminationHistory examinationHistory = new ExaminationHistory(patient,examination,receipt);
+                    examinations.add(examinationHistory);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return examinations;
+    }
+    public  ObservableList<ExaminationHistory> getAllPayslipDayToDay(java.sql.Date dateFrom, java.sql.Date  dateTo)
+    {
+        ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
+        String query = "SELECT DISTINCT hd.*, kb.*, bn.*, tn.*, b1.mabenh AS maBenhChinh, b2.mabenh AS maBenhPhu, nv.hoten as tenbs " +
+                "FROM benhnhan bn " +
+                "JOIN tiepnhan tn ON bn.mabn = tn.mabn " +
+                "JOIN khambenh kb ON tn.matn = kb.matn " +
+                "JOIN hoadon hd ON hd.makb = kb.makb " +
+                "JOIN nhanvien nv ON nv.manv = kb.manv " +
+                "JOIN benh b1 ON b1.mabenh = kb.benhchinh " +
+                "LEFT JOIN benh b2 ON b2.mabenh = kb.benhphu " +
+                "WHERE kb.ngay::date >= ? AND kb.ngay::date <= ? ";
+        query+= "ORDER BY kb.ngay DESC";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            statement.setDate(1, dateFrom);
+            statement.setDate(2, dateTo);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Patient patient = new Patient();
+                    patient.setPatientId(resultSet.getInt("mabn"));
+                    patient.setPatientName(resultSet.getString("hoten"));
+                    patient.setPatientGender(resultSet.getString("gioitinh"));
+                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
+                    patient.setPatientAddress(resultSet.getString("diachi"));
+                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
+                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
+                    patient.setNumber(resultSet.getInt("stt"));
+
+                    Examination examination = new Examination();
+                    examination.setMatn(resultSet.getInt("matn"));
+                    examination.setManv(resultSet.getInt("manv"));
+                    examination.setMakb(resultSet.getInt("makb"));
+                    examination.setTenNhanVien(getEmployee(examination.getManv()));
+                    examination.setMainDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhChinh")));
+                    examination.setSubDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhPhu")));
+                    examination.setNgay(resultSet.getString("ngay"));
+                    examination.setTrieuChung(resultSet.getString("trieuchung"));
+                    examination.setLuuy(resultSet.getString("luuy"));
+                    examination.setTienkham(resultSet.getInt("tienkham"));
+                    examination.setTienthuoc(resultSet.getInt("tienthuoc"));
+                    examination.setMahd(resultSet.getInt("mahd"));
+                    examination.setTenNhanVien(resultSet.getString("tenbs"));
+                    ObservableList<Receipt> receipt = getDetailReceipt(examination.getMakb());
+
+                    ExaminationHistory examinationHistory = new ExaminationHistory(patient,examination,receipt);
+                    examinations.add(examinationHistory);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return examinations;
+    }
+    public  ObservableList<ExaminationHistory> getAllHistoryExamination(int day,int month, int year)
+    {
+        ObservableList<ExaminationHistory> examinations = FXCollections.observableArrayList();
+        String query = "SELECT DISTINCT hd.*, kb.*, bn.*, tn.*, b1.mabenh AS maBenhChinh, b2.mabenh AS maBenhPhu, nv.hoten as tenbs " +
+                "FROM benhnhan bn " +
+                "JOIN tiepnhan tn ON bn.mabn = tn.mabn " +
+                "JOIN khambenh kb ON tn.matn = kb.matn " +
+                "JOIN hoadon hd ON hd.makb = kb.makb " +
+                "JOIN nhanvien nv ON nv.manv = kb.manv " +
+                "JOIN benh b1 ON b1.mabenh = kb.benhchinh " +
+                "LEFT JOIN benh b2 ON b2.mabenh = kb.benhphu " ;
+
+
+        if(year>0) query+="WHERE EXTRACT(YEAR FROM kb.ngay) = ? ";
+        if( day>0) query+="AND EXTRACT(DAY FROM kb.ngay) = ? ";
+        if(month>0) query+="AND EXTRACT(MONTH FROM kb.ngay) = ? ";
+        query+= "ORDER BY kb.ngay DESC";
+        try (PreparedStatement statement = connectDB.databaseLink.prepareStatement(query)) {
+            if(year>0) statement.setInt(1, year);
+            if(day>0) {
+                statement.setInt(2,day);
+                if(month>0) statement.setInt(3,month);
+            } else {
+                if(month>0) statement.setInt(2,month);
+            }
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Patient patient = new Patient();
+                    patient.setPatientId(resultSet.getInt("mabn"));
+                    patient.setPatientName(resultSet.getString("hoten"));
+                    patient.setPatientGender(resultSet.getString("gioitinh"));
+                    patient.setPatientPhoneNumber(resultSet.getString("sdt"));
+                    patient.setPatientAddress(resultSet.getString("diachi"));
+                    patient.setArrivalDate(resultSet.getDate("ngayvao"));
+                    patient.setPatientBirth(resultSet.getDate("ngaysinh"));
+                    patient.setNumber(resultSet.getInt("stt"));
+
+                    Examination examination = new Examination();
+                    examination.setMatn(resultSet.getInt("matn"));
+                    examination.setManv(resultSet.getInt("manv"));
+                    examination.setMakb(resultSet.getInt("makb"));
+                    examination.setTenNhanVien(getEmployee(examination.getManv()));
+                    examination.setMainDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhChinh")));
+                    examination.setSubDisease(diseaseDAO.getDisease(resultSet.getInt("maBenhPhu")));
+                    examination.setNgay(resultSet.getString("ngay"));
                     examination.setTrieuChung(resultSet.getString("trieuchung"));
                     examination.setLuuy(resultSet.getString("luuy"));
                     examination.setTienkham(resultSet.getInt("tienkham"));

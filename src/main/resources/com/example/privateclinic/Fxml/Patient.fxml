@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1356.0" styleClass="container-report" stylesheets="@../Styles/Patient.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.privateclinic.Controllers.PatientController">
+   <children>
+      <TabPane layoutX="2.0" layoutY="86.0" prefHeight="790.0" prefWidth="1339.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Bệnh nhân đã khám">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="755.0" prefWidth="1324.0">
+                     <children>
+                        <TableView fx:id="patientExaminationTable" onMouseClicked="#handleDoubleClick" prefHeight="753.0" prefWidth="1333.0">
+                          <columns>
+                            <TableColumn fx:id="patientSttColumn" prefWidth="50.0" text="STT" />
+                            <TableColumn fx:id="patientIdColumn" prefWidth="60.0" text="Mã BN" />
+                              <TableColumn fx:id="patientNameColumn" prefWidth="200.0" text="Họ và tên" />
+                              <TableColumn fx:id="patientPhoneColumn" prefWidth="115.0" text="SĐT" />
+                              <TableColumn fx:id="diseaseMainColumn" prefWidth="120.0" text="Bệnh chính" />
+                              <TableColumn fx:id="symptomsColumn" prefWidth="195.0" text="Triệu chứng" />
+                              <TableColumn fx:id="patientExamDayColumn" prefWidth="170.0" text="Ngày khám" />
+                              <TableColumn fx:id="patientDoctorColumn" prefWidth="225.0" text="Bác sĩ khám" />
+                              <TableColumn fx:id="actionColumn" prefWidth="110.0" text="Tuỳ chọn 1" />
+                              <TableColumn fx:id="printColumn" prefWidth="85.0" text="Tuỳ chọn 2" />
+                          </columns>
+                        </TableView>
+                        <Label fx:id="lbl_noExaminationResult" layoutX="483.0" layoutY="360.0" prefHeight="65.0" prefWidth="501.0" style="-fx-border-width: 0; -fx-alignment: center; -fx-background-color: #ffffff;" text="Không có kết quả ">
+                           <font>
+                              <Font name="Segoe UI Black" size="16.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <HBox fx:id="hboxDate" layoutX="768.0" layoutY="21.0" prefHeight="39.0" prefWidth="587.0">
+         <children>
+            <Text fx:id="lblDay" fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Ngày">
+               <font>
+                  <Font name="Segoe UI Semibold" size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin>
+            </Text>
+            <ComboBox fx:id="cbDay" onAction="#handlePickDay" prefHeight="33.0" prefWidth="130.0">
+               <HBox.margin>
+                  <Insets left="5.0" top="2.0" />
+               </HBox.margin>
+            </ComboBox>
+            <Text fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Tháng">
+               <font>
+                  <Font name="Segoe UI Semibold" size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin>
+            </Text>
+            <ComboBox fx:id="cbMonth" onAction="#handlePickMonth" prefHeight="33.0" prefWidth="130.0">
+               <HBox.margin>
+                  <Insets left="5.0" top="2.0" />
+               </HBox.margin>
+            </ComboBox>
+            <Text fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Năm">
+               <font>
+                  <Font name="Segoe UI Semibold" size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin>
+            </Text>
+            <ComboBox fx:id="cbYear" onAction="#handlePickYear" prefHeight="39.0" prefWidth="130.0">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="5.0" top="2.0" />
+               </HBox.margin>
+            </ComboBox>
+         </children>
+      </HBox>
+      <MenuButton id="menu-button" fx:id="menuItemFilter" layoutX="536.0" layoutY="24.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="204.0" text="Tuỳ chọn lọc">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#handleMenuDayMonthYear" text="Ngày/tháng/năm" />
+            <MenuItem mnemonicParsing="false" onAction="#handleMenuMonthYear" text="Tháng/năm" />
+            <MenuItem mnemonicParsing="false" onAction="#handleDateToDate" text="Từ ngày đến ngày" />
+            <MenuItem mnemonicParsing="false" onAction="#handleAll" text="Tất cả" />
+         </items>
+      </MenuButton>
+      <HBox fx:id="hboxDateToDate" layoutX="780.0" layoutY="20.0" prefHeight="39.0" prefWidth="409.0" visible="false">
+         <children>
+            <DatePicker fx:id="dateTimePickerPayslipStart" prefHeight="37.0" prefWidth="191.0" />
+            <Text fx:id="lblDay1" fill="#2c4a05" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="To">
+               <font>
+                  <Font name="Segoe UI Semibold" size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+            </Text>
+            <DatePicker fx:id="dateTimePickerPayslipEnd" prefHeight="37.0" prefWidth="191.0" />
+         </children>
+      </HBox>
+      <Pane fx:id="paneProgress" layoutX="500.0" layoutY="350.0" prefHeight="262.0" prefWidth="312.0" style="-fx-background-color: D0D0D066; -fx-background-radius: 50;" styleClass="pane_progress" visible="false">
+         <children>
+            <ProgressIndicator layoutX="130.0" layoutY="97.0" prefHeight="53.0" prefWidth="102.0" />
+         </children>
+      </Pane>
+      <HBox layoutX="19.0" layoutY="21.0" prefHeight="41.0" prefWidth="312.0" styleClass="input-field">
+         <children>
+            <ImageView id="search-icon" fitHeight="38.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/search_icon.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="tfPatientByIdOrName" prefHeight="37.0" prefWidth="270.0" promptText="Tìm bằng tên hoặc mã bệnh nhân" styleClass="search-input">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="13.0" />
+               </font>
+            </TextField>
+         </children>
+      </HBox>
+      <Text fx:id="lblDay2" fill="#c50802" layoutX="950.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: #5A8F15;" text="Note: Quá 7 ngày kể từ ngày khám, không thể in bảng kê">
+         <font>
+            <Font name="Segoe UI Semibold" size="15.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

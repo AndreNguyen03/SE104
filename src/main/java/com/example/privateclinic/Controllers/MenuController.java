@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MenuController implements Initializable {
+    public Button btnPatient;
     @FXML
     private Button btnEmployee;
     @FXML
@@ -139,10 +140,12 @@ public class MenuController implements Initializable {
         btnExamination.setDisable(true);
         btnReception.setDisable(true);
         btnCategory.setDisable(true);
+        btnPatient.setDisable(true);
         switch (_user.getEmployeePosition().trim()) {
             case "Bác sĩ":
                 btnExamination.setDisable(false);
                 btnCategory.setDisable(false);
+                btnPatient.setDisable(false);
                 break;
             case "Chủ":
                 btnReport.setDisable(false);
@@ -151,6 +154,7 @@ public class MenuController implements Initializable {
                 btnExamination.setDisable(false);
                 btnReception.setDisable(false);
                 btnCategory.setDisable(false);
+                btnPatient.setDisable(false);
                 mainPane.getChildren().clear();
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Report.fxml"));
@@ -187,4 +191,11 @@ public class MenuController implements Initializable {
         titleTextField.setFocusTraversable(true);
     }
 
+    public void btnPatientClicked(ActionEvent event) throws IOException {
+        mainPane.getChildren().clear();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/privateclinic/Fxml/Patient.fxml"));
+        Parent reportSceneRoot = loader.load();
+        mainPane.getChildren().add(reportSceneRoot);
+        titleTextField.setText("Bệnh nhân");
+    }
 }
