@@ -23,16 +23,34 @@ Mục tiêu là mang lại một giải pháp **quản lý hiện đại, dễ s
 
 ---
 
-## Các chức năng
-1. **Quản lý danh sách khám bệnh** (tiếp nhận, sắp xếp bệnh nhân theo ngày)
-2. **Lập phiếu khám bệnh** (triệu chứng, chẩn đoán, kê đơn thuốc)
-3. **Tra cứu bệnh nhân** (tìm kiếm, lọc, xem lịch sử khám, in toa thuốc/bảng kê)
-4. **Lập hóa đơn thanh toán** (tính tiền khám, tiền thuốc, xuất PDF)
-5. **Báo cáo doanh thu & sử dụng thuốc** (theo ngày/tháng, thống kê chi tiết)
-6. **Thay đổi quy định** (số lượng bệnh nhân tối đa/ngày, tiền khám, danh mục thuốc)
-7. **Quản lý danh mục** (thuốc, bệnh, đơn vị tính)
-8. **Quản lý nhân viên** (thêm/sửa/xóa nhân viên, phân quyền)
-9. **Quản lý đăng nhập** (đăng nhập, quên mật khẩu, đổi mật khẩu)
+## Demo (Screenshots)
+
+### Đăng nhập
+![Đăng nhập](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/dangnhap.png?raw=true)
+
+### Tiếp nhận bệnh nhân
+![Tiếp nhận](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/farmacy_tiepnhan.png?raw=true)
+
+### Quản lý bệnh nhân
+![Bệnh nhân](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/benhnhan.png?raw=true)
+
+### Khám bệnh
+![Khám bệnh](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/khambenh.png?raw=true)
+
+### Danh mục thuốc
+![Danh mục thuốc](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/danhmucthuoc.png?raw=true)
+
+### Quản lý nhân viên
+![Nhân viên](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/nhanvien.png?raw=true)
+
+### Hóa đơn thanh toán
+![Hóa đơn thanh toán](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/hoadonthanhtoan.png?raw=true)
+
+### Thiết lập hệ thống
+![Thiết lập](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/thietlap.png?raw=true)
+
+### Báo cáo
+![Báo cáo](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/baocao.png?raw=true)
 
 ---
 
