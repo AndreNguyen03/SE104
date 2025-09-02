@@ -26,31 +26,31 @@ Mục tiêu là mang lại một giải pháp **quản lý hiện đại, dễ s
 ## Demo (Screenshots)
 
 ### Đăng nhập
-![Đăng nhập](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/dangnhap.png?raw=true)
+![Đăng nhập](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/dangnhap.png?raw=true)
 
 ### Tiếp nhận bệnh nhân
-![Tiếp nhận](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/farmacy_tiepnhan.png?raw=true)
+![Tiếp nhận](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/farmacy_tiepnhan.png?raw=true)
 
 ### Quản lý bệnh nhân
-![Bệnh nhân](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/benhnhan.png?raw=true)
+![Bệnh nhân](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/benhnhan.png?raw=true)
 
 ### Khám bệnh
-![Khám bệnh](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/khambenh.png?raw=true)
+![Khám bệnh](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/khambenh.png?raw=true)
 
 ### Danh mục thuốc
-![Danh mục thuốc](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/danhmucthuoc.png?raw=true)
+![Danh mục thuốc](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/danhmucthuoc.png?raw=true)
 
 ### Quản lý nhân viên
-![Nhân viên](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/nhanvien.png?raw=true)
+![Nhân viên](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/nhanvien.png?raw=true)
 
 ### Hóa đơn thanh toán
-![Hóa đơn thanh toán](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/hoadonthanhtoan.png?raw=true)
+![Hóa đơn thanh toán](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/hoadonthanhtoan.png?raw=true)
 
 ### Thiết lập hệ thống
-![Thiết lập](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/thietlap.png?raw=true)
+![Thiết lập](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic//assets/thietlap.png?raw=true)
 
 ### Báo cáo
-![Báo cáo](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/blob/main/assets/baocao.png?raw=true)
+![Báo cáo](https://github.com/AndreNguyen03/SE104-Pharmacy-Clinic/assets/baocao.png?raw=true)
 
 ---
 
